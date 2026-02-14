@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SØLID Store</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+            color: white;
+        }
+        /* HEADER */
+        
+        header {
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 4px;
+        }
+        /* HERO */
+        
+        .hero {
+            text-align: center;
+            padding: 80px 20px 40px 20px;
+        }
+        
+        .hero h1 {
+            font-size: 42px;
+            letter-spacing: 6px;
+        }
+        /* PRODUTOS */
+        
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            padding: 40px;
+        }
+        
+        .card {
+            width: 280px;
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            transition: 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .slider {
+            position: relative;
+        }
+        
+        .slider img {
+            width: 100%;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .arrow {
+            position: absolute;
+            top: 45%;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .left {
+            left: 10px;
+        }
+        
+        .right {
+            right: 10px;
+        }
+        
+        select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 8px;
+            border: none;
+        }
+        
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 10px;
+            background: white;
+            color: black;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        /* CARRINHO */
+        
+        .cart {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 320px;
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-height: 80vh;
+            overflow: auto;
+        }
+        
+        .cart-item {
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .qty {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        
+        .qty button {
+            width: 25px;
+            height: 25px;
+            padding: 0;
+        }
+        
+        .total {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        
+        .whatsapp {
+            margin-top: 10px;
+            background: #25D366;
+            color: white;
+        }
+        /* HISTÓRIA */
+        
+        .history {
+            margin-top: 120px;
+            padding: 100px 20px;
+            background: linear-gradient(180deg, #111, #0a0a0a);
+            text-align: center;
+        }
+        
+        .history-content {
+            max-width: 800px;
+            margin: auto;
+        }
+        
+        .history h2 {
+            font-size: 32px;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+        
+        .divider {
+            width: 80px;
+            height: 2px;
+            background: white;
+            margin: 20px auto 40px auto;
+            opacity: 0.4;
+        }
+        
+        .history p {
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-weight: 300;
+            opacity: 0.8;
+        }
+        
+        .highlight {
+            font-weight: 600;
+            font-size: 18px;
+            opacity: 1;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">SØLID</div>
+    </header>
+
+    <section class="hero">
+        <h1>STAY SØLID.</h1>
+    </section>
+
+    <section class="products" id="products"></section>
+
+    <!-- HISTÓRIA -->
+    <section class="history">
+        <div class="history-content">
+            <h2>Nossa História</h2>
+            <div class="divider"></div>
+            <p>
+                A SØLID nasceu da ideia de que caráter é base. Em um mundo onde tudo muda rápido, ser sólido é permanecer firme.
+            </p>
+            <p>
+                Não seguimos tendências vazias. Construímos identidade. Criamos peças que representam postura, força e autenticidade.
+            </p>
+            <p class="highlight">
+                SØLID não é apenas roupa. É posicionamento.
+            </p>
+        </div>
+    </section>
+
+    <!-- CARRINHO -->
+    <div class="cart">
+        <h3>Carrinho</h3>
+        <div id="cartItems"></div>
+        <div class="total">
+            Total: R$ <span id="total">0.00</span>
+        </div>
+        <button class="whatsapp" onclick="checkout()">
+Finalizar no WhatsApp
+</button>
+    </div>
+
+    <script>
+        /* PRODUTOS */
+        const products = [{
+            name: "Moletom masculino (rei dos reis👑)",
+            price: 129.90,
+            images: ["M1.jpeg", "M2.jpeg"]
+        }, {
+            name: "Moletom feminino (rei dos reias👑)",
+            price: 249.90,
+            images: ["F1.jpeg", "F2.jpeg"]
+        }, ];
+
+        let cart = {};
+        let imageIndex = {};
+
+        const productContainer = document.getElementById("products");
+
+        products.forEach((product, index) => {
+            productContainer.innerHTML += `
+<div class="card">
+
+<div class="slider">
+<button class="arrow left" onclick="prevImage(${index})">❮</button>
+<img id="image${index}" src="${product.images[0]}">
+<button class="arrow right" onclick="nextImage(${index})">❯</button>
+</div>
+
+<h3>${product.name}</h3>
+<p>R$ ${product.price.toFixed(2)}</p>
+
+<select id="size${index}">
+<option>P</option>
+<option>M</option>
+<option>G</option>
+<option>GG</option>
+</select>
+
+<select id="color${index}">
+<option>Preto</option>
+<option>Branco</option>
+<option>Bege</option>
+</select>
+
+<button onclick="addToCart(${index})">Adicionar</button>
+
+</div>
+`;
+        });
+
+        /* SLIDER */
+        function nextImage(i) {
+            if (!imageIndex[i]) imageIndex[i] = 0;
+            imageIndex[i]++;
+            if (imageIndex[i] >= products[i].images.length) {
+                imageIndex[i] = 0;
+            }
+            document.getElementById("image" + i).src = products[i].images[imageIndex[i]];
+        }
+
+        function prevImage(i) {
+            if (!imageIndex[i]) imageIndex[i] = 0;
+            imageIndex[i]--;
+            if (imageIndex[i] < 0) {
+                imageIndex[i] = products[i].images.length - 1;
+            }
+            document.getElementById("image" + i).src = products[i].images[imageIndex[i]];
+        }
+
+        /* CARRINHO */
+        function addToCart(i) {
+            let size = document.getElementById("size" + i).value;
+            let color = document.getElementById("color" + i).value;
+            let product = products[i];
+
+            let key = product.name + size + color;
+
+            if (cart[key]) {
+                cart[key].qty++;
+            } else {
+                cart[key] = {...product,
+                    size,
+                    color,
+                    qty: 1
+                };
+            }
+            renderCart();
+        }
+
+        function changeQty(key, amount) {
+            cart[key].qty += amount;
+            if (cart[key].qty <= 0) {
+                delete cart[key];
+            }
+            renderCart();
+        }
+
+        function renderCart() {
+            let html = "";
+            let total = 0;
+
+            for (let key in cart) {
+                let item = cart[key];
+                total += item.price * item.qty;
+
+                html += `
+<div class="cart-item">
+${item.name}<br>
+Tam:${item.size} | Cor:${item.color}<br>
+R$ ${item.price.toFixed(2)}
+<div class="qty">
+<button onclick="changeQty('${key}',-1)">-</button>
+<span>${item.qty}</span>
+<button onclick="changeQty('${key}',1)">+</button>
+</div>
+<hr>
+</div>
+`;
+            }
+
+            document.getElementById("cartItems").innerHTML = html;
+            document.getElementById("total").innerText = total.toFixed(2);
+        }
+
+        /* WHATSAPP */
+        function checkout() {
+            let message = "Pedido SØLID:%0A";
+            let total = 0;
+
+            for (let key in cart) {
+                let item = cart[key];
+                message += `${item.name} | Tam:${item.size} | Cor:${item.color} | Qtd:${item.qty}%0A`;
+                total += item.price * item.qty;
+            }
+
+            message += `Total: R$ ${total.toFixed(2)}`;
+
+            window.open(`https://wa.me/5531998702914?text=${message}`);
+        }
+    </script>
+
+</body>
+
+</html>
