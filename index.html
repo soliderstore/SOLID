@@ -9,14 +9,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
 
     <style>
-        /* ================= VARIÁVEIS DE TEMA ================= */
-        
          :root {
             --bg: #0f0f0f;
             --bg2: #1a1a1a;
             --text: #ffffff;
             --card: rgba(255, 255, 255, 0.05);
             --border: rgba(255, 255, 255, 0.1);
+            --cart-bg: #111111;
+            /* Fundo sólido do carrinho */
         }
         
         [data-theme="light"] {
@@ -25,8 +25,9 @@
             --text: #111111;
             --card: rgba(0, 0, 0, 0.05);
             --border: rgba(0, 0, 0, 0.1);
+            --cart-bg: #ffffff;
+            /* Fundo sólido claro */
         }
-        /* ================= RESET ================= */
         
         * {
             margin: 0;
@@ -40,7 +41,7 @@
             background: linear-gradient(135deg, var(--bg), var(--bg2));
             color: var(--text);
         }
-        /* ================= HEADER ================= */
+        /* HEADER */
         
         header {
             padding: 20px 8%;
@@ -64,7 +65,7 @@
             color: var(--text);
             cursor: pointer;
         }
-        /* ================= HERO ================= */
+        /* HERO */
         
         .hero {
             text-align: center;
@@ -75,7 +76,7 @@
             font-size: 42px;
             letter-spacing: 6px;
         }
-        /* ================= PRODUTOS ================= */
+        /* PRODUTOS */
         
         .products {
             display: flex;
@@ -143,7 +144,7 @@
             background: var(--text);
             color: var(--bg);
         }
-        /* ================= BOTÃO CARRINHO ================= */
+        /* BOTÃO CARRINHO */
         
         .cart-toggle {
             position: fixed;
@@ -172,20 +173,26 @@
             align-items: center;
             font-weight: bold;
         }
-        /* ================= CARRINHO ================= */
+        /* CARRINHO */
         
         .cart {
             position: fixed;
             bottom: 90px;
             right: 20px;
-            width: 320px;
+            width: 340px;
             padding: 20px;
             border-radius: 20px;
-            background: var(--card);
-            border: 1px solid var(--border);
+            background: var(--cart-bg);
+            /* FUNDO SÓLIDO */
+            border: 2px solid var(--border);
             display: none;
             max-height: 80vh;
             overflow: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        }
+        
+        .cart h3 {
+            margin-bottom: 10px;
         }
         
         .cart-item {
@@ -207,8 +214,9 @@
         }
         
         .total {
-            margin-top: 10px;
+            margin-top: 15px;
             font-weight: bold;
+            font-size: 16px;
         }
         
         .coupon {
@@ -242,18 +250,15 @@
 
     <section class="products" id="products"></section>
 
-    <!-- BOTÃO DO CARRINHO -->
     <div class="cart-toggle" onclick="toggleCart()">
         Carrinho
         <div class="cart-count" id="cartCount">0</div>
     </div>
 
-    <!-- CARRINHO -->
     <div class="cart" id="cartBox">
         <h3>Carrinho</h3>
         <div id="cartItems"></div>
 
-        <!-- CUPOM -->
         <div class="coupon">
             <input type="text" id="couponInput" placeholder="Cupom (SOLID10)">
             <button onclick="applyCoupon()">Aplicar cupom</button>
@@ -261,10 +266,15 @@
         </div>
 
         <div class="total">Total: R$ <span id="total">0.00</span></div>
+
+        <button onclick="checkout()" style="margin-top:10px;background:#25D366;color:white;">
+Finalizar compra
+</button>
+
     </div>
 
     <script>
-        /* ================= TEMA ================= */
+        /* TEMA */
         function toggleTheme() {
             let theme = document.documentElement.getAttribute("data-theme");
             if (theme === "light") {
@@ -282,7 +292,7 @@
             themeBtn.innerText = "☀";
         }
 
-        /* ================= PRODUTOS ================= */
+        /* PRODUTOS */
         const products = [{
             name: "Moletom masculino (rei dos reis👑)",
             price: 160.00,
@@ -297,8 +307,8 @@
         let cart = {};
         let discount = 0;
 
-        /* GERA CARDS */
         const container = document.getElementById("products");
+
         products.forEach((p, i) => {
             container.innerHTML += `
 <div class="card">
@@ -323,7 +333,6 @@
 </div>`;
         });
 
-        /* SLIDER */
         function nextImage(i) {
             if (imageIndex[i] == null) imageIndex[i] = 0;
             imageIndex[i] = (imageIndex[i] + 1) % products[i].images.length;
@@ -337,7 +346,6 @@
             document.getElementById("img" + i).src = products[i].images[imageIndex[i]];
         }
 
-        /* ================= CARRINHO ================= */
         function addToCart(i) {
             let size = document.getElementById("size" + i).value;
             if (size === "") {
@@ -363,7 +371,6 @@
             renderCart();
         }
 
-        /* ================= CUPOM ================= */
         function applyCoupon() {
             if (localStorage.getItem("usedCoupon")) {
                 couponMsg.innerText = "Cupom já utilizado.";
@@ -381,7 +388,6 @@
             renderCart();
         }
 
-        /* ================= RENDER ================= */
         function renderCart() {
             let html = "";
             let total = 0;
@@ -412,15 +418,41 @@ R$ ${item.price.toFixed(2)}
             cartCount.innerText = count;
         }
 
-        /* ================= CONTROLES ================= */
+        function checkout() {
+            if (Object.keys(cart).length === 0) {
+                alert("Seu carrinho está vazio.");
+                return;
+            }
+
+            let message = "🛍 Pedido SØLID:%0A%0A";
+            let total = 0;
+
+            for (let key in cart) {
+                let item = cart[key];
+                total += item.price * item.qty;
+
+                message += `• ${item.name}%0A`;
+                message += `Tam: ${item.size}%0A`;
+                message += `Qtd: ${item.qty}%0A`;
+                message += `Preço unitário: R$ ${item.price.toFixed(2)}%0A%0A`;
+            }
+
+            let final = total - (total * discount);
+
+            if (discount > 0) {
+                message += `🎟 Cupom aplicado: SOLID10%0A`;
+                message += `Desconto: ${(discount*100)}%%0A%0A`;
+                localStorage.setItem("usedCoupon", true);
+            }
+
+            message += `💰 Total: R$ ${final.toFixed(2)}`;
+
+            window.open(`https://wa.me/5531998702914?text=${message}`, "_blank");
+        }
+
         function toggleCart() {
             cartBox.style.display = cartBox.style.display === "block" ? "none" : "block";
         }
-
-        /* Marca cupom como usado após "compra" (simulado) */
-        window.addEventListener("beforeunload", () => {
-            if (discount > 0) localStorage.setItem("usedCoupon", true);
-        });
     </script>
 
 </body>
