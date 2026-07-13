@@ -1,0 +1,398 @@
+/* ================= HERO ================= */
+
+.hero{
+
+    min-height:100vh;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:140px 0 80px;
+
+}
+
+.hero::before{
+
+    content:"";
+
+    position:absolute;
+
+    width:700px;
+
+    height:700px;
+
+    right:-180px;
+
+    top:-180px;
+
+    border-radius:50%;
+
+    background:radial-gradient(circle,
+    rgba(255,255,255,.08),
+    transparent 70%);
+
+    filter:blur(40px);
+
+}
+
+.hero::after{
+
+    content:"";
+
+    position:absolute;
+
+    left:-250px;
+
+    bottom:-250px;
+
+    width:600px;
+
+    height:600px;
+
+    border-radius:50%;
+
+    background:radial-gradient(circle,
+    rgba(255,255,255,.04),
+    transparent 70%);
+
+}
+
+.hero-container{
+
+    display:grid;
+
+    grid-template-columns:55% 45%;
+
+    align-items:center;
+
+    gap:60px;
+
+    width:min(92%,1300px);
+
+    margin:auto;
+
+}
+
+.hero-left{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    gap:28px;
+
+}
+
+.subtitle{
+
+    color:#8d8d8d;
+
+    letter-spacing:7px;
+
+    font-weight:600;
+
+}
+
+.hero h1{
+
+    font-size:clamp(4rem,7vw,6.5rem);
+
+    line-height:.92;
+
+    font-weight:800;
+
+    letter-spacing:-3px;
+
+}
+
+.hero p{
+
+    color:#bdbdbd;
+
+    font-size:1.05rem;
+
+    line-height:2;
+
+    max-width:520px;
+
+}
+
+.hero-buttons{
+
+    display:flex;
+
+    gap:18px;
+
+    margin-top:20px;
+
+}
+
+.hero-right{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    position:relative;
+
+}
+
+.hero-right img{
+
+    width:100%;
+
+    max-width:480px;
+
+    border-radius:24px;
+
+    object-fit:cover;
+
+    box-shadow:0 40px 100px rgba(0,0,0,.45);
+
+}
+
+/* ================= BENEFÍCIOS ================= */
+
+.benefits{
+
+    border-top:1px solid var(--border);
+
+    border-bottom:1px solid var(--border);
+
+    background:var(--surface);
+
+}
+
+.benefits .container{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+}
+
+.benefit{
+
+    text-align:center;
+
+    padding:25px;
+
+    font-weight:600;
+
+    color:var(--text-light);
+
+}
+
+/* ================= TÍTULOS ================= */
+
+.section-title{
+
+    text-align:center;
+
+    margin-bottom:70px;
+
+}
+
+.section-title span{
+
+    color:var(--text-light);
+
+    letter-spacing:5px;
+
+    font-size:.9rem;
+
+}
+
+.section-title h2{
+
+    font-size:2.7rem;
+
+    margin-top:15px;
+
+}
+
+/* ================= PRODUTOS ================= */
+
+.featured-products{
+
+    padding:120px 8%;
+
+}
+
+.products-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+    gap:35px;
+
+}
+
+/* ================= HISTÓRIA ================= */
+
+.history{
+
+    padding:140px 8%;
+
+    background:var(--surface);
+
+}
+
+.history-content{
+
+    max-width:850px;
+
+    margin:auto;
+
+    text-align:center;
+
+}
+
+.history span{
+
+    color:var(--text-light);
+
+    letter-spacing:5px;
+
+}
+
+.history h2{
+
+    font-size:3rem;
+
+    margin:25px 0;
+
+}
+
+.history p{
+
+    color:var(--text-light);
+
+    line-height:2;
+
+    margin-bottom:50px;
+
+}
+
+/* ================= NEWSLETTER ================= */
+
+.newsletter{
+
+    padding:140px 8%;
+
+}
+
+.newsletter-content{
+
+    max-width:700px;
+
+    margin:auto;
+
+    text-align:center;
+
+}
+
+.newsletter span{
+
+    color:var(--text-light);
+
+    letter-spacing:5px;
+
+}
+
+.newsletter h2{
+
+    margin:20px 0;
+
+    font-size:2.8rem;
+
+}
+
+.newsletter p{
+
+    color:var(--text-light);
+
+    margin-bottom:40px;
+
+}
+
+.newsletter form{
+
+    display:flex;
+
+    gap:15px;
+
+}
+
+.newsletter input{
+
+    flex:1;
+
+    height:60px;
+
+    padding:0 20px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:var(--radius);
+
+    background:var(--card);
+
+    color:white;
+
+}
+
+.newsletter button{
+
+    padding:0 40px;
+
+    border:none;
+
+    border-radius:var(--radius);
+
+    background:white;
+
+    color:black;
+
+    font-weight:700;
+
+    transition:var(--transition);
+
+}
+
+.newsletter button:hover{
+
+    transform:translateY(-3px);
+
+}
+/* ================= ANIMAÇÕES ================= */
+
+@keyframes float{
+
+    0%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-20px);
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+    }
+
+}

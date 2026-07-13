@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Carrinho | SØLID</title>
+
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet"
+          href="../assets/css/style.css">
+
+</head>
+
+<body>
+
+<!-- ======================================== -->
+<!-- HEADER                                  -->
+<!-- Cole exatamente o mesmo header do index -->
+<!-- ======================================== -->
+
+<section class="cart-page">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <span>
+
+                SHOPPING CART
+
+            </span>
+
+            <h2>
+
+                Seu Carrinho
+
+            </h2>
+
+        </div>
+
+        <div class="cart-content">
+
+            <div class="cart-products">
+
+                <!-- PRODUTO -->
+
+                <div class="card cart-item">
+
+                    <div class="card-image">
+
+                        <img src="../assets/images/products/F1.jpeg"
+                             alt="Produto">
+
+                        <span class="badge">
+
+                            NOVO
+
+                        </span>
+
+                    </div>
+
+                    <div class="card-content">
+
+                        <h3 class="card-title">
+
+                            Camiseta Street Cristã
+
+                        </h3>
+
+                        <p>
+
+                            Minimal Collection
+
+                        </p>
+
+                        <h4 class="card-price">
+
+                            R$149,90
+
+                        </h4>
+
+                        <div class="cart-actions">
+
+                            <div class="quantity">
+
+                                <button class="minus">
+
+                                    −
+
+                                </button>
+
+                                <input
+                                    type="number"
+                                    value="1"
+                                    min="1">
+
+                                <button class="plus">
+
+                                    +
+
+                                </button>
+
+                            </div>
+
+                            <button class="remove">
+
+                                Remover
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                                <!-- PRODUTO -->
+
+                <div class="card cart-item">
+
+                    <div class="card-image">
+
+                        <img src="../assets/images/products/F2.jpeg"
+                             alt="Produto">
+
+                    </div>
+
+                    <div class="card-content">
+
+                        <h3 class="card-title">
+
+                            Moletom Street Cristã
+
+                        </h3>
+
+                        <p>
+
+                            Premium Collection
+
+                        </p>
+
+                        <h4 class="card-price">
+
+                            R$249,90
+
+                        </h4>
+
+                        <div class="cart-actions">
+
+                            <div class="quantity">
+
+                                <button class="minus">
+
+                                    −
+
+                                </button>
+
+                                <input
+                                    type="number"
+                                    value="1"
+                                    min="1">
+
+                                <button class="plus">
+
+                                    +
+
+                                </button>
+
+                            </div>
+
+                            <button class="remove">
+
+                                Remover
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+
+            <!-- ================= RESUMO ================= -->
+
+            <aside class="cart-summary">
+
+                <div class="summary-card">
+
+                    <h3>
+
+                        Resumo do Pedido
+
+                    </h3>
+
+                    <div class="summary-row">
+
+                        <span>
+
+                            Subtotal
+
+                        </span>
+
+                        <strong id="subtotal">
+
+                            R$399,80
+
+                        </strong>
+
+                    </div>
+
+                    <div class="summary-row">
+
+                        <span>
+
+                            Frete
+
+                        </span>
+
+                        <strong>
+
+                            Grátis
+
+                        </strong>
+
+                    </div>
+
+                    <div class="summary-row">
+
+                        <span>
+
+                            Desconto
+
+                        </span>
+
+                        <strong>
+
+                            R$0,00
+
+                        </strong>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="summary-total">
+
+                        <span>
+
+                            Total
+
+                        </span>
+
+                        <strong id="total">
+
+                            R$399,80
+
+                        </strong>
+
+                    </div>
+
+                    <a href="checkout.html"
+                       class="btn-primary">
+
+                        Finalizar Compra
+
+                    </a>
+
+                    <a href="shop.html"
+                       class="btn-secondary">
+
+                        Continuar Comprando
+
+                    </a>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- ================= PRODUTOS ================= -->
+
+<section class="featured-products">
+
+    <div class="container">
+
+        <div class="section-title">
+
+            <span>
+
+                VOCÊ TAMBÉM PODE GOSTAR
+
+            </span>
+
+            <h2>
+
+                Continue Comprando
+
+            </h2>
+
+        </div>
+
+        <div class="products-grid">
+
+            <!-- Produto 1 -->
+
+            <div class="card">
+
+                <div class="card-image">
+
+                    <img src="../assets/images/products/F1.jpeg">
+
+                </div>
+
+                <div class="card-content">
+
+                    <h3 class="card-title">
+
+                        Camiseta Street Cristã
+
+                    </h3>
+
+                    <h4 class="card-price">
+
+                        R$149,90
+
+                    </h4>
+
+                    <button>
+
+                        Ver Produto
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Produto 2 -->
+
+            <div class="card">
+
+                <div class="card-image">
+
+                    <img src="../assets/images/products/F2.jpeg">
+
+                </div>
+
+                <div class="card-content">
+
+                    <h3 class="card-title">
+
+                        Moletom Street Cristã
+
+                    </h3>
+
+                    <h4 class="card-price">
+
+                        R$249,90
+
+                    </h4>
+
+                    <button>
+
+                        Ver Produto
+
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- Produto 3 -->
+
+            <div class="card">
+
+                <div class="card-image">
+
+                    <img src="../assets/images/products/M1.jpeg">
+
+                </div>
+
+                <div class="card-content">
+
+                    <h3 class="card-title">
+
+                        Boné SØLID
+
+                    </h3>
+
+                    <h4 class="card-price">
+
+                        R$99,90
+
+                    </h4>
+
+                    <button>
+
+                        Ver Produto
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- NEWSLETTER -->
+
+<!-- Cole exatamente a mesma newsletter da Home -->
+
+
+
+<!-- FOOTER -->
+
+<!-- Cole exatamente o mesmo footer do index -->
+
+
+
+<script src="../assets/js/cart.js"></script>
+
+</body>
+
+</html>

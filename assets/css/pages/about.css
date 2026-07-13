@@ -1,0 +1,233 @@
+/* ===========================
+   ABOUT HERO
+=========================== */
+
+.about-hero{
+
+    min-height:60vh;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    padding:150px 20px 100px;
+
+    background:
+        radial-gradient(circle at top,
+        rgba(255,255,255,.08),
+        transparent 65%),
+        #050505;
+
+}
+
+.about-hero span{
+
+    display:block;
+
+    color:var(--text-light);
+
+    letter-spacing:8px;
+
+    font-size:.9rem;
+
+    margin-bottom:20px;
+
+}
+
+.about-hero h1{
+
+    font-size:clamp(3rem,7vw,5.5rem);
+
+    max-width:900px;
+
+    margin:auto;
+
+    line-height:1.1;
+
+    font-weight:800;
+
+}
+
+/* ===========================
+   STORY
+=========================== */
+
+.about-story{
+
+    padding:120px 8%;
+
+    background:var(--surface);
+
+}
+
+.about-story .container{
+
+    max-width:900px;
+
+}
+
+.about-story h2{
+
+    font-size:2.8rem;
+
+    margin-bottom:40px;
+
+}
+
+.about-story p{
+
+    color:var(--text-light);
+
+    font-size:1.05rem;
+
+    line-height:2;
+
+    margin-bottom:25px;
+
+}
+
+/* ===========================
+   MISSION
+=========================== */
+
+.about-mission{
+
+    padding:120px 8%;
+
+    text-align:center;
+
+}
+
+.about-mission .container{
+
+    max-width:850px;
+
+}
+
+.about-mission h2{
+
+    font-size:2.8rem;
+
+    margin-bottom:30px;
+
+}
+
+.about-mission p{
+
+    color:var(--text-light);
+
+    line-height:2;
+
+    font-size:1.05rem;
+
+}
+
+/* ===========================
+   VALUES
+=========================== */
+
+.about-values{
+
+    padding:120px 8%;
+
+    background:var(--surface);
+
+}
+
+.about-values .container{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:30px;
+
+}
+
+.value{
+
+    padding:40px;
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    background:var(--card);
+
+    transition:var(--transition);
+
+}
+
+.value:hover{
+
+    transform:translateY(-8px);
+
+    border-color:#3f3f3f;
+
+}
+
+.value h3{
+
+    margin-bottom:20px;
+
+    font-size:1.5rem;
+
+}
+
+.value p{
+
+    color:var(--text-light);
+
+    line-height:1.8;
+
+}
+
+/* ===========================
+   CTA
+=========================== */
+
+.about-cta{
+
+    padding:150px 8%;
+
+    text-align:center;
+
+}
+
+.about-cta h2{
+
+    font-size:3rem;
+
+    margin-bottom:35px;
+
+}
+
+/* ===========================
+   RESPONSIVO
+=========================== */
+
+@media(max-width:900px){
+
+    .about-values .container{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .about-hero{
+
+        min-height:50vh;
+
+    }
+
+    .about-hero h1{
+
+        font-size:3rem;
+
+    }
+
+}

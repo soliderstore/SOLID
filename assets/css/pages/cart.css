@@ -1,0 +1,679 @@
+/* ================= CART HEADER ================= */
+
+.cart-header{
+
+    padding:180px 0 80px;
+
+    text-align:center;
+
+}
+
+.cart-header span{
+
+    color:var(--text-light);
+
+    letter-spacing:6px;
+
+    font-weight:600;
+
+}
+
+.cart-header h1{
+
+    font-size:4rem;
+
+    margin:20px 0;
+
+    letter-spacing:-2px;
+
+}
+
+.cart-header p{
+
+    color:var(--text-light);
+
+    max-width:650px;
+
+    margin:auto;
+
+    line-height:2;
+
+}
+
+
+
+/* ================= CART ================= */
+
+.cart-page{
+
+    padding:80px 0 140px;
+
+}
+
+.cart-page .container{
+
+    display:grid;
+
+    grid-template-columns:2fr 420px;
+
+    gap:40px;
+
+    align-items:start;
+
+}
+
+
+
+/* ================= PRODUTOS ================= */
+
+.cart-products{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:25px;
+
+}
+
+.cart-product{
+
+    display:grid;
+
+    grid-template-columns:120px 1fr auto auto auto;
+
+    gap:25px;
+
+    align-items:center;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius);
+
+    padding:25px;
+
+    transition:var(--transition);
+
+}
+
+.cart-product:hover{
+
+    transform:translateY(-4px);
+
+    border-color:white;
+
+}
+
+.product-image{
+
+    width:120px;
+
+    height:120px;
+
+    overflow:hidden;
+
+    border-radius:18px;
+
+}
+
+.product-image img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.5s;
+
+}
+
+.cart-product:hover img{
+
+    transform:scale(1.08);
+
+}
+
+.product-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+}
+
+.product-info h3{
+
+    font-size:1.3rem;
+
+}
+
+.product-info p{
+
+    color:var(--text-light);
+
+}
+
+.product-info span{
+
+    font-size:1.1rem;
+
+    font-weight:700;
+
+}
+/* ================= QUANTIDADE ================= */
+
+.product-quantity{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.product-quantity button{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:var(--surface);
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+}
+
+.product-quantity button:hover{
+
+    background:white;
+
+    color:black;
+
+}
+
+.product-quantity input{
+
+    width:60px;
+
+    height:42px;
+
+    text-align:center;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:12px;
+
+    background:var(--surface);
+
+    color:white;
+
+    font-weight:600;
+
+}
+
+.product-price{
+
+    font-size:1.2rem;
+
+    font-weight:700;
+
+    min-width:110px;
+
+    text-align:right;
+
+}
+
+.remove-product{
+
+    width:48px;
+
+    height:48px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#202020;
+
+    color:#ff5b5b;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+}
+
+.remove-product:hover{
+
+    background:#ff5b5b;
+
+    color:white;
+
+}
+
+
+
+/* ================= RESUMO ================= */
+
+.cart-summary{
+
+    position:sticky;
+
+    top:120px;
+
+}
+
+.summary-box{
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius);
+
+    padding:35px;
+
+}
+
+.summary-box hr{
+
+    border:none;
+
+    border-top:1px solid var(--border);
+
+    margin:25px 0;
+
+}
+
+.summary-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:18px;
+
+    color:var(--text-light);
+
+}
+
+.summary-total{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+    font-size:1.3rem;
+
+    font-weight:700;
+
+}
+
+
+
+/* ================= CUPOM ================= */
+
+.coupon{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:15px;
+
+    margin-bottom:30px;
+
+}
+
+.coupon input{
+
+    width:100%;
+
+    height:55px;
+
+    border:none;
+
+    outline:none;
+
+    background:var(--surface);
+
+    color:white;
+
+    border-radius:var(--radius);
+
+    padding:0 18px;
+
+}
+
+.coupon button{
+
+    height:55px;
+
+    border:none;
+
+    border-radius:var(--radius);
+
+    background:white;
+
+    color:black;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+}
+
+.coupon button:hover{
+
+    transform:translateY(-3px);
+
+}
+
+
+
+/* ================= BOTÕES ================= */
+
+.checkout-btn{
+
+    width:100%;
+
+    height:60px;
+
+    border:none;
+
+    border-radius:var(--radius);
+
+    background:white;
+
+    color:black;
+
+    font-size:1rem;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+    margin-bottom:25px;
+
+}
+
+.checkout-btn:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.continue-shopping{
+
+    display:block;
+
+    text-align:center;
+
+    color:var(--text-light);
+
+    text-decoration:none;
+
+    transition:var(--transition);
+
+}
+
+.continue-shopping:hover{
+
+    color:white;
+
+}
+/* ================= PRODUTOS RECOMENDADOS ================= */
+
+.featured-products{
+
+    padding:120px 0;
+
+}
+
+.featured-products .products-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+    gap:30px;
+
+}
+
+.featured-products .product-card{
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius);
+
+    overflow:hidden;
+
+    transition:var(--transition);
+
+    text-align:center;
+
+}
+
+.featured-products .product-card:hover{
+
+    transform:translateY(-8px);
+
+    border-color:white;
+
+}
+
+.featured-products .product-card img{
+
+    width:100%;
+
+    height:320px;
+
+    object-fit:cover;
+
+    transition:.5s;
+
+}
+
+.featured-products .product-card:hover img{
+
+    transform:scale(1.05);
+
+}
+
+.featured-products .product-card h3{
+
+    margin:25px 20px 10px;
+
+    font-size:1.3rem;
+
+}
+
+.featured-products .product-card p{
+
+    color:var(--text-light);
+
+    margin-bottom:25px;
+
+    font-size:1rem;
+
+}
+
+.featured-products .product-card .btn-primary{
+
+    margin-bottom:30px;
+
+}
+
+
+
+/* ================= ANIMAÇÕES ================= */
+
+.cart-product{
+
+    animation:fadeUp .6s ease;
+
+}
+
+.summary-box{
+
+    animation:fadeUp .8s ease;
+
+}
+
+.featured-products .product-card{
+
+    animation:fadeUp .8s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(30px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+
+
+/* ================= RESPONSIVO ================= */
+
+@media(max-width:1100px){
+
+    .cart-page .container{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .cart-summary{
+
+        position:static;
+
+    }
+
+}
+
+@media(max-width:900px){
+
+    .cart-product{
+
+        grid-template-columns:1fr;
+
+        text-align:center;
+
+    }
+
+    .product-image{
+
+        margin:auto;
+
+    }
+
+    .product-info{
+
+        align-items:center;
+
+    }
+
+    .product-quantity{
+
+        justify-content:center;
+
+    }
+
+    .product-price{
+
+        text-align:center;
+
+    }
+
+    .remove-product{
+
+        margin:auto;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .cart-header{
+
+        padding:150px 0 60px;
+
+    }
+
+    .cart-header h1{
+
+        font-size:3rem;
+
+    }
+
+    .summary-box{
+
+        padding:25px;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .featured-products .products-grid{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .cart-header h1{
+
+        font-size:2.4rem;
+
+    }
+
+    .cart-header p{
+
+        font-size:.95rem;
+
+    }
+
+}

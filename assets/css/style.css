@@ -1,0 +1,20 @@
+@import url("variables.css");
+@import url("reset.css");
+
+@import url("components/header.css");
+@import url("components/footer.css");
+@import url("components/button.css");
+@import url("components/card.css");
+@import url("components/cart.css");
+@import url("components/newsletter.css");
+
+@import url("pages/home.css");
+@import url("pages/shop.css");
+@import url("pages/product.css");
+@import url("pages/about.css");
+@import url("pages/contact.css");
+@import url("pages/login.css");
+@import url("pages/register.css");
+@import url("pages/profile.css");
+
+@import url("responsive.css");

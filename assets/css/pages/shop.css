@@ -1,0 +1,161 @@
+/* ===========================
+   SHOP HERO
+=========================== */
+
+.shop-hero{
+
+    padding:180px 8% 100px;
+
+    text-align:center;
+
+    background:
+    radial-gradient(circle at top,
+    rgba(255,255,255,.08),
+    transparent 70%),
+    var(--background);
+
+}
+
+.shop-hero span{
+
+    display:block;
+
+    margin-bottom:15px;
+
+    letter-spacing:6px;
+
+    color:var(--text-light);
+
+}
+
+.shop-hero h1{
+
+    font-size:clamp(3rem,7vw,5rem);
+
+    margin-bottom:20px;
+
+}
+
+.shop-hero p{
+
+    max-width:700px;
+
+    margin:auto;
+
+    color:var(--text-light);
+
+    line-height:1.8;
+
+}
+
+/* ===========================
+   TOOLBAR
+=========================== */
+
+.shop-toolbar{
+
+    padding:50px 8%;
+
+    border-top:1px solid var(--border);
+
+    border-bottom:1px solid var(--border);
+
+    background:var(--surface);
+
+}
+
+.shop-toolbar .container{
+
+    display:flex;
+
+    gap:20px;
+
+    align-items:center;
+
+    flex-wrap:wrap;
+
+}
+
+.shop-toolbar input{
+
+    flex:1;
+
+    min-width:280px;
+
+    height:55px;
+
+    padding:0 20px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:14px;
+
+    background:var(--card);
+
+    color:white;
+
+}
+
+.shop-toolbar select{
+
+    min-width:220px;
+
+    height:55px;
+
+    padding:0 20px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:var(--card);
+
+    color:white;
+
+    cursor:pointer;
+
+}
+
+/* ===========================
+   PRODUTOS
+=========================== */
+
+.shop-products{
+
+    padding:100px 8%;
+
+}
+
+.shop-products .products-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+
+    gap:35px;
+
+}
+
+/* ===========================
+   RESPONSIVO
+=========================== */
+
+@media(max-width:900px){
+
+    .shop-toolbar .container{
+
+        flex-direction:column;
+
+    }
+
+    .shop-toolbar input,
+
+    .shop-toolbar select{
+
+        width:100%;
+
+    }
+
+}

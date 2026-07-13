@@ -1,459 +1,546 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SØLID Store</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
-    <style>
-         :root {
-            --bg: #0f0f0f;
-            --bg2: #1a1a1a;
-            --text: #ffffff;
-            --card: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
-            --cart-bg: #111111;
-            /* Fundo sólido do carrinho */
-        }
-        
-        [data-theme="light"] {
-            --bg: #f4f4f4;
-            --bg2: #ffffff;
-            --text: #111111;
-            --card: rgba(0, 0, 0, 0.05);
-            --border: rgba(0, 0, 0, 0.1);
-            --cart-bg: #ffffff;
-            /* Fundo sólido claro */
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
-            transition: background .4s, color .4s;
-        }
-        
-        body {
-            background: linear-gradient(135deg, var(--bg), var(--bg2));
-            color: var(--text);
-        }
-        /* HEADER */
-        
-        header {
-            padding: 20px 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 26px;
-            font-weight: 700;
-            letter-spacing: 4px;
-        }
-        
-        .theme-btn {
-            font-size: 12px;
-            padding: 6px 12px;
-            border-radius: 15px;
-            border: 1px solid var(--border);
-            background: var(--card);
-            color: var(--text);
-            cursor: pointer;
-        }
-        /* HERO */
-        
-        .hero {
-            text-align: center;
-            padding: 80px 20px 40px;
-        }
-        
-        .hero h1 {
-            font-size: 42px;
-            letter-spacing: 6px;
-        }
-        /* PRODUTOS */
-        
-        .products {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 40px;
-            padding: 40px;
-        }
-        
-        .card {
-            width: 280px;
-            padding: 20px;
-            border-radius: 20px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        }
-        
-        .slider {
-            position: relative;
-        }
-        
-        .slider img {
-            width: 100%;
-            border-radius: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(0, 0, 0, .6);
-            color: #fff;
-            border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        
-        .left {
-            left: 10px;
-        }
-        
-        .right {
-            right: 10px;
-        }
-        
-        select {
-            width: 100%;
-            padding: 8px;
-            border-radius: 8px;
-            border: none;
-            margin-bottom: 8px;
-        }
-        
-        button {
-            width: 100%;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            background: var(--text);
-            color: var(--bg);
-        }
-        /* BOTÃO CARRINHO */
-        
-        .cart-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 12px 22px;
-            border-radius: 30px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            cursor: pointer;
-            z-index: 1000;
-        }
-        
-        .cart-count {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: red;
-            color: white;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            font-size: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-        }
-        /* CARRINHO */
-        
-        .cart {
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 340px;
-            padding: 20px;
-            border-radius: 20px;
-            background: var(--cart-bg);
-            /* FUNDO SÓLIDO */
-            border: 2px solid var(--border);
-            display: none;
-            max-height: 80vh;
-            overflow: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-        }
-        
-        .cart h3 {
-            margin-bottom: 10px;
-        }
-        
-        .cart-item {
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-        
-        .qty {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 5px;
-        }
-        
-        .qty button {
-            width: 25px;
-            height: 25px;
-            padding: 0;
-        }
-        
-        .total {
-            margin-top: 15px;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        
-        .coupon {
-            margin-top: 10px;
-        }
-        
-        .coupon input {
-            width: 100%;
-            padding: 8px;
-            border-radius: 8px;
-            border: none;
-            margin-bottom: 5px;
-        }
-        
-        .coupon-msg {
-            font-size: 12px;
-        }
-    </style>
+    <title>Carrinho | SØLID</title>
+
+    <link rel="preconnect"
+        href="https://fonts.googleapis.com">
+
+    <link rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <link rel="stylesheet"
+        href="../assets/css/style.css">
+
+    <link rel="stylesheet"
+        href="../assets/css/pages/cart.css">
+
 </head>
 
 <body>
 
-    <header>
-        <div class="logo">SØLID</div>
-        <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
-    </header>
+<header class="header">
 
-    <section class="hero">
-        <h1>STAY SØLID.</h1>
-    </section>
+    <div class="container">
 
-    <section class="products" id="products"></section>
+        <a href="../index.html" class="logo">
 
-    <div class="cart-toggle" onclick="toggleCart()">
-        Carrinho
-        <div class="cart-count" id="cartCount">0</div>
-    </div>
+            <span>SØLID</span>
 
-    <div class="cart" id="cartBox">
-        <h3>Carrinho</h3>
-        <div id="cartItems"></div>
+        </a>
 
-        <div class="coupon">
-            <input type="text" id="couponInput" placeholder="Cupom (SOLID10)">
-            <button onclick="applyCoupon()">Aplicar cupom</button>
-            <p class="coupon-msg" id="couponMsg"></p>
+        <nav class="menu">
+
+            <a href="../index.html">Home</a>
+
+            <a href="shop.html">Shop</a>
+
+            <a href="collections.html">Coleções</a>
+
+            <a href="about.html">Sobre</a>
+
+            <a href="contact.html">Contato</a>
+
+        </nav>
+
+        <div class="actions">
+
+            <a href="wishlist.html">
+
+                <i class="fa-regular fa-heart"></i>
+
+            </a>
+
+            <a href="cart.html">
+
+                <i class="fa-solid fa-bag-shopping"></i>
+
+            </a>
+
+            <a href="login.html">
+
+                <i class="fa-regular fa-user"></i>
+
+            </a>
+
         </div>
 
-        <div class="total">Total: R$ <span id="total">0.00</span></div>
+    </div>
 
-        <button onclick="checkout()" style="margin-top:10px;background:#25D366;color:white;">
-Finalizar compra
-</button>
+</header>
+
+
+
+<section class="cart-header">
+
+    <div class="container">
+
+        <span>
+
+            SHOPPING CART
+
+        </span>
+
+        <h1>
+
+            Seu Carrinho
+
+        </h1>
+
+        <p>
+
+            Revise seus produtos antes de finalizar a compra.
+
+        </p>
 
     </div>
 
-    <script>
-        /* TEMA */
-        function toggleTheme() {
-            let theme = document.documentElement.getAttribute("data-theme");
-            if (theme === "light") {
-                document.documentElement.removeAttribute("data-theme");
-                localStorage.setItem("theme", "dark");
-                themeBtn.innerText = "🌙";
-            } else {
-                document.documentElement.setAttribute("data-theme", "light");
-                localStorage.setItem("theme", "light");
-                themeBtn.innerText = "☀";
-            }
-        }
-        if (localStorage.getItem("theme") === "light") {
-            document.documentElement.setAttribute("data-theme", "light");
-            themeBtn.innerText = "☀";
-        }
+</section>
 
-        /* PRODUTOS */
-        const products = [{
-            name: "Moletom masculino (rei dos reis👑)",
-            price: 160.00,
-            images: ["M1.jpeg", "M2.jpeg", "logo.png"]
-        }, {
-            name: "Moletom feminino (rei dos reis👑)",
-            price: 160.00,
-            images: ["F1.jpeg", "F2.jpeg", "logo.png"]
-        }];
 
-        let imageIndex = {};
-        let cart = {};
-        let discount = 0;
 
-        const container = document.getElementById("products");
+<section class="cart-page">
 
-        products.forEach((p, i) => {
-            container.innerHTML += `
-<div class="card">
-<div class="slider">
-<button class="arrow left" onclick="prevImage(${i})">❮</button>
-<img id="img${i}" src="${p.images[0]}">
-<button class="arrow right" onclick="nextImage(${i})">❯</button>
+<div class="container">
+
+<div class="cart-products">
+
+<div class="cart-product">
+
+<div class="product-image">
+
+<img src="../assets/images/products/F1.jpeg">
+
 </div>
 
-<h3>${p.name}</h3>
-<p>R$ ${p.price.toFixed(2)}</p>
+<div class="product-info">
 
-<select id="size${i}">
-<option value="">Escolha o tamanho</option>
-<option>P</option>
-<option>M</option>
-<option>G</option>
-<option>GG</option>
-</select>
+<h3>
 
-<button onclick="addToCart(${i})">Adicionar</button>
-</div>`;
-        });
+Camiseta Street Cristã
 
-        function nextImage(i) {
-            if (imageIndex[i] == null) imageIndex[i] = 0;
-            imageIndex[i] = (imageIndex[i] + 1) % products[i].images.length;
-            document.getElementById("img" + i).src = products[i].images[imageIndex[i]];
-        }
+</h3>
 
-        function prevImage(i) {
-            if (imageIndex[i] == null) imageIndex[i] = 0;
-            imageIndex[i]--;
-            if (imageIndex[i] < 0) imageIndex[i] = products[i].images.length - 1;
-            document.getElementById("img" + i).src = products[i].images[imageIndex[i]];
-        }
+<p>
 
-        function addToCart(i) {
-            let size = document.getElementById("size" + i).value;
-            if (size === "") {
-                alert("Escolha o tamanho");
-                return;
-            }
+Tamanho G
 
-            let p = products[i];
-            let key = p.name + size;
+</p>
 
-            if (cart[key]) cart[key].qty++;
-            else cart[key] = {...p,
-                size,
-                qty: 1
-            };
+<span>
 
-            renderCart();
-        }
+R$149,90
 
-        function changeQty(key, val) {
-            cart[key].qty += val;
-            if (cart[key].qty <= 0) delete cart[key];
-            renderCart();
-        }
+</span>
 
-        function applyCoupon() {
-            if (localStorage.getItem("usedCoupon")) {
-                couponMsg.innerText = "Cupom já utilizado.";
-                couponMsg.style.color = "red";
-                return;
-            }
-            if (couponInput.value === "SOLID10") {
-                discount = 0.10;
-                couponMsg.innerText = "Cupom aplicado!";
-                couponMsg.style.color = "lightgreen";
-            } else {
-                couponMsg.innerText = "Cupom inválido.";
-                couponMsg.style.color = "red";
-            }
-            renderCart();
-        }
+</div>
 
-        function renderCart() {
-            let html = "";
-            let total = 0;
-            let count = 0;
+<div class="product-quantity">
 
-            for (let key in cart) {
-                let item = cart[key];
-                total += item.price * item.qty;
-                count += item.qty;
+<button class="minus">
 
-                html += `
-<div class="cart-item">
-${item.name}<br>
-Tam: ${item.size}<br>
-R$ ${item.price.toFixed(2)}
-<div class="qty">
-<button onclick="changeQty('${key}',-1)">-</button>
-<span>${item.qty}</span>
-<button onclick="changeQty('${key}',1)">+</button>
-</div><hr>
-</div>`;
-            }
+<i class="fa-solid fa-minus"></i>
 
-            let final = total - (total * discount);
+</button>
 
-            cartItems.innerHTML = html;
-            document.getElementById("total").innerText = final.toFixed(2);
-            cartCount.innerText = count;
-        }
+<input
 
-        function checkout() {
-            if (Object.keys(cart).length === 0) {
-                alert("Seu carrinho está vazio.");
-                return;
-            }
+type="number"
 
-            let message = "🛍 Pedido SØLID:%0A%0A";
-            let total = 0;
+value="1"
 
-            for (let key in cart) {
-                let item = cart[key];
-                total += item.price * item.qty;
+min="1">
 
-                message += `• ${item.name}%0A`;
-                message += `Tam: ${item.size}%0A`;
-                message += `Qtd: ${item.qty}%0A`;
-                message += `Preço unitário: R$ ${item.price.toFixed(2)}%0A%0A`;
-            }
+<button class="plus">
 
-            let final = total - (total * discount);
+<i class="fa-solid fa-plus"></i>
 
-            if (discount > 0) {
-                message += `🎟 Cupom aplicado: SOLID10%0A`;
-                message += `Desconto: ${(discount*100)}%%0A%0A`;
-                localStorage.setItem("usedCoupon", true);
-            }
+</button>
 
-            message += `💰 Total: R$ ${final.toFixed(2)}`;
+</div>
 
-            window.open(`https://wa.me/5531998702914?text=${message}`, "_blank");
-        }
+<div class="product-price">
 
-        function toggleCart() {
-            cartBox.style.display = cartBox.style.display === "block" ? "none" : "block";
-        }
-    </script>
+R$149,90
+
+</div>
+
+<button class="remove-product">
+
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+</div>
+
+
+
+<div class="cart-product">
+
+<div class="product-image">
+
+<img src="../assets/images/products/F2.jpeg">
+
+</div>
+
+<div class="product-info">
+
+<h3>
+
+Moletom Street Cristã
+
+</h3>
+
+<p>
+
+Tamanho M
+
+</p>
+
+<span>
+
+R$249,90
+
+</span>
+
+</div>
+
+<div class="product-quantity">
+
+<button class="minus">
+
+<i class="fa-solid fa-minus"></i>
+
+</button>
+
+<input
+
+type="number"
+
+value="1"
+
+min="1">
+
+<button class="plus">
+
+<i class="fa-solid fa-plus"></i>
+
+</button>
+
+</div>
+
+<div class="product-price">
+
+R$249,90
+
+</div>
+
+<button class="remove-product">
+
+<i class="fa-solid fa-trash"></i>
+
+</button>
+
+</div>
+        </div>
+
+        <!-- ================= RESUMO ================= -->
+
+        <aside class="cart-summary">
+
+            <h2>
+
+                Resumo do Pedido
+
+            </h2>
+
+            <div class="summary-box">
+
+                <div class="summary-item">
+
+                    <span>Subtotal</span>
+
+                    <strong id="subtotal">
+
+                        R$ 399,80
+
+                    </strong>
+
+                </div>
+
+                <div class="summary-item">
+
+                    <span>Frete</span>
+
+                    <strong>
+
+                        Grátis
+
+                    </strong>
+
+                </div>
+
+                <div class="summary-item">
+
+                    <span>Desconto</span>
+
+                    <strong id="discount">
+
+                        R$ 0,00
+
+                    </strong>
+
+                </div>
+
+                <hr>
+
+                <div class="summary-total">
+
+                    <span>Total</span>
+
+                    <strong id="total">
+
+                        R$ 399,80
+
+                    </strong>
+
+                </div>
+
+                <div class="coupon">
+
+                    <input
+
+                        type="text"
+
+                        placeholder="Cupom de desconto">
+
+                    <button>
+
+                        Aplicar
+
+                    </button>
+
+                </div>
+
+                <button class="checkout-btn">
+
+                    Finalizar Compra
+
+                </button>
+
+                <a href="shop.html"
+
+                    class="continue-shopping">
+
+                    ← Continuar Comprando
+
+                </a>
+
+            </div>
+
+        </aside>
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- ================= SUGESTÕES ================= -->
+
+<section class="featured-products">
+
+    <div class="section-title">
+
+        <span>
+
+            VOCÊ TAMBÉM PODE GOSTAR
+
+        </span>
+
+        <h2>
+
+            Continue Comprando
+
+        </h2>
+
+    </div>
+
+    <div class="products-grid">
+
+        <div class="product-card">
+
+            <img
+
+                src="../assets/images/products/F1.jpeg"
+
+                alt="">
+
+            <h3>
+
+                Camiseta Street Cristã
+
+            </h3>
+
+            <p>
+
+                R$149,90
+
+            </p>
+
+            <a href="shop.html"
+
+                class="btn-primary">
+
+                Ver Produto
+
+            </a>
+
+        </div>
+
+        <div class="product-card">
+
+            <img
+
+                src="../assets/images/products/F2.jpeg"
+
+                alt="">
+
+            <h3>
+
+                Moletom Street Cristã
+
+            </h3>
+
+            <p>
+
+                R$249,90
+
+            </p>
+
+            <a href="shop.html"
+
+                class="btn-primary">
+
+                Ver Produto
+
+            </a>
+
+        </div>
+
+        <div class="product-card">
+
+            <img
+
+                src="../assets/images/products/M1.jpeg"
+
+                alt="">
+
+            <h3>
+
+                Boné SØLID
+
+            </h3>
+
+            <p>
+
+                R$99,90
+
+            </p>
+
+            <a href="shop.html"
+
+                class="btn-primary">
+
+                Ver Produto
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="footer-content">
+
+        <div>
+
+            <h3>SØLID</h3>
+
+            <p>
+
+                Premium Streetwear.
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <h4>Institucional</h4>
+
+            <a href="about.html">Sobre</a>
+
+            <a href="contact.html">Contato</a>
+
+        </div>
+
+        <div>
+
+            <h4>Loja</h4>
+
+            <a href="shop.html">Produtos</a>
+
+            <a href="cart.html">Carrinho</a>
+
+        </div>
+
+        <div>
+
+            <h4>Conta</h4>
+
+            <a href="login.html">Entrar</a>
+
+            <a href="register.html">Cadastrar</a>
+
+        </div>
+
+    </div>
+
+    <div class="copyright">
+
+        © 2026 SØLID. Todos os direitos reservados.
+
+    </div>
+
+</footer>
+
+<script src="../assets/js/cart.js"></script>
 
 </body>
 

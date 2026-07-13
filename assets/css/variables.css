@@ -1,0 +1,44 @@
+:root{
+
+    /* Brand */
+
+    --primary:#ffffff;
+    --secondary:#d4d4d4;
+
+    /* Background */
+
+    --background:#050505;
+    --surface:#111111;
+    --card:#181818;
+
+    /* Text */
+
+    --text:#ffffff;
+    --text-light:#b7b7b7;
+
+    /* Border */
+
+    --border:#242424;
+
+    /* Buttons */
+
+    --button:#ffffff;
+    --button-text:#050505;
+
+    /* Radius */
+
+    --radius:18px;
+
+    /* Container */
+
+    --container:1300px;
+
+    /* Shadow */
+
+    --shadow:0 20px 60px rgba(0,0,0,.35);
+
+    /* Transition */
+
+    --transition:.35s ease;
+
+}

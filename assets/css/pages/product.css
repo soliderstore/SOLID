@@ -1,0 +1,211 @@
+/* ==========================================
+   PRODUCT PAGE
+========================================== */
+
+.product-page{
+
+    padding:160px 0 100px;
+
+}
+
+.product-layout{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:80px;
+
+    align-items:start;
+
+}
+
+/* ==========================================
+   GALERIA
+========================================== */
+
+.product-gallery{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+.main-image{
+
+    width:100%;
+
+    border-radius:20px;
+
+    background:var(--card);
+
+    border:1px solid var(--border);
+
+}
+
+.thumbs{
+
+    display:flex;
+
+    gap:15px;
+
+}
+
+.thumbs img{
+
+    width:90px;
+
+    height:90px;
+
+    object-fit:cover;
+
+    border-radius:12px;
+
+    border:2px solid transparent;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.thumbs img:hover{
+
+    border-color:white;
+
+}
+
+/* ==========================================
+   INFORMAÇÕES
+========================================== */
+
+.product-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.product-info .badge{
+
+    width:max-content;
+
+    margin-bottom:20px;
+
+}
+
+.product-info h1{
+
+    font-size:3rem;
+
+    margin-bottom:15px;
+
+}
+
+.product-info h2{
+
+    font-size:2.3rem;
+
+    margin-bottom:25px;
+
+}
+
+.product-info p{
+
+    color:var(--text-light);
+
+    line-height:1.9;
+
+    margin-bottom:35px;
+
+}
+
+/* ==========================================
+   TAMANHO E COR
+========================================== */
+
+.product-info h4{
+
+    margin-bottom:12px;
+
+}
+
+.product-info select{
+
+    width:100%;
+
+    height:55px;
+
+    margin-bottom:20px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:14px;
+
+    background:var(--card);
+
+    color:white;
+
+    padding:0 18px;
+
+}
+
+/* ==========================================
+   BOTÃO
+========================================== */
+
+.product-info button{
+
+    margin-top:20px;
+
+    width:100%;
+
+    height:60px;
+
+    border:none;
+
+    border-radius:15px;
+
+    background:white;
+
+    color:black;
+
+    font-size:1rem;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.product-info button:hover{
+
+    transform:translateY(-5px);
+
+    background:#e7e7e7;
+
+}
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media(max-width:1000px){
+
+    .product-layout{
+
+        grid-template-columns:1fr;
+
+        gap:50px;
+
+    }
+
+}
