@@ -3,474 +3,148 @@
 
 <head>
 
+    <!-- Configurações -->
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <title>SØLID | Premium Streetwear</title>
 
-    <title>Carrinho | SØLID</title>
-
-    <link rel="preconnect"
-        href="https://fonts.googleapis.com">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
 
     <link rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
+          href="https://fonts.gstatic.com"
+          crossorigin>
 
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-
+          rel="stylesheet">
+    
     <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
+    <!-- CSS -->
     <link rel="stylesheet"
-        href="../assets/css/style.css">
-
-    <link rel="stylesheet"
-        href="../assets/css/pages/cart.css">
+          href="assets/css/style.css">
 
 </head>
 
 <body>
 
-<header class="header">
+    <!-- ================= HEADER ================= -->
 
-    <div class="container">
+    <header class="header">
 
-        <a href="../index.html" class="logo">
+        <div class="container">
+
+            <a href="index.html" class="logo">
 
             <span>SØLID</span>
 
-        </a>
-
-        <nav class="menu">
-
-            <a href="../index.html">Home</a>
-
-            <a href="shop.html">Shop</a>
-
-            <a href="collections.html">Coleções</a>
-
-            <a href="about.html">Sobre</a>
-
-            <a href="contact.html">Contato</a>
-
-        </nav>
-
-        <div class="actions">
-
-            <a href="wishlist.html">
-
-                <i class="fa-regular fa-heart"></i>
-
             </a>
 
-            <a href="cart.html">
+            <nav class="menu">
 
-                <i class="fa-solid fa-bag-shopping"></i>
+                <a href="index.html">Home</a>
 
-            </a>
+                <a href="pages/shop.html">Shop</a>
 
-            <a href="login.html">
+                <a href="pages/collections.html">Coleções</a>
 
-                <i class="fa-regular fa-user"></i>
+                <a href="pages/about.html">Sobre</a>
 
-            </a>
+                <a href="pages/contact.html">Contato</a>
 
-        </div>
+            </nav>
 
-    </div>
+            <div class="actions">
 
-</header>
+                <a href="pages/wishlist.html">
 
+                    <i class="fa-regular fa-heart"></i>
 
+                </a>
 
-<section class="cart-header">
+                <a href="pages/cart.html">
 
-    <div class="container">
+                    <i class="fa-solid fa-bag-shopping"></i>
 
-        <span>
+                </a>
 
-            SHOPPING CART
+                <a href="pages/login.html">
 
-        </span>
-
-        <h1>
-
-            Seu Carrinho
-
-        </h1>
-
-        <p>
-
-            Revise seus produtos antes de finalizar a compra.
-
-        </p>
-
-    </div>
-
-</section>
-
-
-
-<section class="cart-page">
-
-<div class="container">
-
-<div class="cart-products">
-
-<div class="cart-product">
-
-<div class="product-image">
-
-<img src="../assets/images/products/F1.jpeg">
-
-</div>
-
-<div class="product-info">
-
-<h3>
-
-Camiseta Street Cristã
-
-</h3>
-
-<p>
-
-Tamanho G
-
-</p>
-
-<span>
-
-R$149,90
-
-</span>
-
-</div>
-
-<div class="product-quantity">
-
-<button class="minus">
-
-<i class="fa-solid fa-minus"></i>
-
-</button>
-
-<input
-
-type="number"
-
-value="1"
-
-min="1">
-
-<button class="plus">
-
-<i class="fa-solid fa-plus"></i>
-
-</button>
-
-</div>
-
-<div class="product-price">
-
-R$149,90
-
-</div>
-
-<button class="remove-product">
-
-<i class="fa-solid fa-trash"></i>
-
-</button>
-
-</div>
-
-
-
-<div class="cart-product">
-
-<div class="product-image">
-
-<img src="../assets/images/products/F2.jpeg">
-
-</div>
-
-<div class="product-info">
-
-<h3>
-
-Moletom Street Cristã
-
-</h3>
-
-<p>
-
-Tamanho M
-
-</p>
-
-<span>
-
-R$249,90
-
-</span>
-
-</div>
-
-<div class="product-quantity">
-
-<button class="minus">
-
-<i class="fa-solid fa-minus"></i>
-
-</button>
-
-<input
-
-type="number"
-
-value="1"
-
-min="1">
-
-<button class="plus">
-
-<i class="fa-solid fa-plus"></i>
-
-</button>
-
-</div>
-
-<div class="product-price">
-
-R$249,90
-
-</div>
-
-<button class="remove-product">
-
-<i class="fa-solid fa-trash"></i>
-
-</button>
-
-</div>
-        </div>
-
-        <!-- ================= RESUMO ================= -->
-
-        <aside class="cart-summary">
-
-            <h2>
-
-                Resumo do Pedido
-
-            </h2>
-
-            <div class="summary-box">
-
-                <div class="summary-item">
-
-                    <span>Subtotal</span>
-
-                    <strong id="subtotal">
-
-                        R$ 399,80
-
-                    </strong>
-
-                </div>
-
-                <div class="summary-item">
-
-                    <span>Frete</span>
-
-                    <strong>
-
-                        Grátis
-
-                    </strong>
-
-                </div>
-
-                <div class="summary-item">
-
-                    <span>Desconto</span>
-
-                    <strong id="discount">
-
-                        R$ 0,00
-
-                    </strong>
-
-                </div>
-
-                <hr>
-
-                <div class="summary-total">
-
-                    <span>Total</span>
-
-                    <strong id="total">
-
-                        R$ 399,80
-
-                    </strong>
-
-                </div>
-
-                <div class="coupon">
-
-                    <input
-
-                        type="text"
-
-                        placeholder="Cupom de desconto">
-
-                    <button>
-
-                        Aplicar
-
-                    </button>
-
-                </div>
-
-                <button class="checkout-btn">
-
-                    Finalizar Compra
-
-                </button>
-
-                <a href="shop.html"
-
-                    class="continue-shopping">
-
-                    ← Continuar Comprando
+                    <i class="fa-regular fa-user"></i>
 
                 </a>
 
             </div>
 
-        </aside>
+        </div>
 
-    </div>
-
-</section>
+    </header>
 
 
 
+    <!-- ================= HERO ================= -->
 
+    <!-- ================= HERO ================= -->
 
-<!-- ================= SUGESTÕES ================= -->
+<section class="hero">
 
-<section class="featured-products">
+    <div class="container hero-container">
 
-    <div class="section-title">
+        <div class="hero-left">
 
-        <span>
+            <span class="subtitle">
 
-            VOCÊ TAMBÉM PODE GOSTAR
+                NEW COLLECTION 2026
 
-        </span>
+            </span>
 
-        <h2>
+            <h1>
 
-            Continue Comprando
+                WE DON'T<br>
 
-        </h2>
+                FOLLOW<br>
 
-    </div>
+                TRENDS.
 
-    <div class="products-grid">
-
-        <div class="product-card">
-
-            <img
-
-                src="../assets/images/products/F1.jpeg"
-
-                alt="">
-
-            <h3>
-
-                Camiseta Street Cristã
-
-            </h3>
+            </h1>
 
             <p>
 
-                R$149,90
+                Minimalismo.
+
+                Qualidade.
+
+                Streetwear desenvolvido para quem cria
+                seu próprio caminho.
 
             </p>
 
-            <a href="shop.html"
+            <div class="hero-buttons">
 
-                class="btn-primary">
+                <a href="pages/shop.html"
+                   class="btn-primary">
 
-                Ver Produto
+                    Comprar Agora
 
-            </a>
+                </a>
+
+                <a href="pages/about.html"
+                   class="btn-secondary">
+
+                    Nossa História
+
+                </a>
+
+            </div>
 
         </div>
 
-        <div class="product-card">
+        <div class="hero-right">
 
-            <img
-
-                src="../assets/images/products/F2.jpeg"
-
-                alt="">
-
-            <h3>
-
-                Moletom Street Cristã
-
-            </h3>
-
-            <p>
-
-                R$249,90
-
-            </p>
-
-            <a href="shop.html"
-
-                class="btn-primary">
-
-                Ver Produto
-
-            </a>
-
-        </div>
-
-        <div class="product-card">
-
-            <img
-
-                src="../assets/images/products/M1.jpeg"
-
-                alt="">
-
-            <h3>
-
-                Boné SØLID
-
-            </h3>
-
-            <p>
-
-                R$99,90
-
-            </p>
-
-            <a href="shop.html"
-
-                class="btn-primary">
-
-                Ver Produto
-
-            </a>
+            <img src="assets/images/products/M1.jpeg"
+                 alt="Moletom">
 
         </div>
 
@@ -479,68 +153,191 @@ R$249,90
 </section>
 
 
+    <!-- ================= BENEFÍCIOS ================= -->
+
+    <section class="benefits">
+
+        <div class="container">
+
+            <div class="benefit">
+
+                🚚 Frete para todo o Brasil
+
+            </div>
+
+            <div class="benefit">
+
+                🔒 Compra 100% Segura
+
+            </div>
+
+            <div class="benefit">
+
+                ⭐ Qualidade Premium
+
+            </div>
+
+        </div>
+
+    </section>
 
 
 
-<!-- ================= FOOTER ================= -->
+    <!-- ================= PRODUTOS ================= -->
 
-<footer class="footer">
+    <section class="featured-products">
 
-    <div class="footer-content">
+        <div class="section-title">
 
-        <div>
+            <span>DESTAQUES</span>
 
-            <h3>SØLID</h3>
+            <h2>Produtos em Destaque</h2>
+
+        </div>
+
+        <div id="products" class="products-grid"></div>
+
+    </section>
+
+
+
+    <!-- ================= SOBRE ================= -->
+
+    <section class="history">
+
+        <div class="history-content">
+
+            <span>NOSSA HISTÓRIA</span>
+
+            <h2>
+
+                Ser SØLID é permanecer firme.
+
+            </h2>
 
             <p>
 
-                Premium Streetwear.
+                Acreditamos que vestir-se é uma forma de comunicar quem você é.
+
+                Criamos peças minimalistas, premium e atemporais para pessoas que
+                valorizam identidade acima de tendências.
 
             </p>
 
-        </div>
+            <a href="pages/about.html"
+               class="btn-primary">
 
-        <div>
+                Conheça nossa história
 
-            <h4>Institucional</h4>
-
-            <a href="about.html">Sobre</a>
-
-            <a href="contact.html">Contato</a>
+            </a>
 
         </div>
 
-        <div>
+    </section>
 
-            <h4>Loja</h4>
 
-            <a href="shop.html">Produtos</a>
 
-            <a href="cart.html">Carrinho</a>
+    <!-- ================= NEWSLETTER ================= -->
+
+    <section class="newsletter">
+
+        <div class="newsletter-content">
+
+            <span>NOVIDADES</span>
+
+            <h2>
+
+                Receba nossos lançamentos.
+
+            </h2>
+
+            <p>
+
+                Seja o primeiro a conhecer novas coleções e promoções.
+
+            </p>
+
+            <form>
+
+                <input
+                    type="email"
+                    placeholder="Seu melhor e-mail">
+
+                <button>
+
+                    Inscrever-se
+
+                </button>
+
+            </form>
 
         </div>
 
-        <div>
+    </section>
 
-            <h4>Conta</h4>
 
-            <a href="login.html">Entrar</a>
 
-            <a href="register.html">Cadastrar</a>
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="footer-content">
+
+            <div>
+
+                <h3>SØLID</h3>
+
+                <p>
+
+                    Premium Streetwear.
+
+                </p>
+
+            </div>
+
+            <div>
+
+                <h4>Institucional</h4>
+
+                <a href="pages/about.html">Sobre</a>
+
+                <a href="pages/contact.html">Contato</a>
+
+            </div>
+
+            <div>
+
+                <h4>Loja</h4>
+
+                <a href="pages/shop.html">Produtos</a>
+
+                <a href="pages/cart.html">Carrinho</a>
+
+            </div>
+
+            <div>
+
+                <h4>Conta</h4>
+
+                <a href="pages/login.html">Entrar</a>
+
+                <a href="pages/register.html">Cadastrar</a>
+
+            </div>
 
         </div>
 
-    </div>
+        <div class="copyright">
 
-    <div class="copyright">
+            © 2026 SØLID. Todos os direitos reservados.
 
-        © 2026 SØLID. Todos os direitos reservados.
+        </div>
 
-    </div>
+    </footer>
 
-</footer>
 
-<script src="../assets/js/cart.js"></script>
+
+    <script src="assets/js/script.js"></script>
 
 </body>
 
