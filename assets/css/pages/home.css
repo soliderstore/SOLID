@@ -396,3 +396,84 @@
     }
 
 }
+
+/* ================= MOBILE ================= */
+
+@media(max-width:900px){
+    .hero{
+        min-height:auto;
+        padding:118px 0 70px;
+    }
+
+    .hero-container{
+        grid-template-columns:1fr;
+        gap:42px;
+    }
+
+    .hero-left{
+        gap:22px;
+    }
+
+    .hero h1{
+        font-size:clamp(3.4rem, 14vw, 5.4rem);
+        letter-spacing:-2px;
+    }
+
+    .hero-right{
+        justify-content:flex-start;
+    }
+
+    .hero-right img{
+        width:min(100%, 420px);
+        max-width:none;
+    }
+
+    .benefits .container{
+        grid-template-columns:1fr;
+    }
+
+    .benefit + .benefit{
+        border-top:1px solid var(--border);
+    }
+}
+
+@media(max-width:520px){
+    .hero{
+        padding-top:105px;
+    }
+
+    .hero-container{
+        width:min(88%, var(--container));
+        gap:34px;
+    }
+
+    .subtitle{
+        font-size:.8rem;
+        letter-spacing:5px;
+        line-height:1.45;
+    }
+
+    .hero h1{
+        font-size:clamp(3.1rem, 15vw, 4.4rem);
+        line-height:.94;
+    }
+
+    .hero p{
+        font-size:1rem;
+        line-height:1.75;
+    }
+
+    .hero-buttons{
+        flex-direction:column;
+        margin-top:8px;
+    }
+
+    .hero-buttons a{
+        width:100%;
+        text-align:center;
+    }
+
+    .hero-right img{
+        border-radius:18px;
+    }
+}

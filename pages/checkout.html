@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finalizar compra | SØLID</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <a href="../index.html" class="logo"><span>SØLID</span></a>
+            <nav class="menu">
+                <a href="../index.html">Home</a>
+                <a href="shop.html">Shop</a>
+                <a href="collections.html">Coleções</a>
+                <a href="about.html">Sobre</a>
+                <a href="contact.html">Contato</a>
+            </nav>
+            <div class="actions">
+                <a href="wishlist.html" aria-label="Favoritos"><i class="fa-regular fa-heart"></i></a>
+                <a href="cart.html" aria-label="Carrinho"><i class="fa-solid fa-bag-shopping"></i></a>
+                <a href="login.html" aria-label="Entrar"><i class="fa-regular fa-user"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="checkout-page">
+        <div class="container">
+            <div class="section-title">
+                <span>CHECKOUT</span>
+                <h1>Finalizar Compra</h1>
+                <p>Preencha seus dados para enviar o pedido.</p>
+            </div>
+
+            <div id="checkout-content" class="checkout-layout">
+                <form id="checkout-form" class="checkout-form">
+                    <h2>Seus dados</h2>
+                    <div class="form-grid">
+                        <label>Nome completo<input id="customer-name" type="text" required autocomplete="name"></label>
+                        <label>WhatsApp<input id="customer-phone" type="tel" required autocomplete="tel" placeholder="(00) 00000-0000"></label>
+                        <label>E-mail<input id="customer-email" type="email" required autocomplete="email"></label>
+                        <label>CPF <small>(opcional)</small><input id="customer-cpf" type="text" inputmode="numeric" placeholder="000.000.000-00"></label>
+                        <label class="form-full">Rua / Avenida<input id="customer-address" type="text" required autocomplete="street-address"></label>
+                        <label>Número<input id="customer-number" type="text" required></label>
+                        <label>Complemento <small>(opcional)</small><input id="customer-complement" type="text"></label>
+                        <label>Bairro<input id="customer-neighborhood" type="text" required></label>
+                        <label>CEP<input id="customer-zip" type="text" required inputmode="numeric" placeholder="00000-000"></label>
+                        <label class="form-full">Cidade / UF<input id="customer-city" type="text" required placeholder="Ex.: Belo Horizonte / MG"></label>
+                        <label>Recebimento<select id="delivery-method" required><option value="">Selecione</option><option>Entrega no endereço</option><option>Retirada a combinar</option></select></label>
+                        <label>Forma de pagamento<select id="payment-method" required><option value="">Selecione</option><option>PIX</option><option>Cartão de crédito</option><option>Cartão de débito</option><option>Dinheiro</option></select></label>
+                    </div>
+                    <label>Detalhes do pagamento <small>(opcional)</small><input id="payment-details" type="text" placeholder="Ex.: cartão em 2x ou troco para R$ 100,00"></label>
+                    <label>Observações do pedido <small>(opcional)</small><textarea id="customer-notes" rows="4" placeholder="Ponto de referência, melhor horário para entrega ou outra informação."></textarea></label>
+                    <button class="btn-primary checkout-submit" type="submit"><i class="fa-brands fa-whatsapp"></i> Enviar pedido pelo WhatsApp</button>
+                </form>
+
+                <aside class="checkout-summary">
+                    <h2>Resumo do pedido</h2>
+                    <div id="checkout-items"></div>
+                    <div class="checkout-total"><span>Total</span><strong id="checkout-total"></strong></div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer"><div class="copyright">© 2026 SØLID. Todos os direitos reservados.</div></footer>
+    <script src="../assets/js/checkout.js"></script>
+    <script src="../assets/js/main.js"></script>
+</body>
+</html>

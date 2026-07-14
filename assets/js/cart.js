@@ -1,154 +1,113 @@
 /* ==========================================================
-   SØLID - Cart
+   SØLID - Carrinho
 ========================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-
-    const minusButtons = document.querySelectorAll(".minus");
-    const plusButtons = document.querySelectorAll(".plus");
-    const removeButtons = document.querySelectorAll(".remove");
-
+    const productsContainer = document.querySelector(".cart-products");
     const subtotal = document.getElementById("subtotal");
     const total = document.getElementById("total");
+    const summary = document.querySelector(".cart-summary");
 
-    function format(value){
-
-        return value.toLocaleString("pt-BR",{
-
-            style:"currency",
-
-            currency:"BRL"
-
+    function format(value) {
+        return value.toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL"
         });
+    }
+
+    function getCart() {
+        try {
+            const cart = JSON.parse(localStorage.getItem("solid-cart"));
+            return Array.isArray(cart) ? cart : [];
+        } catch {
+            return [];
+        }
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem("solid-cart", JSON.stringify(cart));
+    }
+
+    function updateTotals(cart) {
+        const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        subtotal.textContent = format(cartTotal);
+        total.textContent = format(cartTotal);
 
     }
 
-    function calculate(){
+    function renderCart() {
+        const cart = getCart();
+        updateTotals(cart);
 
-        let finalTotal = 0;
-
-        document.querySelectorAll(".cart-item").forEach(item=>{
-
-            const input = item.querySelector("input");
-
-            const priceElement = item.querySelector(".card-price");
-
-            const price = Number(
-
-                priceElement.innerText
-                .replace("R$","")
-                .replace(/\./g,"")
-                .replace(",",".")
-                .trim()
-
-            );
-
-            finalTotal += price * Number(input.value);
-
-        });
-
-        subtotal.innerHTML = format(finalTotal);
-
-        total.innerHTML = format(finalTotal);
-
-    }
-
-    plusButtons.forEach(button=>{
-
-        button.addEventListener("click",()=>{
-
-            const input = button.parentElement.querySelector("input");
-
-            input.value++;
-
-            calculate();
-
-        });
-
-    });
-
-    minusButtons.forEach(button=>{
-
-        button.addEventListener("click",()=>{
-
-            const input = button.parentElement.querySelector("input");
-
-            if(Number(input.value) > 1){
-
-                input.value--;
-
-            }
-
-            calculate();
-
-        });
-
-    });
-
-    removeButtons.forEach(button=>{
-
-        button.addEventListener("click",()=>{
-
-            const card = button.closest(".cart-item");
-
-            card.style.opacity = "0";
-
-            card.style.transform = "translateY(20px)";
-
-            setTimeout(()=>{
-
-                card.remove();
-
-                calculate();
-
-                emptyCart();
-
-            },300);
-
-        });
-
-    });
-
-    function emptyCart(){
-
-        const items = document.querySelectorAll(".cart-item");
-
-        if(items.length === 0){
-
-            document.querySelector(".cart-products").innerHTML = `
-
+        if (cart.length === 0) {
+            productsContainer.innerHTML = `
                 <div class="section-title">
-
                     <span>SHOPPING CART</span>
-
                     <h2>Seu carrinho está vazio</h2>
-
-                    <p>
-
-                        Adicione alguns produtos para começar sua compra.
-
-                    </p>
-
+                    <p>Adicione alguns produtos para começar sua compra.</p>
                     <br>
-
-                    <a href="shop.html" class="btn-primary">
-
-                        Ir para Loja
-
-                    </a>
-
-                </div>
-
-            `;
-
-            subtotal.innerHTML = format(0);
-
-            total.innerHTML = format(0);
-
+                    <a href="shop.html" class="btn-primary">Ir para Loja</a>
+                </div>`;
+            summary.style.display = "none";
+            return;
         }
 
+        summary.style.display = "block";
+        productsContainer.innerHTML = cart.map((item, index) => `
+            <div class="card cart-item" data-index="${index}">
+                <div class="card-image">
+                    <img src="${item.image}" alt="${item.name}">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">${item.name}</h3>
+                    <p>Tamanho: ${item.size} · Cor: ${item.color}</p>
+                    <h4 class="card-price">${format(item.price)}</h4>
+                    <div class="cart-actions">
+                        <div class="quantity">
+                            <button class="minus" type="button" aria-label="Diminuir quantidade">−</button>
+                            <input type="number" value="${item.quantity}" min="1" aria-label="Quantidade">
+                            <button class="plus" type="button" aria-label="Aumentar quantidade">+</button>
+                        </div>
+                        <button class="remove" type="button">Remover</button>
+                    </div>
+                </div>
+            </div>`).join("");
     }
 
-    calculate();
+    productsContainer.addEventListener("click", (event) => {
+        const card = event.target.closest(".cart-item");
+        if (!card) return;
 
+        const index = Number(card.dataset.index);
+        const cart = getCart();
+        if (!cart[index]) return;
+
+        if (event.target.closest(".plus")) {
+            cart[index].quantity++;
+        } else if (event.target.closest(".minus")) {
+            cart[index].quantity = Math.max(1, cart[index].quantity - 1);
+        } else if (event.target.closest(".remove")) {
+            cart.splice(index, 1);
+        } else {
+            return;
+        }
+
+        saveCart(cart);
+        renderCart();
+    });
+
+    productsContainer.addEventListener("change", (event) => {
+        if (!event.target.matches("input[type='number']")) return;
+
+        const card = event.target.closest(".cart-item");
+        const cart = getCart();
+        const index = Number(card.dataset.index);
+        if (!cart[index]) return;
+
+        cart[index].quantity = Math.max(1, Number(event.target.value) || 1);
+        saveCart(cart);
+        renderCart();
+    });
+
+    renderCart();
 });

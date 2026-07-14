@@ -16,5 +16,7 @@
 @import url("pages/login.css");
 @import url("pages/register.css");
 @import url("pages/profile.css");
+@import url("pages/wishlist.css");
+@import url("pages/checkout.css");
 
 @import url("responsive.css");

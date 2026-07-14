@@ -101,11 +101,52 @@ if (!container) {
 
                 </button>
 
+                <button id="add-wishlist" type="button">
+
+                    <i class="fa-regular fa-heart"></i> Adicionar aos Favoritos
+
+                </button>
+
             </div>
 
         </div>
 
     `;
+}
+
+const addWishlistButton = document.getElementById("add-wishlist");
+
+if (addWishlistButton) {
+
+    addWishlistButton.addEventListener("click", () => {
+
+        const size = document.getElementById("size").value;
+        const color = document.getElementById("color").value;
+        let wishlist;
+
+        try {
+            wishlist = JSON.parse(localStorage.getItem("solid-wishlist")) || [];
+        } catch {
+            wishlist = [];
+        }
+
+        const alreadySaved = wishlist.some(item => item.id === product.id);
+
+        if (!alreadySaved) {
+            wishlist.push({
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.images[0],
+                size,
+                color
+            });
+            localStorage.setItem("solid-wishlist", JSON.stringify(wishlist));
+        }
+
+        addWishlistButton.innerHTML = '<i class="fa-solid fa-heart"></i> Produto favoritado';
+        addWishlistButton.disabled = true;
+    });
 }
 /* =====================================================
    CARRINHO
