@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
         updateTotals(cart);
 
         if (cart.length === 0) {
+            document.querySelector(".cart-page").classList.add("cart-is-empty");
             productsContainer.innerHTML = `
                 <div class="section-title">
                     <span>SHOPPING CART</span>
@@ -52,6 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        document.querySelector(".cart-page").classList.remove("cart-is-empty");
         summary.style.display = "block";
         productsContainer.innerHTML = cart.map((item, index) => `
             <div class="card cart-item" data-index="${index}">

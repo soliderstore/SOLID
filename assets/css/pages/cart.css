@@ -46,7 +46,7 @@
 
 .cart-page{
 
-    padding:80px 0 140px;
+    padding:150px 0 140px;
 
 }
 
@@ -675,5 +675,39 @@
         font-size:.95rem;
 
     }
+
+}
+
+/* ================= CARRINHO VAZIO ================= */
+
+.cart-page.cart-is-empty .container{
+
+    display:block;
+
+}
+
+.cart-page.cart-is-empty .cart-content{
+
+    display:block;
+
+}
+
+.cart-page.cart-is-empty .cart-products{
+
+    min-height:420px;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+}
+
+.cart-page.cart-is-empty .cart-products .section-title{
+
+    max-width:650px;
+
+    margin:0;
 
 }

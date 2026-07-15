@@ -71,3 +71,61 @@
     padding-top:25px;
 
 }
+
+@media(max-width:800px){
+
+    .footer{
+
+        padding:55px 8% 25px;
+
+    }
+
+    .footer-content{
+
+        grid-template-columns:repeat(2, 1fr);
+
+        gap:32px 24px;
+
+        margin-bottom:40px;
+
+    }
+
+    .footer-brand{
+
+        grid-column:1 / -1;
+
+    }
+
+}
+
+@media(max-width:460px){
+
+    .footer-content{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .footer-brand{
+
+        grid-column:auto;
+
+    }
+
+}
+
+.footer-logo{
+
+    display:inline-block;
+
+    margin-bottom:15px;
+
+    color:var(--text);
+
+    font-size:2rem;
+
+    font-weight:800;
+
+    letter-spacing:6px;
+
+}

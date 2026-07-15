@@ -1,9 +1,43 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const header = document.querySelector(".header");
-    const menu = document.querySelector(".header .menu");
-    const actions = document.querySelector(".header .actions");
+    let header = document.querySelector(".header");
 
-    if (!header || !menu || !actions) return;
+    if (!header) {
+        const isPageInsidePagesFolder = window.location.pathname.includes("/pages/");
+        const rootPath = isPageInsidePagesFolder ? "../" : "";
+        const pagesPath = isPageInsidePagesFolder ? "" : "pages/";
+
+        if (!document.querySelector('link[href*="font-awesome"]')) {
+            const icons = document.createElement("link");
+            icons.rel = "stylesheet";
+            icons.href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css";
+            document.head.append(icons);
+        }
+
+        header = document.createElement("header");
+        header.className = "header";
+        header.innerHTML = `
+            <div class="container">
+                <a href="${rootPath}index.html" class="logo"><span>SØLID</span></a>
+                <nav class="menu">
+                    <a href="${rootPath}index.html">Home</a>
+                    <a href="${pagesPath}shop.html">Shop</a>
+                    <a href="${pagesPath}collections.html">Coleções</a>
+                    <a href="${pagesPath}about.html">Sobre</a>
+                    <a href="${pagesPath}contact.html">Contato</a>
+                </nav>
+                <div class="actions">
+                    <a href="${pagesPath}wishlist.html" aria-label="Favoritos"><i class="fa-regular fa-heart"></i></a>
+                    <a href="${pagesPath}cart.html" aria-label="Carrinho"><i class="fa-solid fa-bag-shopping"></i></a>
+                    <a href="${pagesPath}login.html" aria-label="Entrar"><i class="fa-regular fa-user"></i></a>
+                </div>
+            </div>`;
+        document.body.prepend(header);
+    }
+
+    const menu = header.querySelector(".menu");
+    const actions = header.querySelector(".actions");
+
+    if (!menu || !actions || header.querySelector(".menu-toggle")) return;
 
     const toggle = document.createElement("button");
     toggle.className = "menu-toggle";
