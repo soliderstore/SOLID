@@ -159,7 +159,7 @@
 
 .mobile-menu-actions{ display:none; }
 
-@media(max-width:900px){
+@media(max-width:1100px){
     .header .container{ height:72px; }
     .menu-toggle{ display:block; z-index:2; }
 

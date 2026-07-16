@@ -399,7 +399,7 @@
 
 /* ================= MOBILE ================= */
 
-@media(max-width:900px){
+@media(max-width:1100px){
     .hero{
         min-height:auto;
         padding:118px 0 70px;
@@ -437,7 +437,7 @@
     }
 }
 
-@media(max-width:520px){
+@media(max-width:700px){
     .hero{
         padding-top:105px;
     }
