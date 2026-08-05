@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato | SØLID</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+    <main class="contact-page">
+        <div class="container">
+            <div class="section-title">
+                <span>FALE CONOSCO</span>
+                <h1>Como podemos ajudar?</h1>
+                <p>Envie sua dúvida e nossa equipe responderá pelo WhatsApp.</p>
+            </div>
+
+            <div class="contact-layout">
+                <div class="contact-intro">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    <h2>Atendimento rápido</h2>
+                    <p>Conte o que você precisa. Sua mensagem será encaminhada diretamente para o atendimento da SØLID.</p>
+                    <a href="https://wa.me/5531998244421" target="_blank" rel="noopener">+55 31 99824-4421</a>
+                </div>
+
+                <form id="contact-form" class="contact-form">
+                    <label>Seu nome<input id="contact-name" type="text" required autocomplete="name" placeholder="Como podemos chamar você?"></label>
+                    <label>Seu WhatsApp<input id="contact-phone" type="tel" required autocomplete="tel" inputmode="numeric" maxlength="15" placeholder="(00) 00000-0000"></label>
+                    <label>Assunto<select id="contact-subject" required><option value="">Selecione o assunto</option><option>Produtos e tamanhos</option><option>Pedido em andamento</option><option>Entrega e frete</option><option>Troca ou devolução</option><option>Pagamento</option><option>Outro assunto</option></select></label>
+                    <label>Sua dúvida<textarea id="contact-message" rows="6" required placeholder="Escreva aqui como podemos ajudar."></textarea></label>
+                    <button class="btn-primary" type="submit"><i class="fa-brands fa-whatsapp"></i> Enviar dúvida pelo WhatsApp</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script src="../assets/js/contact.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/footer.js"></script>
+</body>
+</html>
