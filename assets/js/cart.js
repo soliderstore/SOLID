@@ -7,12 +7,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const subtotal = document.getElementById("subtotal");
     const total = document.getElementById("total");
     const summary = document.querySelector(".cart-summary");
+    const cartContent = document.querySelector(".cart-content");
 
     function format(value) {
-        return value.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL"
-        });
+        return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
     }
 
     function getCart() {
@@ -32,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
         subtotal.textContent = format(cartTotal);
         total.textContent = format(cartTotal);
-
     }
 
     function renderCart() {
@@ -41,25 +38,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (cart.length === 0) {
             document.querySelector(".cart-page").classList.add("cart-is-empty");
+            cartContent.classList.add("empty-cart-content");
             productsContainer.innerHTML = `
-                <div class="section-title">
-                    <span>SHOPPING CART</span>
-                    <h2>Seu carrinho está vazio</h2>
-                    <p>Adicione alguns produtos para começar sua compra.</p>
-                    <br>
-                    <a href="shop.html" class="btn-primary">Ir para Loja</a>
+                <div class="empty-cart-card">
+                    <div class="empty-cart-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                    <span>SEU CARRINHO</span>
+                    <h2>Ainda não há produtos por aqui.</h2>
+                    <p>Descubra peças feitas para acompanhar sua identidade e escolha a sua favorita.</p>
+                    <a href="shop.html" class="btn-primary">Explorar a coleção <i class="fa-solid fa-arrow-right"></i></a>
                 </div>`;
             summary.style.display = "none";
             return;
         }
 
         document.querySelector(".cart-page").classList.remove("cart-is-empty");
+        cartContent.classList.remove("empty-cart-content");
         summary.style.display = "block";
         productsContainer.innerHTML = cart.map((item, index) => `
             <div class="card cart-item" data-index="${index}">
-                <div class="card-image">
-                    <img src="${item.image}" alt="${item.name}">
-                </div>
+                <div class="card-image"><img src="${item.image}" alt="${item.name}"></div>
                 <div class="card-content">
                     <h3 class="card-title">${item.name}</h3>
                     <p>Tamanho: ${item.size} · Cor: ${item.color}</p>
@@ -76,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>`).join("");
     }
 
-    productsContainer.addEventListener("click", (event) => {
+    productsContainer.addEventListener("click", event => {
         const card = event.target.closest(".cart-item");
         if (!card) return;
 
@@ -84,23 +81,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const cart = getCart();
         if (!cart[index]) return;
 
-        if (event.target.closest(".plus")) {
-            cart[index].quantity++;
-        } else if (event.target.closest(".minus")) {
-            cart[index].quantity = Math.max(1, cart[index].quantity - 1);
-        } else if (event.target.closest(".remove")) {
-            cart.splice(index, 1);
-        } else {
-            return;
-        }
+        if (event.target.closest(".plus")) cart[index].quantity++;
+        else if (event.target.closest(".minus")) cart[index].quantity = Math.max(1, cart[index].quantity - 1);
+        else if (event.target.closest(".remove")) cart.splice(index, 1);
+        else return;
 
         saveCart(cart);
         renderCart();
     });
 
-    productsContainer.addEventListener("change", (event) => {
+    productsContainer.addEventListener("change", event => {
         if (!event.target.matches("input[type='number']")) return;
-
         const card = event.target.closest(".cart-item");
         const cart = getCart();
         const index = Number(card.dataset.index);
