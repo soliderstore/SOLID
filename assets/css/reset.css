@@ -10,6 +10,8 @@ html{
 
     scroll-behavior:smooth;
 
+    overflow-x:clip;
+
 }
 
 body{
@@ -21,6 +23,8 @@ body{
     font-family:"Montserrat",sans-serif;
 
     overflow-x:hidden;
+
+    min-width:0;
 
 }
 

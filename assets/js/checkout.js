@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.querySelector("#checkout-form");
     const itemsContainer = document.querySelector("#checkout-items");
     const totalElement = document.querySelector("#checkout-total");
+    const checkoutCoupon = document.querySelector("#checkout-coupon");
     const phoneInput = document.querySelector("#customer-phone");
     const cpfInput = document.querySelector("#customer-cpf");
     const zipInput = document.querySelector("#customer-zip");
@@ -90,13 +91,19 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    const orderTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const orderSubtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const couponApplied = localStorage.getItem("solid-coupon") === "SOLID10" && localStorage.getItem("solid-first-purchase-used") !== "true";
+    const discountValue = couponApplied ? orderSubtotal * 0.1 : 0;
+    const orderTotal = orderSubtotal - discountValue;
     itemsContainer.innerHTML = cart.map(item => `
         <div class="checkout-item">
             <img src="${item.image}" alt="${item.name}">
             <div><strong>${item.quantity}x ${item.name}</strong><small>Tam. ${item.size} · ${item.color}</small></div>
             <span>${format(item.price * item.quantity)}</span>
         </div>`).join("");
+    checkoutCoupon.innerHTML = couponApplied
+        ? `<span>Cupom SOLID10</span><strong>− ${format(discountValue)}</strong>`
+        : "";
     totalElement.textContent = format(orderTotal);
 
     form.addEventListener("submit", event => {
@@ -131,7 +138,12 @@ document.addEventListener("DOMContentLoaded", () => {
             `• ${item.quantity}x ${item.name} (Tam: ${item.size} | Cor: ${item.color}) — ${format(item.price * item.quantity)}`
         ).join("\n");
 
-        const message = `Olá! Quero confirmar meu pedido na SØLID.\n\n*PEDIDO ${orderCode}*\nData: ${new Date().toLocaleString("pt-BR")}\n\n*DADOS DO CLIENTE*\nNome: ${customer.name}\nWhatsApp: ${customer.phone}\nE-mail: ${customer.email}${customer.cpf ? `\nCPF: ${customer.cpf}` : ""}\n\n*ENDEREÇO*\n${customer.address}, ${customer.number}${customer.complement ? ` - ${customer.complement}` : ""}\nBairro: ${customer.neighborhood}\nCEP: ${customer.zip}\nCidade/UF: ${customer.city}\n\n*RECEBIMENTO E PAGAMENTO*\nRecebimento: ${customer.delivery}\nFrete: a confirmar pela loja\nPagamento: ${customer.payment}${customer.paymentDetails ? `\nDetalhes do pagamento: ${customer.paymentDetails}` : ""}\n\n*ITENS DO PEDIDO*\n${orderItems}\n\n*TOTAL DOS PRODUTOS: ${format(orderTotal)}*\n\n${customer.notes ? `*OBSERVAÇÕES*\n${customer.notes}\n\n` : ""}Aguardo a confirmação do pedido, disponibilidade e valor do frete.`;
+        const discountLine = couponApplied ? `\nCupom SOLID10: − ${format(discountValue)}` : "";
+        const message = `Olá! Quero confirmar meu pedido na SØLID.\n\n*PEDIDO ${orderCode}*\nData: ${new Date().toLocaleString("pt-BR")}\n\n*DADOS DO CLIENTE*\nNome: ${customer.name}\nWhatsApp: ${customer.phone}\nE-mail: ${customer.email}${customer.cpf ? `\nCPF: ${customer.cpf}` : ""}\n\n*ENDEREÇO*\n${customer.address}, ${customer.number}${customer.complement ? ` - ${customer.complement}` : ""}\nBairro: ${customer.neighborhood}\nCEP: ${customer.zip}\nCidade/UF: ${customer.city}\n\n*RECEBIMENTO E PAGAMENTO*\nRecebimento: ${customer.delivery}\nFrete: a confirmar pela loja\nPagamento: ${customer.payment}${customer.paymentDetails ? `\nDetalhes do pagamento: ${customer.paymentDetails}` : ""}\n\n*ITENS DO PEDIDO*\n${orderItems}\n\nSubtotal: ${format(orderSubtotal)}${discountLine}\n*TOTAL DOS PRODUTOS: ${format(orderTotal)}*\n\n${customer.notes ? `*OBSERVAÇÕES*\n${customer.notes}\n\n` : ""}Aguardo a confirmação do pedido, disponibilidade e valor do frete.`;
+        if (couponApplied) {
+            localStorage.setItem("solid-first-purchase-used", "true");
+            localStorage.removeItem("solid-coupon");
+        }
         window.open(`https://wa.me/5531998244421?text=${encodeURIComponent(message)}`, "_blank", "noopener");
     });
 });

@@ -8,6 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const total = document.getElementById("total");
     const summary = document.querySelector(".cart-summary");
     const cartContent = document.querySelector(".cart-content");
+    const discountElement = document.getElementById("discount");
+    const couponInput = document.getElementById("coupon-code");
+    const applyCouponButton = document.getElementById("apply-coupon");
+    const couponMessage = document.getElementById("coupon-message");
+    const validCoupon = "SOLID10";
 
     function format(value) {
         return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -26,10 +31,31 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem("solid-cart", JSON.stringify(cart));
     }
 
+    function getCoupon() {
+        const firstPurchaseUsed = localStorage.getItem("solid-first-purchase-used") === "true";
+        return !firstPurchaseUsed && localStorage.getItem("solid-coupon") === validCoupon ? validCoupon : null;
+    }
+
+    function getDiscount(subtotalValue) {
+        return getCoupon() ? subtotalValue * 0.1 : 0;
+    }
+
     function updateTotals(cart) {
         const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const discount = getDiscount(cartTotal);
         subtotal.textContent = format(cartTotal);
-        total.textContent = format(cartTotal);
+        discountElement.textContent = `− ${format(discount)}`;
+        total.textContent = format(cartTotal - discount);
+
+        if (getCoupon()) {
+            couponInput.value = validCoupon;
+            couponMessage.innerHTML = "Cupom <strong>SOLID10</strong> aplicado: 10% de desconto.";
+            couponMessage.classList.add("coupon-success");
+        } else if (localStorage.getItem("solid-first-purchase-used") === "true") {
+            couponInput.value = "";
+            couponMessage.textContent = "O cupom SOLID10 é válido somente para a primeira compra.";
+            couponMessage.classList.remove("coupon-success");
+        }
     }
 
     function renderCart() {
@@ -100,6 +126,30 @@ document.addEventListener("DOMContentLoaded", () => {
         cart[index].quantity = Math.max(1, Number(event.target.value) || 1);
         saveCart(cart);
         renderCart();
+    });
+
+    applyCouponButton.addEventListener("click", () => {
+        const code = couponInput.value.trim().toUpperCase();
+
+        if (localStorage.getItem("solid-first-purchase-used") === "true") {
+            localStorage.removeItem("solid-coupon");
+            couponMessage.textContent = "O cupom SOLID10 já foi utilizado na sua primeira compra.";
+            couponMessage.classList.remove("coupon-success");
+            updateTotals(getCart());
+            return;
+        }
+
+        if (code === validCoupon) {
+            localStorage.setItem("solid-coupon", validCoupon);
+            couponMessage.innerHTML = "Cupom <strong>SOLID10</strong> aplicado: 10% de desconto.";
+            couponMessage.classList.add("coupon-success");
+        } else {
+            localStorage.removeItem("solid-coupon");
+            couponMessage.textContent = "Cupom inválido. Tente SOLID10 para ganhar 10% de desconto.";
+            couponMessage.classList.remove("coupon-success");
+        }
+
+        updateTotals(getCart());
     });
 
     renderCart();

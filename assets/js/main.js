@@ -37,6 +37,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const menu = header.querySelector(".menu");
     const actions = header.querySelector(".actions");
 
+    try {
+        const account = JSON.parse(localStorage.getItem("solid-account"));
+        const isLoggedIn = localStorage.getItem("solid-session") === "active" && account;
+        const accountLink = actions?.children[2];
+
+        if (isLoggedIn && accountLink) {
+            const isPageInsidePagesFolder = window.location.pathname.includes("/pages/");
+            accountLink.href = isPageInsidePagesFolder ? "profile.html" : "pages/profile.html";
+            accountLink.setAttribute("aria-label", "Minha conta");
+        }
+    } catch {
+        // Mantém o link de entrada caso os dados locais estejam indisponíveis.
+    }
+
     if (!menu || !actions || header.querySelector(".menu-toggle")) return;
 
     const toggle = document.createElement("button");

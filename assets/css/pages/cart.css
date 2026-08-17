@@ -678,6 +678,98 @@
 
 }
 
+.coupon-box{
+
+    margin:24px 0;
+
+    padding:16px;
+
+    border:1px solid var(--border);
+
+    border-radius:14px;
+
+    background:var(--surface);
+
+}
+
+.coupon-box label{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    font-size:.82rem;
+
+    font-weight:600;
+
+}
+
+.coupon-box > div{
+
+    display:flex;
+
+    gap:8px;
+
+}
+
+.coupon-box input{
+
+    min-width:0;
+
+    flex:1;
+
+    height:42px;
+
+    padding:0 12px;
+
+    border:1px solid var(--border);
+
+    border-radius:9px;
+
+    outline:none;
+
+    background:var(--card);
+
+    color:var(--text);
+
+    text-transform:uppercase;
+
+}
+
+.coupon-box button{
+
+    padding:0 14px;
+
+    border:0;
+
+    border-radius:9px;
+
+    background:var(--primary);
+
+    color:#050505;
+
+    font-weight:700;
+
+}
+
+.coupon-box small{
+
+    display:block;
+
+    margin-top:10px;
+
+    color:var(--text-light);
+
+    line-height:1.4;
+
+}
+
+.coupon-box small.coupon-success{
+
+    color:#79d89b;
+
+}
+
 /* ================= CARRINHO VAZIO ================= */
 
 .cart-page.cart-is-empty .container{

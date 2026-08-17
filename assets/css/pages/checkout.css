@@ -14,6 +14,7 @@
 .checkout-item small{ display:block; margin-top:5px; color:var(--text-light); }
 .checkout-item span{ white-space:nowrap; }
 .checkout-total{ display:flex; justify-content:space-between; padding-top:22px; font-size:1.1rem; }
+.checkout-coupon{ display:flex; justify-content:space-between; padding:16px 0 0; color:#79d89b; font-size:.85rem; }
 .checkout-empty{ grid-column:1 / -1; text-align:center; padding:50px 20px; }
 .checkout-empty p{ margin:12px 0 28px; color:var(--text-light); }
 @media(max-width:800px){ .checkout-page{ padding-top:115px; } .checkout-layout{ grid-template-columns:1fr; } }

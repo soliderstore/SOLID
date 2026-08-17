@@ -15,9 +15,9 @@ const PRODUCTS = [
 
         description: "Moletom oversized premium desenvolvido em algodão de alta qualidade. Confortável, resistente e perfeito para qualquer ocasião.",
 
-        price: 129.90,
+        price: 180.00,
 
-        oldPrice: 159.90,
+        oldPrice: 199.90,
 
         rating: 5,
 
@@ -71,9 +71,9 @@ const PRODUCTS = [
 
         description: "Moletom premium feminino SØLID com acabamento de alta qualidade e modelagem confortável.",
 
-        price: 129.90,
+        price: 99.90,
 
-        oldPrice: 159.90,
+        oldPrice: 129.90,
 
         rating: 5,
 
