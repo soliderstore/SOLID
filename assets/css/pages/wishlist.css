@@ -1,0 +1,32 @@
+.wishlist-page {
+    min-height: 70vh;
+    padding: 150px 0 90px;
+}
+
+.wishlist-card .btn-primary,
+.remove-wishlist {
+    width: 100%;
+    margin-top: 12px;
+}
+
+.remove-wishlist {
+    border: 0;
+    background: transparent;
+    color: #777;
+    cursor: pointer;
+    font: inherit;
+}
+
+.wishlist-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.wishlist-empty i {
+    color: var(--primary);
+    font-size: 42px;
+}
+
+.wishlist-empty h2 { margin: 20px 0 10px; }
+.wishlist-empty p { margin-bottom: 28px; }

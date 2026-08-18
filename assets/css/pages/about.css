@@ -210,6 +210,72 @@
    RESPONSIVO
 =========================== */
 
+.about-eyebrow{
+
+    display:block;
+
+    margin-bottom:18px;
+
+    color:var(--text-light);
+
+    font-size:.85rem;
+
+    font-weight:600;
+
+    letter-spacing:5px;
+
+}
+
+/* ===========================
+   VERSE
+=========================== */
+
+.about-verse{
+
+    padding:120px 8%;
+
+    text-align:center;
+
+    background:linear-gradient(135deg, #111, #050505);
+
+}
+
+.about-verse .container{
+
+    max-width:850px;
+
+}
+
+.about-verse blockquote{
+
+    margin:22px auto 18px;
+
+    font-size:clamp(1.8rem, 4vw, 3.2rem);
+
+    font-weight:700;
+
+    line-height:1.25;
+
+}
+
+.about-verse cite{
+
+    color:var(--text-light);
+
+    font-style:normal;
+
+    font-weight:600;
+
+}
+
+.about-verse p{
+
+    margin-top:28px;
+
+    color:var(--text-light);
+
+}
+
 @media(max-width:900px){
 
     .about-values .container{

@@ -54,6 +54,8 @@
 
 .shop-toolbar{
 
+    display:none;
+
     padding:50px 8%;
 
     border-top:1px solid var(--border);

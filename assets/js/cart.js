@@ -1,154 +1,156 @@
 /* ==========================================================
-   SØLID - Cart
+   SØLID - Carrinho
 ========================================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-
-    const minusButtons = document.querySelectorAll(".minus");
-    const plusButtons = document.querySelectorAll(".plus");
-    const removeButtons = document.querySelectorAll(".remove");
-
+    const productsContainer = document.querySelector(".cart-products");
     const subtotal = document.getElementById("subtotal");
     const total = document.getElementById("total");
+    const summary = document.querySelector(".cart-summary");
+    const cartContent = document.querySelector(".cart-content");
+    const discountElement = document.getElementById("discount");
+    const couponInput = document.getElementById("coupon-code");
+    const applyCouponButton = document.getElementById("apply-coupon");
+    const couponMessage = document.getElementById("coupon-message");
+    const validCoupon = "SOLID10";
 
-    function format(value){
-
-        return value.toLocaleString("pt-BR",{
-
-            style:"currency",
-
-            currency:"BRL"
-
-        });
-
+    function format(value) {
+        return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
     }
 
-    function calculate(){
-
-        let finalTotal = 0;
-
-        document.querySelectorAll(".cart-item").forEach(item=>{
-
-            const input = item.querySelector("input");
-
-            const priceElement = item.querySelector(".card-price");
-
-            const price = Number(
-
-                priceElement.innerText
-                .replace("R$","")
-                .replace(/\./g,"")
-                .replace(",",".")
-                .trim()
-
-            );
-
-            finalTotal += price * Number(input.value);
-
-        });
-
-        subtotal.innerHTML = format(finalTotal);
-
-        total.innerHTML = format(finalTotal);
-
+    function getCart() {
+        try {
+            const cart = JSON.parse(localStorage.getItem("solid-cart"));
+            return Array.isArray(cart) ? cart : [];
+        } catch {
+            return [];
+        }
     }
 
-    plusButtons.forEach(button=>{
+    function saveCart(cart) {
+        localStorage.setItem("solid-cart", JSON.stringify(cart));
+    }
 
-        button.addEventListener("click",()=>{
+    function getCoupon() {
+        const firstPurchaseUsed = localStorage.getItem("solid-first-purchase-used") === "true";
+        return !firstPurchaseUsed && localStorage.getItem("solid-coupon") === validCoupon ? validCoupon : null;
+    }
 
-            const input = button.parentElement.querySelector("input");
+    function getDiscount(subtotalValue) {
+        return getCoupon() ? subtotalValue * 0.1 : 0;
+    }
 
-            input.value++;
+    function updateTotals(cart) {
+        const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+        const discount = getDiscount(cartTotal);
+        subtotal.textContent = format(cartTotal);
+        discountElement.textContent = `− ${format(discount)}`;
+        total.textContent = format(cartTotal - discount);
 
-            calculate();
+        if (getCoupon()) {
+            couponInput.value = validCoupon;
+            couponMessage.innerHTML = "Cupom <strong>SOLID10</strong> aplicado: 10% de desconto.";
+            couponMessage.classList.add("coupon-success");
+        } else if (localStorage.getItem("solid-first-purchase-used") === "true") {
+            couponInput.value = "";
+            couponMessage.textContent = "O cupom SOLID10 é válido somente para a primeira compra.";
+            couponMessage.classList.remove("coupon-success");
+        }
+    }
 
-        });
+    function renderCart() {
+        const cart = getCart();
+        updateTotals(cart);
 
-    });
-
-    minusButtons.forEach(button=>{
-
-        button.addEventListener("click",()=>{
-
-            const input = button.parentElement.querySelector("input");
-
-            if(Number(input.value) > 1){
-
-                input.value--;
-
-            }
-
-            calculate();
-
-        });
-
-    });
-
-    removeButtons.forEach(button=>{
-
-        button.addEventListener("click",()=>{
-
-            const card = button.closest(".cart-item");
-
-            card.style.opacity = "0";
-
-            card.style.transform = "translateY(20px)";
-
-            setTimeout(()=>{
-
-                card.remove();
-
-                calculate();
-
-                emptyCart();
-
-            },300);
-
-        });
-
-    });
-
-    function emptyCart(){
-
-        const items = document.querySelectorAll(".cart-item");
-
-        if(items.length === 0){
-
-            document.querySelector(".cart-products").innerHTML = `
-
-                <div class="section-title">
-
-                    <span>SHOPPING CART</span>
-
-                    <h2>Seu carrinho está vazio</h2>
-
-                    <p>
-
-                        Adicione alguns produtos para começar sua compra.
-
-                    </p>
-
-                    <br>
-
-                    <a href="shop.html" class="btn-primary">
-
-                        Ir para Loja
-
-                    </a>
-
-                </div>
-
-            `;
-
-            subtotal.innerHTML = format(0);
-
-            total.innerHTML = format(0);
-
+        if (cart.length === 0) {
+            document.querySelector(".cart-page").classList.add("cart-is-empty");
+            cartContent.classList.add("empty-cart-content");
+            productsContainer.innerHTML = `
+                <div class="empty-cart-card">
+                    <div class="empty-cart-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                    <span>SEU CARRINHO</span>
+                    <h2>Ainda não há produtos por aqui.</h2>
+                    <p>Descubra peças feitas para acompanhar sua identidade e escolha a sua favorita.</p>
+                    <a href="shop.html" class="btn-primary">Explorar a coleção <i class="fa-solid fa-arrow-right"></i></a>
+                </div>`;
+            summary.style.display = "none";
+            return;
         }
 
+        document.querySelector(".cart-page").classList.remove("cart-is-empty");
+        cartContent.classList.remove("empty-cart-content");
+        summary.style.display = "block";
+        productsContainer.innerHTML = cart.map((item, index) => `
+            <div class="card cart-item" data-index="${index}">
+                <div class="card-image"><img src="${item.image}" alt="${item.name}"></div>
+                <div class="card-content">
+                    <h3 class="card-title">${item.name}</h3>
+                    <p>Tamanho: ${item.size} · Cor: ${item.color}</p>
+                    <h4 class="card-price">${format(item.price)}</h4>
+                    <div class="cart-actions">
+                        <div class="quantity">
+                            <button class="minus" type="button" aria-label="Diminuir quantidade">−</button>
+                            <input type="number" value="${item.quantity}" min="1" aria-label="Quantidade">
+                            <button class="plus" type="button" aria-label="Aumentar quantidade">+</button>
+                        </div>
+                        <button class="remove" type="button">Remover</button>
+                    </div>
+                </div>
+            </div>`).join("");
     }
 
-    calculate();
+    productsContainer.addEventListener("click", event => {
+        const card = event.target.closest(".cart-item");
+        if (!card) return;
 
+        const index = Number(card.dataset.index);
+        const cart = getCart();
+        if (!cart[index]) return;
+
+        if (event.target.closest(".plus")) cart[index].quantity++;
+        else if (event.target.closest(".minus")) cart[index].quantity = Math.max(1, cart[index].quantity - 1);
+        else if (event.target.closest(".remove")) cart.splice(index, 1);
+        else return;
+
+        saveCart(cart);
+        renderCart();
+    });
+
+    productsContainer.addEventListener("change", event => {
+        if (!event.target.matches("input[type='number']")) return;
+        const card = event.target.closest(".cart-item");
+        const cart = getCart();
+        const index = Number(card.dataset.index);
+        if (!cart[index]) return;
+
+        cart[index].quantity = Math.max(1, Number(event.target.value) || 1);
+        saveCart(cart);
+        renderCart();
+    });
+
+    applyCouponButton.addEventListener("click", () => {
+        const code = couponInput.value.trim().toUpperCase();
+
+        if (localStorage.getItem("solid-first-purchase-used") === "true") {
+            localStorage.removeItem("solid-coupon");
+            couponMessage.textContent = "O cupom SOLID10 já foi utilizado na sua primeira compra.";
+            couponMessage.classList.remove("coupon-success");
+            updateTotals(getCart());
+            return;
+        }
+
+        if (code === validCoupon) {
+            localStorage.setItem("solid-coupon", validCoupon);
+            couponMessage.innerHTML = "Cupom <strong>SOLID10</strong> aplicado: 10% de desconto.";
+            couponMessage.classList.add("coupon-success");
+        } else {
+            localStorage.removeItem("solid-coupon");
+            couponMessage.textContent = "Cupom inválido. Tente SOLID10 para ganhar 10% de desconto.";
+            couponMessage.classList.remove("coupon-success");
+        }
+
+        updateTotals(getCart());
+    });
+
+    renderCart();
 });

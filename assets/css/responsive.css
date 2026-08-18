@@ -1,8 +1,122 @@
-@media(max-width:900px){
+/* ================= TABLET ================= */
 
-    .navbar{
+@media(max-width:1100px){
 
-        display:none;
+    .products-grid{
+
+        grid-template-columns:repeat(2, minmax(0, 1fr));
+
+        gap:24px;
+
+    }
+
+    .featured-products,
+    .history,
+    .newsletter{
+
+        padding-left:6%;
+
+        padding-right:6%;
+
+    }
+
+    .section-title{
+
+        margin-bottom:45px;
+
+    }
+
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:700px){
+
+    .container{
+
+        width:min(88%, var(--container));
+
+    }
+
+    .products-grid{
+
+        grid-template-columns:1fr;
+
+        gap:20px;
+
+    }
+
+    .section-title h1,
+    .section-title h2{
+
+        font-size:clamp(2rem, 9vw, 2.7rem);
+
+        line-height:1.1;
+
+    }
+
+    .newsletter{
+
+        padding-top:85px;
+
+        padding-bottom:85px;
+
+    }
+
+    .newsletter h2{
+
+        font-size:clamp(2.1rem, 10vw, 3rem);
+
+        line-height:1.08;
+
+    }
+
+    .newsletter form{
+
+        flex-direction:column;
+
+        gap:12px;
+
+    }
+
+    .newsletter input,
+    .newsletter button{
+
+        width:100%;
+
+        min-height:56px;
+
+    }
+
+    .newsletter button{
+
+        padding:0 22px;
+
+        white-space:nowrap;
+
+    }
+
+    .copyright{
+
+        font-size:.78rem;
+
+    }
+
+}
+
+@media(max-width:380px){
+
+    .logo{
+
+        font-size:1.55rem;
+
+        letter-spacing:5px;
+
+    }
+
+    .header .container{
+
+        height:66px;
 
     }
 
