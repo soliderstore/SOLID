@@ -1,0 +1,7 @@
+Options -MultiViews
+DirectoryIndex index.php
+RewriteEngine On
+
+RewriteRule ^$ index.php [L]
+RewriteRule ^index\.html$ index.php [R=302,L]
+RewriteRule ^pages/(.+)\.html$ pages/$1.php [R=302,L]

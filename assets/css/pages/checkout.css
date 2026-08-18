@@ -9,6 +9,7 @@
 .checkout-form input:focus, .checkout-form textarea:focus, .checkout-form select:focus{ border-color:#777; }
 .checkout-form label small{ color:#777; font-size:.72rem; }
 .checkout-submit{ width:100%; border:0; margin-top:8px; }
+.checkout-message{ min-height:1.2em; margin:4px 0 12px; color:#ff8585; font-size:.82rem; line-height:1.45; }
 .checkout-item{ display:grid; grid-template-columns:52px 1fr auto; gap:12px; align-items:center; padding:14px 0; border-bottom:1px solid var(--border); font-size:.8rem; }
 .checkout-item img{ width:52px; height:62px; border-radius:8px; object-fit:cover; }
 .checkout-item small{ display:block; margin-top:5px; color:var(--text-light); }

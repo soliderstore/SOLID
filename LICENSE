@@ -28,3 +28,21 @@ Ano:
 2026
 
 Todos os direitos reservados.
+
+---
+
+ATUALIZAÇÕES DO PROJETO
+
+Este projeto inclui as seguintes funcionalidades e melhorias implementadas:
+
+• Carrinho de compras dinâmico, com itens adicionados pelo usuário, alteração de quantidade, remoção e estado visual para carrinho vazio;
+• Lista de desejos para salvar e remover produtos favoritos;
+• Checkout detalhado com dados pessoais, endereço, forma de entrega, método de pagamento e validações de campos;
+• Envio de pedidos e dúvidas diretamente para o WhatsApp oficial da SØLID;
+• Cupom SOLID10, com 10% de desconto válido somente para a primeira compra no navegador;
+• Área de conta com cadastro, login, perfil, edição de dados, endereço, foto de perfil e preferência de recebimento de novidades por e-mail;
+• Menu responsivo com animação de hambúrguer para celulares e tablets;
+• Rodapé padronizado, design responsivo e melhorias de adaptação para diferentes tamanhos de tela;
+• Página de contato e página Sobre ampliadas com conteúdo institucional e propósito da marca.
+
+Todas as funcionalidades, códigos, layouts, textos e recursos descritos acima permanecem protegidos pelos direitos autorais desta licença.

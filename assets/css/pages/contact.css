@@ -8,6 +8,7 @@
 .contact-form label{ display:block; margin-bottom:18px; color:var(--text-light); font-size:.85rem; }
 .contact-form input, .contact-form select, .contact-form textarea{ width:100%; margin-top:8px; padding:14px; border:1px solid var(--border); border-radius:10px; outline:0; background:var(--surface); color:var(--text); font:inherit; }
 .contact-form input:focus, .contact-form select:focus, .contact-form textarea:focus{ border-color:#777; }
+.contact-form textarea{ height:132px; min-height:132px; max-height:132px; resize:none !important; overflow-x:hidden; overflow-y:auto; box-sizing:border-box; line-height:1.55; }
 .contact-form button{ width:100%; border:0; }
 @media(max-width:800px){ .contact-page{ padding-top:115px; } .contact-layout{ grid-template-columns:1fr; } }
 @media(max-width:500px){ .contact-intro, .contact-form{ padding:24px; } }

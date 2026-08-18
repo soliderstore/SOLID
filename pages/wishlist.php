@@ -13,18 +13,18 @@
 <body>
     <header class="header">
         <div class="container">
-            <a href="../index.html" class="logo"><span>SØLID</span></a>
+            <a href="../index.php" class="logo"><span>SØLID</span></a>
             <nav class="menu">
-                <a href="../index.html">Home</a>
-                <a href="shop.html">Shop</a>
-                <a href="collections.html">Coleções</a>
-                <a href="about.html">Sobre</a>
-                <a href="contact.html">Contato</a>
+                <a href="../index.php">Home</a>
+                <a href="shop.php">Shop</a>
+                <a href="collections.php">Coleções</a>
+                <a href="about.php">Sobre</a>
+                <a href="contact.php">Contato</a>
             </nav>
             <div class="actions">
-                <a href="wishlist.html" aria-label="Lista de desejos"><i class="fa-solid fa-heart"></i></a>
-                <a href="cart.html" aria-label="Carrinho"><i class="fa-solid fa-bag-shopping"></i></a>
-                <a href="login.html" aria-label="Entrar"><i class="fa-regular fa-user"></i></a>
+                <a href="wishlist.php" aria-label="Lista de desejos"><i class="fa-solid fa-heart"></i></a>
+                <a href="cart.php" aria-label="Carrinho"><i class="fa-solid fa-bag-shopping"></i></a>
+                <a href="login.php" aria-label="Entrar"><i class="fa-regular fa-user"></i></a>
             </div>
         </div>
     </header>

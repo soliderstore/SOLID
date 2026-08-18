@@ -1,11 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Em XAMPP o projeto abre em /SOLID/. No InfinityFree ele abre na raiz.
+    // Nunca usamos C:\\xampp\\... como link: isso é um caminho do computador, não uma URL.
+    const isLocalServer = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+    const projectRoot = isLocalServer ? "/SOLID/" : "/";
+    const pageUrl = page => page === "index" ? projectRoot : `${projectRoot}pages/${page}.php`;
     let header = document.querySelector(".header");
 
     if (!header) {
-        const isPageInsidePagesFolder = window.location.pathname.includes("/pages/");
-        const rootPath = isPageInsidePagesFolder ? "../" : "";
-        const pagesPath = isPageInsidePagesFolder ? "" : "pages/";
-
         if (!document.querySelector('link[href*="font-awesome"]')) {
             const icons = document.createElement("link");
             icons.rel = "stylesheet";
@@ -17,18 +18,18 @@ document.addEventListener("DOMContentLoaded", () => {
         header.className = "header";
         header.innerHTML = `
             <div class="container">
-                <a href="${rootPath}index.html" class="logo"><span>SØLID</span></a>
+                <a href="${pageUrl("index")}" class="logo"><span>SØLID</span></a>
                 <nav class="menu">
-                    <a href="${rootPath}index.html">Home</a>
-                    <a href="${pagesPath}shop.html">Shop</a>
-                    <a href="${pagesPath}collections.html">Coleções</a>
-                    <a href="${pagesPath}about.html">Sobre</a>
-                    <a href="${pagesPath}contact.html">Contato</a>
+                    <a href="${pageUrl("index")}">Home</a>
+                    <a href="${pageUrl("shop")}">Shop</a>
+                    <a href="${pageUrl("collections")}">Coleções</a>
+                    <a href="${pageUrl("about")}">Sobre</a>
+                    <a href="${pageUrl("contact")}">Contato</a>
                 </nav>
                 <div class="actions">
-                    <a href="${pagesPath}wishlist.html" aria-label="Favoritos"><i class="fa-regular fa-heart"></i></a>
-                    <a href="${pagesPath}cart.html" aria-label="Carrinho"><i class="fa-solid fa-bag-shopping"></i></a>
-                    <a href="${pagesPath}login.html" aria-label="Entrar"><i class="fa-regular fa-user"></i></a>
+                    <a href="${pageUrl("wishlist")}" aria-label="Favoritos"><i class="fa-regular fa-heart"></i></a>
+                    <a href="${pageUrl("cart")}" aria-label="Carrinho"><i class="fa-solid fa-bag-shopping"></i></a>
+                    <a href="${pageUrl("login")}" aria-label="Entrar"><i class="fa-regular fa-user"></i></a>
                 </div>
             </div>`;
         document.body.prepend(header);
@@ -37,15 +38,45 @@ document.addEventListener("DOMContentLoaded", () => {
     const menu = header.querySelector(".menu");
     const actions = header.querySelector(".actions");
 
+    const internalPages = new Set(["index", "shop", "collections", "about", "contact", "wishlist", "cart", "login", "register", "profile", "checkout"]);
+    header.querySelectorAll('a[href]').forEach(link => {
+        const href = link.getAttribute("href");
+        if (!href || /^(https?:|mailto:|tel:|#)/i.test(href)) return;
+        const filename = href.split("/").pop().split(/[?#]/)[0];
+        const page = filename.replace(/\.(?:html|php)$/i, "");
+        if (internalPages.has(page)) link.setAttribute("href", pageUrl(page));
+    });
+
+    // Protege também links criados dinamicamente por carrinho, favoritos e checkout.
+    document.addEventListener("click", event => {
+        const link = event.target.closest("a[href]");
+        if (!link || link.target === "_blank") return;
+        const href = link.getAttribute("href");
+        if (!href || /^(https?:|mailto:|tel:|#)/i.test(href)) return;
+        const [path, suffix = ""] = href.split(/(?=[?#])/);
+        const filename = path.split("/").pop();
+        const page = filename.replace(/\.(?:html|php)$/i, "");
+        if (!internalPages.has(page)) return;
+        const correctUrl = `${pageUrl(page)}${suffix}`;
+        if (link.href !== new URL(correctUrl, window.location.origin).href) {
+            event.preventDefault();
+            window.location.assign(correctUrl);
+        }
+    });
+
     try {
         const account = JSON.parse(localStorage.getItem("solid-account"));
         const isLoggedIn = localStorage.getItem("solid-session") === "active" && account;
         const accountLink = actions?.children[2];
 
         if (isLoggedIn && accountLink) {
-            const isPageInsidePagesFolder = window.location.pathname.includes("/pages/");
-            accountLink.href = isPageInsidePagesFolder ? "profile.html" : "pages/profile.html";
+            accountLink.href = pageUrl("profile");
             accountLink.setAttribute("aria-label", "Minha conta");
+
+            if (typeof account.profileImage === "string" && account.profileImage.startsWith("data:image/")) {
+                accountLink.classList.add("account-avatar-link");
+                accountLink.innerHTML = `<img src="${account.profileImage}" alt="Foto de perfil">`;
+            }
         }
     } catch {
         // Mantém o link de entrada caso os dados locais estejam indisponíveis.
@@ -63,10 +94,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const mobileActions = document.createElement("div");
     mobileActions.className = "mobile-menu-actions";
+    const avatarImage = actions.children[2]?.querySelector("img");
+    const mobileAccount = avatarImage
+        ? `<img class="mobile-account-avatar" src="${avatarImage.src}" alt=""> Minha conta`
+        : '<i class="fa-regular fa-user"></i> Minha conta';
     mobileActions.innerHTML = `
-        <a href="${actions.children[0]?.getAttribute("href") || "wishlist.html"}"><i class="fa-regular fa-heart"></i> Favoritos</a>
-        <a href="${actions.children[1]?.getAttribute("href") || "cart.html"}"><i class="fa-solid fa-bag-shopping"></i> Carrinho</a>
-        <a href="${actions.children[2]?.getAttribute("href") || "login.html"}"><i class="fa-regular fa-user"></i> Minha conta</a>`;
+        <a href="${actions.children[0]?.getAttribute("href") || "wishlist.php"}"><i class="fa-regular fa-heart"></i> Favoritos</a>
+        <a href="${actions.children[1]?.getAttribute("href") || "cart.php"}"><i class="fa-solid fa-bag-shopping"></i> Carrinho</a>
+        <a href="${actions.children[2]?.getAttribute("href") || "login.php"}">${mobileAccount}</a>`;
     menu.append(mobileActions);
 
     function closeMenu() {

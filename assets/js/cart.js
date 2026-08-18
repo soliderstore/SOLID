@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const applyCouponButton = document.getElementById("apply-coupon");
     const couponMessage = document.getElementById("coupon-message");
     const validCoupon = "SOLID10";
+    const apiUrl = "../api/account.php";
 
     function format(value) {
         return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -32,8 +33,19 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function getCoupon() {
-        const firstPurchaseUsed = localStorage.getItem("solid-first-purchase-used") === "true";
-        return !firstPurchaseUsed && localStorage.getItem("solid-coupon") === validCoupon ? validCoupon : null;
+        return localStorage.getItem("solid-coupon") === validCoupon ? validCoupon : null;
+    }
+
+    async function accountApi(action) {
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "same-origin",
+            body: JSON.stringify({ action })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.message || "Não foi possível validar o cupom.");
+        return data;
     }
 
     function getDiscount(subtotalValue) {
@@ -51,10 +63,6 @@ document.addEventListener("DOMContentLoaded", () => {
             couponInput.value = validCoupon;
             couponMessage.innerHTML = "Cupom <strong>SOLID10</strong> aplicado: 10% de desconto.";
             couponMessage.classList.add("coupon-success");
-        } else if (localStorage.getItem("solid-first-purchase-used") === "true") {
-            couponInput.value = "";
-            couponMessage.textContent = "O cupom SOLID10 é válido somente para a primeira compra.";
-            couponMessage.classList.remove("coupon-success");
         }
     }
 
@@ -71,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <span>SEU CARRINHO</span>
                     <h2>Ainda não há produtos por aqui.</h2>
                     <p>Descubra peças feitas para acompanhar sua identidade e escolha a sua favorita.</p>
-                    <a href="shop.html" class="btn-primary">Explorar a coleção <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="shop.php" class="btn-primary">Explorar a coleção <i class="fa-solid fa-arrow-right"></i></a>
                 </div>`;
             summary.style.display = "none";
             return;
@@ -93,7 +101,14 @@ document.addEventListener("DOMContentLoaded", () => {
                             <input type="number" value="${item.quantity}" min="1" aria-label="Quantidade">
                             <button class="plus" type="button" aria-label="Aumentar quantidade">+</button>
                         </div>
-                        <button class="remove" type="button">Remover</button>
+                        <div class="remove-control">
+                            <button class="remove" type="button">Remover</button>
+                            <div class="remove-confirm" aria-live="polite">
+                                <span>Remover item?</span>
+                                <button class="confirm-remove" type="button">Confirmar</button>
+                                <button class="cancel-remove" type="button" aria-label="Cancelar remoção">Cancelar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>`).join("");
@@ -109,7 +124,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (event.target.closest(".plus")) cart[index].quantity++;
         else if (event.target.closest(".minus")) cart[index].quantity = Math.max(1, cart[index].quantity - 1);
-        else if (event.target.closest(".remove")) cart.splice(index, 1);
+        else if (event.target.closest(".remove")) {
+            card.querySelector(".remove-control")?.classList.add("is-confirming");
+            return;
+        }
+        else if (event.target.closest(".cancel-remove")) {
+            card.querySelector(".remove-control")?.classList.remove("is-confirming");
+            return;
+        }
+        else if (event.target.closest(".confirm-remove")) cart.splice(index, 1);
         else return;
 
         saveCart(cart);
@@ -128,21 +151,23 @@ document.addEventListener("DOMContentLoaded", () => {
         renderCart();
     });
 
-    applyCouponButton.addEventListener("click", () => {
+    applyCouponButton.addEventListener("click", async () => {
         const code = couponInput.value.trim().toUpperCase();
 
-        if (localStorage.getItem("solid-first-purchase-used") === "true") {
-            localStorage.removeItem("solid-coupon");
-            couponMessage.textContent = "O cupom SOLID10 já foi utilizado na sua primeira compra.";
-            couponMessage.classList.remove("coupon-success");
-            updateTotals(getCart());
-            return;
-        }
-
         if (code === validCoupon) {
-            localStorage.setItem("solid-coupon", validCoupon);
-            couponMessage.innerHTML = "Cupom <strong>SOLID10</strong> aplicado: 10% de desconto.";
-            couponMessage.classList.add("coupon-success");
+            try {
+                const status = await accountApi("coupon_status");
+                if (status.couponUsed) throw new Error("Este cupom já foi utilizado nesta conta.");
+                localStorage.setItem("solid-coupon", validCoupon);
+                couponMessage.innerHTML = "Cupom <strong>SOLID10</strong> aplicado: 10% de desconto.";
+                couponMessage.classList.add("coupon-success");
+            } catch (error) {
+                localStorage.removeItem("solid-coupon");
+                couponMessage.textContent = error.message === "Faça login para continuar."
+                    ? "Entre na sua conta para usar este cupom uma única vez."
+                    : error.message;
+                couponMessage.classList.remove("coupon-success");
+            }
         } else {
             localStorage.removeItem("solid-coupon");
             couponMessage.textContent = "Cupom inválido. Tente SOLID10 para ganhar 10% de desconto.";
@@ -153,4 +178,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     renderCart();
+
+    async function syncAppliedCoupon() {
+        if (!getCoupon()) return;
+        try {
+            const status = await accountApi("coupon_status");
+            if (status.couponUsed) throw new Error("Este cupom já foi utilizado nesta conta.");
+        } catch (error) {
+            localStorage.removeItem("solid-coupon");
+            couponMessage.textContent = error.message === "Faça login para continuar."
+                ? "Entre na sua conta para usar este cupom uma única vez."
+                : error.message;
+            couponMessage.classList.remove("coupon-success");
+            updateTotals(getCart());
+        }
+    }
+
+    syncAppliedCoupon();
 });

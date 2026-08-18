@@ -1,4 +1,5 @@
 const container = document.querySelector("#products");
+const projectRoot = ["localhost", "127.0.0.1"].includes(window.location.hostname) ? "/SOLID/" : "/";
 
 if (container) {
 
@@ -31,7 +32,7 @@ if (container) {
                     </p>
 
                     <button
-                        onclick="location.href='product.html?id=${product.id}'">
+                        onclick="window.location.href='${projectRoot}pages/product.php?id=${product.id}'">
 
                         Ver Produto
 

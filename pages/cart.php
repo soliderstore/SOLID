@@ -231,8 +231,12 @@
                     </div>
 
                     <div class="coupon-box">
-                        <label for="coupon-code">Cupom de desconto</label>
-                        <div>
+                        <div class="coupon-heading">
+                            <i class="fa-solid fa-ticket"></i>
+                            <label for="coupon-code">Cupom de desconto</label>
+                            <span>Primeira compra</span>
+                        </div>
+                        <div class="coupon-form">
                             <input id="coupon-code" type="text" placeholder="Digite seu cupom" autocomplete="off">
                             <button id="apply-coupon" type="button">Aplicar</button>
                         </div>
@@ -289,14 +293,14 @@
 
                     </div>
 
-                    <a href="checkout.html"
+                    <a href="checkout.php"
                        class="btn-primary">
 
                         Finalizar Compra
 
                     </a>
 
-                    <a href="shop.html"
+                    <a href="shop.php"
                        class="btn-secondary">
 
                         Continuar Comprando
@@ -319,7 +323,7 @@
 
 <!-- ================= PRODUTOS ================= -->
 
-<section class="featured-products">
+<section class="featured-products cart-recommendations" hidden>
 
     <div class="container">
 

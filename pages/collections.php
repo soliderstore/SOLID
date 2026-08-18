@@ -62,7 +62,7 @@
 
                     </a>
 
-                    <a href="shop.html" class="btn-secondary">
+                    <a href="shop.php" class="btn-secondary">
 
                         Comprar
 
@@ -148,7 +148,7 @@
 
                         </span>
 
-                        <a href="shop.html"
+                        <a href="shop.php"
                             class="btn-primary">
 
                             Ver Produtos
@@ -283,7 +283,7 @@
 
     </p>
 
-    <a href="shop.html"
+    <a href="shop.php"
 
         class="btn-primary">
 

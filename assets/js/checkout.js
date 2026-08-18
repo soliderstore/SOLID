@@ -8,6 +8,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const cpfInput = document.querySelector("#customer-cpf");
     const zipInput = document.querySelector("#customer-zip");
     const emailInput = document.querySelector("#customer-email");
+    const checkoutMessage = document.querySelector("#checkout-message");
+    const submitButton = form?.querySelector(".checkout-submit");
+    const apiUrl = "../api/account.php";
+
+    async function accountApi(action) {
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "same-origin",
+            body: JSON.stringify({ action })
+        });
+        const data = await response.json();
+        if (!response.ok || !data.ok) throw new Error(data.message || "Não foi possível validar o cupom.");
+        return data;
+    }
 
     function digits(value, limit) {
         return value.replace(/\D/g, "").slice(0, limit);
@@ -86,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="checkout-empty">
                 <h2>Seu carrinho está vazio</h2>
                 <p>Adicione produtos antes de finalizar a compra.</p>
-                <a href="shop.html" class="btn-primary">Ir para a loja</a>
+                <a href="shop.php" class="btn-primary">Ir para a loja</a>
             </div>`;
         return;
     }
@@ -106,14 +121,31 @@ document.addEventListener("DOMContentLoaded", () => {
         : "";
     totalElement.textContent = format(orderTotal);
 
-    form.addEventListener("submit", event => {
+    form.addEventListener("submit", async event => {
         event.preventDefault();
+
+        checkoutMessage.textContent = "";
 
         [phoneInput, cpfInput, zipInput, emailInput].forEach(input =>
             input.dispatchEvent(new Event("input"))
         );
 
         if (!form.reportValidity()) return;
+
+        if (couponApplied) {
+            try {
+                submitButton.disabled = true;
+                submitButton.textContent = "Validando cupom...";
+                await accountApi("redeem_coupon");
+            } catch (error) {
+                checkoutMessage.textContent = error.message === "Faça login para continuar."
+                    ? "Entre na sua conta para finalizar este pedido com o cupom SOLID10."
+                    : error.message;
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Confirmar e enviar pedido pelo WhatsApp';
+                return;
+            }
+        }
 
         const orderCode = `SOLID-${Date.now().toString().slice(-6)}`;
 
@@ -141,7 +173,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const discountLine = couponApplied ? `\nCupom SOLID10: − ${format(discountValue)}` : "";
         const message = `Olá! Quero confirmar meu pedido na SØLID.\n\n*PEDIDO ${orderCode}*\nData: ${new Date().toLocaleString("pt-BR")}\n\n*DADOS DO CLIENTE*\nNome: ${customer.name}\nWhatsApp: ${customer.phone}\nE-mail: ${customer.email}${customer.cpf ? `\nCPF: ${customer.cpf}` : ""}\n\n*ENDEREÇO*\n${customer.address}, ${customer.number}${customer.complement ? ` - ${customer.complement}` : ""}\nBairro: ${customer.neighborhood}\nCEP: ${customer.zip}\nCidade/UF: ${customer.city}\n\n*RECEBIMENTO E PAGAMENTO*\nRecebimento: ${customer.delivery}\nFrete: a confirmar pela loja\nPagamento: ${customer.payment}${customer.paymentDetails ? `\nDetalhes do pagamento: ${customer.paymentDetails}` : ""}\n\n*ITENS DO PEDIDO*\n${orderItems}\n\nSubtotal: ${format(orderSubtotal)}${discountLine}\n*TOTAL DOS PRODUTOS: ${format(orderTotal)}*\n\n${customer.notes ? `*OBSERVAÇÕES*\n${customer.notes}\n\n` : ""}Aguardo a confirmação do pedido, disponibilidade e valor do frete.`;
         if (couponApplied) {
-            localStorage.setItem("solid-first-purchase-used", "true");
             localStorage.removeItem("solid-coupon");
         }
         window.open(`https://wa.me/5531998244421?text=${encodeURIComponent(message)}`, "_blank", "noopener");

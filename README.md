@@ -42,19 +42,33 @@ SOLID/
 │   ├── images/
 │   └── js/
 │
-├── pages/
-│   ├── about.html
-│   ├── cart.html
-│   ├── collections.html
-│   ├── contact.html
-│   ├── login.html
-│   ├── product.html
-│   ├── profile.html
-│   ├── register.html
-│   ├── shop.html
-│   └── wishlist.html
+├── api/
+│   └── account.php
 │
-├── index.html
+├── config/
+│   └── conexao.php
+│
+├── database/
+│   └── sql/
+│
+├── docs/
+│   ├── infinityfree.md
+│   └── xampp-mysql.md
+│
+├── pages/
+│   ├── about.php
+│   ├── cart.php
+│   ├── checkout.php
+│   ├── collections.php
+│   ├── contact.php
+│   ├── login.php
+│   ├── product.php
+│   ├── profile.php
+│   ├── register.php
+│   ├── shop.php
+│   └── wishlist.php
+│
+├── index.php
 ├── LICENSE
 └── README.md
 ```

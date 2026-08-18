@@ -12,9 +12,9 @@
 </head>
 <body>
     <header class="header"><div class="container">
-        <a href="../index.html" class="logo"><span>SØLID</span></a>
-        <nav class="menu"><a href="../index.html">Home</a><a href="shop.html">Shop</a><a href="collections.html">Coleções</a><a href="about.html">Sobre</a><a href="contact.html">Contato</a></nav>
-        <div class="actions"><a href="wishlist.html" aria-label="Favoritos"><i class="fa-regular fa-heart"></i></a><a href="cart.html" aria-label="Carrinho"><i class="fa-solid fa-bag-shopping"></i></a><a href="login.html" aria-label="Entrar"><i class="fa-regular fa-user"></i></a></div>
+        <a href="../index.php" class="logo"><span>SØLID</span></a>
+        <nav class="menu"><a href="../index.php">Home</a><a href="shop.php">Shop</a><a href="collections.php">Coleções</a><a href="about.php">Sobre</a><a href="contact.php">Contato</a></nav>
+        <div class="actions"><a href="wishlist.php" aria-label="Favoritos"><i class="fa-regular fa-heart"></i></a><a href="cart.php" aria-label="Carrinho"><i class="fa-solid fa-bag-shopping"></i></a><a href="login.php" aria-label="Entrar"><i class="fa-regular fa-user"></i></a></div>
     </div></header>
     <main>
         <section class="about-hero"><div class="container"><span>SOBRE A SØLID</span><h1>Mais do que roupas.<br>Construímos identidade.</h1></div></section>
@@ -42,7 +42,7 @@
             <div class="value"><h3>Qualidade</h3><p>Peças desenvolvidas para durar, acompanhar e representar você.</p></div>
             <div class="value"><h3>Identidade</h3><p>Menos excesso, mais propósito para quem não vive apenas de tendências.</p></div>
         </div></section>
-        <section class="about-cta"><div class="container"><h2>Faça parte da SØLID.</h2><a href="shop.html" class="btn-primary">Conheça a coleção</a></div></section>
+        <section class="about-cta"><div class="container"><h2>Faça parte da SØLID.</h2><a href="shop.php" class="btn-primary">Conheça a coleção</a></div></section>
     </main>
     <footer class="footer"></footer>
     <script src="../assets/js/main.js"></script>

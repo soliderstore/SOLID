@@ -4,6 +4,38 @@
     padding:0;
     box-sizing:border-box;
 
+    scrollbar-width:thin;
+    scrollbar-color:#5a5a5a #111111;
+
+}
+
+/* Barras de rolagem no padrão escuro da SØLID, inclusive em campos de texto. */
+::-webkit-scrollbar{
+
+    width:10px;
+    height:10px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#111111;
+    border-radius:999px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    border:2px solid #111111;
+    border-radius:999px;
+    background:#555555;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#8a8a8a;
+
 }
 
 html{

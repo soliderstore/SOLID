@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <i class="fa-regular fa-heart"></i>
                     <h2>Sua lista de desejos está vazia</h2>
                     <p>Salve seus produtos favoritos para encontrá-los facilmente depois.</p>
-                    <a href="shop.html" class="btn-primary">Conhecer produtos</a>
+                    <a href="shop.php" class="btn-primary">Conhecer produtos</a>
                 </div>`;
             return;
         }

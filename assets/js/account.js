@@ -1,10 +1,35 @@
 document.addEventListener("DOMContentLoaded", () => {
     const accountKey = "solid-account";
     const sessionKey = "solid-session";
+    const apiUrl = "../api/account.php";
     const getAccount = () => { try { return JSON.parse(localStorage.getItem(accountKey)); } catch { return null; } };
     const saveAccount = account => localStorage.setItem(accountKey, JSON.stringify(account));
     const getSession = () => localStorage.getItem(sessionKey) === "active" && getAccount();
     const escapeHtml = (value = "") => String(value).replace(/[&<>"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[char]);
+
+    async function api(action, payload = {}) {
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "same-origin",
+            body: JSON.stringify({ action, ...payload })
+        });
+        const rawResponse = await response.text();
+        let data;
+
+        try {
+            data = JSON.parse(rawResponse);
+        } catch {
+            throw new Error("A API PHP não respondeu. Confirme se o projeto foi enviado ao InfinityFree e se o arquivo api/account.php está na hospedagem.");
+        }
+        if (!response.ok || !data.ok) throw new Error(data.message || "Não foi possível concluir esta ação.");
+        return data;
+    }
+
+    function saveSession(user) {
+        saveAccount(user);
+        localStorage.setItem(sessionKey, "active");
+    }
 
     function formatPhone(value) {
         const digits = value.replace(/\D/g, "").slice(0, 11);
@@ -56,41 +81,60 @@ document.addEventListener("DOMContentLoaded", () => {
         registerForm.addEventListener("submit", async event => {
             event.preventDefault();
             const message = document.querySelector("#account-message");
-            if (getAccount()) { message.textContent = "Já existe uma conta criada neste navegador. Entre para continuar."; return; }
             const account = collect("register");
             account.password = document.querySelector("#register-password").value;
             if (!await savePhoto(document.querySelector("#register-image"), account, message)) return;
-            saveAccount(account); localStorage.setItem(sessionKey, "active"); window.location.href = "profile.html";
+            try {
+                const data = await api("register", account);
+                saveSession(data.user);
+                window.location.href = "profile.php";
+            } catch (error) { message.textContent = error.message; }
         });
     }
 
     const loginForm = document.querySelector("#login-form");
     if (loginForm) loginForm.addEventListener("submit", event => {
         event.preventDefault();
-        const account = getAccount();
         const message = document.querySelector("#account-message");
-        if (!account || account.email !== document.querySelector("#login-email").value.trim().toLowerCase() || account.password !== document.querySelector("#login-password").value) { message.textContent = "E-mail ou senha incorretos. Crie uma conta se ainda não possui cadastro."; return; }
-        localStorage.setItem(sessionKey, "active"); window.location.href = "profile.html";
+        api("login", { email: document.querySelector("#login-email").value.trim(), password: document.querySelector("#login-password").value })
+            .then(data => { saveSession(data.user); window.location.href = "profile.php"; })
+            .catch(error => { message.textContent = error.message; });
     });
 
     const content = document.querySelector("#profile-content");
     if (!content) return;
 
-    function renderProfile() {
-        const account = getSession();
-        if (!account) { content.innerHTML = `<div class="account-card account-empty"><i class="fa-regular fa-user"></i><h2>Entre na sua conta</h2><p>Faça login ou crie uma conta para acessar este espaço.</p><a href="login.html" class="btn-primary">Entrar</a><a href="register.html" class="btn-secondary">Criar conta</a></div>`; return; }
+    async function renderProfile() {
+        let account = null;
+        try {
+            const data = await api("session");
+            account = data.user;
+            saveSession(account);
+        } catch {
+            localStorage.removeItem(sessionKey);
+            localStorage.removeItem(accountKey);
+        }
+        if (!account) { content.innerHTML = `<div class="account-card account-empty"><i class="fa-regular fa-user"></i><h2>Entre na sua conta</h2><p>Faça login ou crie uma conta para acessar este espaço.</p><a href="login.php" class="btn-primary">Entrar</a><a href="register.php" class="btn-secondary">Criar conta</a></div>`; return; }
         const photo = account.profileImage ? `<img src="${account.profileImage}" alt="Foto de ${escapeHtml(account.name)}">` : account.name.charAt(0).toUpperCase();
-        content.innerHTML = `<div class="account-card profile-card"><div class="profile-avatar">${photo}</div><span>MINHA CONTA</span><h2>Olá, ${escapeHtml(account.name.split(" ")[0])}!</h2><p>${escapeHtml(account.email)}</p><div class="profile-data"><div><small>WhatsApp</small><strong>${escapeHtml(account.phone)}</strong></div><div><small>Endereço</small><strong>${escapeHtml(account.address)}, ${escapeHtml(account.number)}${account.complement ? ` - ${escapeHtml(account.complement)}` : ""}<br>${escapeHtml(account.neighborhood)} · ${escapeHtml(account.city)}<br>CEP: ${escapeHtml(account.zip)}</strong></div><div><small>Novidades por e-mail</small><strong>${account.newsletter ? "Ativadas" : "Não ativadas"}</strong></div></div><div class="profile-links"><a href="wishlist.html"><i class="fa-regular fa-heart"></i> Meus favoritos</a><a href="cart.html"><i class="fa-solid fa-bag-shopping"></i> Meu carrinho</a></div><button id="edit-profile" class="profile-edit" type="button">Editar meus dados</button><button id="logout-button" type="button">Sair da conta</button></div>`;
-        document.querySelector("#edit-profile").addEventListener("click", renderEdit);
-        document.querySelector("#logout-button").addEventListener("click", () => { localStorage.removeItem(sessionKey); window.location.href = "login.html"; });
+        content.innerHTML = `<div class="account-card profile-card"><div class="profile-avatar">${photo}</div><span>MINHA CONTA</span><h2>Olá, ${escapeHtml(account.name.split(" ")[0])}!</h2><p>${escapeHtml(account.email)}</p><div class="profile-data"><div><small>WhatsApp</small><strong>${escapeHtml(account.phone)}</strong></div><div><small>Endereço</small><strong>${escapeHtml(account.address)}, ${escapeHtml(account.number)}${account.complement ? ` - ${escapeHtml(account.complement)}` : ""}<br>${escapeHtml(account.neighborhood)} · ${escapeHtml(account.city)}<br>CEP: ${escapeHtml(account.zip)}</strong></div><div><small>Novidades por e-mail</small><strong>${account.newsletter ? "Ativadas" : "Não ativadas"}</strong></div></div><div class="profile-links"><a href="wishlist.php"><i class="fa-regular fa-heart"></i> Meus favoritos</a><a href="cart.php"><i class="fa-solid fa-bag-shopping"></i> Meu carrinho</a></div><button id="edit-profile" class="profile-edit" type="button">Editar meus dados</button><button id="logout-button" type="button">Sair da conta</button></div>`;
+        document.querySelector("#edit-profile").addEventListener("click", () => renderEdit(account));
+        document.querySelector("#logout-button").addEventListener("click", async () => {
+            try { await api("logout"); } finally { localStorage.removeItem(sessionKey); localStorage.removeItem(accountKey); window.location.href = "login.php"; }
+        });
     }
 
-    function renderEdit() {
-        const account = getSession();
+    function renderEdit(account) {
         content.innerHTML = `<section class="account-card edit-profile-card"><h1>Editar dados</h1><p>Mantenha suas informações e endereço atualizados.</p><form id="profile-form" class="account-form">${fields("profile", account)}<label class="account-full">Foto de perfil <small>(opcional, até 1,5 MB)</small><input id="profile-image" type="file" accept="image/*"></label><label class="newsletter-choice account-full"><input id="profile-newsletter" type="checkbox" ${account.newsletter ? "checked" : ""}> Quero receber lançamentos, promoções e novidades por e-mail.</label><p id="account-message" class="account-message" role="alert"></p><button class="btn-primary" type="submit">Salvar alterações</button><button id="cancel-edit" class="account-cancel" type="button">Cancelar</button></form></section>`;
         const form = document.querySelector("#profile-form"); setupMasks(form);
         document.querySelector("#cancel-edit").addEventListener("click", renderProfile);
-        form.addEventListener("submit", async event => { event.preventDefault(); const message = document.querySelector("#account-message"); const updated = collect("profile", account); if (!await savePhoto(document.querySelector("#profile-image"), updated, message)) return; saveAccount(updated); renderProfile(); });
+        form.addEventListener("submit", async event => {
+            event.preventDefault();
+            const message = document.querySelector("#account-message");
+            const updated = collect("profile", account);
+            if (!await savePhoto(document.querySelector("#profile-image"), updated, message)) return;
+            try { const data = await api("update", updated); saveSession(data.user); renderProfile(); }
+            catch (error) { message.textContent = error.message; }
+        });
     }
 
     renderProfile();
