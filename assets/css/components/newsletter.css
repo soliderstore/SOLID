@@ -1,0 +1,4 @@
+.newsletter form, .collections-newsletter form { flex-wrap: wrap; }
+.newsletter-consent { display: flex; align-items: flex-start; gap: 10px; flex: 0 0 100%; text-align: left; font-size: 12px; color: var(--text-light); line-height: 1.6; margin-top: 14px; }
+.newsletter .newsletter-consent input, .collections-newsletter .newsletter-consent input { flex: 0 0 18px; width: 18px; height: 18px; min-width: 18px; padding: 0; margin-top: 2px; accent-color: white; }
+.newsletter-message { font-size: 13px; color: var(--text-light); margin-top: 14px; }

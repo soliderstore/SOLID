@@ -467,6 +467,8 @@
 
 
 
+<script src="../assets/js/products.js"></script>
+<script src="../assets/js/purchase-auth.js"></script>
 <script src="../assets/js/cart.js"></script>
 <script src="../assets/js/main.js"></script>
 <script src="../assets/js/footer.js"></script>

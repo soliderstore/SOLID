@@ -199,6 +199,7 @@
 
 <script src="../assets/js/products.js"></script>
 <script src="../assets/js/shop.js"></script>
+<script src="../assets/js/newsletter.js"></script>
 <script src="../assets/js/main.js"></script>
 <script src="../assets/js/footer.js"></script>
 

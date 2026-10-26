@@ -13,7 +13,7 @@ if (container) {
 
                     <span class="badge">${product.badge}</span>
 
-                    <img src="${product.images[0]}" alt="${product.name}">
+                    <img src="${projectRoot + product.images[0].replace(/^\.\.\//, "")}" alt="${product.name}">
 
                 </div>
 
@@ -27,7 +27,7 @@ if (container) {
 
                     <p class="card-price">
 
-                        R$ ${product.price.toFixed(2)}
+                        ${product.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
 
                     </p>
 

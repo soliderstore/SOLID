@@ -2,6 +2,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const form = document.querySelector("#contact-form");
     const phoneInput = document.querySelector("#contact-phone");
 
+    [["#contact-name", 30], ["#contact-message", 150]].forEach(([selector, limit]) => {
+        const input = document.querySelector(selector);
+        input.addEventListener("input", () => { input.value = input.value.slice(0, limit); });
+    });
+
     function formatPhone(value) {
         const digits = value.replace(/\D/g, "").slice(0, 11);
         if (digits.length <= 2) return digits ? `(${digits}` : "";
@@ -21,9 +26,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!form.reportValidity()) return;
 
-        const name = document.querySelector("#contact-name").value.trim();
+        const name = document.querySelector("#contact-name").value.trim().slice(0, 30);
         const subject = document.querySelector("#contact-subject").value;
-        const message = document.querySelector("#contact-message").value.trim();
+        const message = document.querySelector("#contact-message").value.trim().slice(0, 150);
         const text = `Olá, SØLID! Tenho uma dúvida pelo site.\n\n*DADOS DE CONTATO*\nNome: ${name}\nWhatsApp: ${phoneInput.value}\n\n*ASSUNTO*\n${subject}\n\n*DÚVIDA*\n${message}\n\nAguardo o retorno. Obrigado!`;
 
         window.open(`https://wa.me/5531998244421?text=${encodeURIComponent(text)}`, "_blank", "noopener");

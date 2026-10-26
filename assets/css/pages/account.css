@@ -34,3 +34,6 @@
 .profile-edit{ margin-bottom:4px; color:var(--text); border:1px solid var(--border); border-radius:10px; }
 #logout-button, .account-cancel{ color:#ff9d9d; }
 @media(max-width:600px){ .account-page{ padding:115px 0 70px; } .account-card{ padding:28px 22px; } .account-form-grid{ grid-template-columns:1fr; } .account-full{ grid-column:auto; } }
+
+.address-lookup-status { display: block; color: var(--text-light); font-size: 12px; font-weight: 400; line-height: 1.5; margin-top: 6px; }
+.address-lookup-status:empty { display: none; }

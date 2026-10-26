@@ -3,6 +3,7 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 
     scrollbar-width:thin;
     scrollbar-color:#5a5a5a #111111;
@@ -95,3 +96,6 @@ ul{
     margin:auto;
 
 }
+
+/* Foco visível no padrão da marca para navegação por teclado. */
+:where(a, button, input, select, textarea):focus-visible { outline:2px solid #b7b7b7; outline-offset:3px; }

@@ -143,29 +143,6 @@ collectionCards.forEach(card => {
    NEWSLETTER
 ========================== */
 
-const newsletter = document.querySelector(".newsletter form");
-
-newsletter.addEventListener("submit", function(e){
-
-    e.preventDefault();
-
-    const email = this.querySelector("input").value.trim();
-
-    if(email === ""){
-
-        alert("Digite um e-mail.");
-
-        return;
-
-    }
-
-    alert("Obrigado por fazer parte da SØLID!");
-
-    this.reset();
-
-});
-
-
 /* ==========================
    LOADING DOS CARDS
 ========================== */

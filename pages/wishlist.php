@@ -39,7 +39,8 @@
         </section>
     </main>
     <footer class="footer"><div class="copyright">© 2026 SØLID. Todos os direitos reservados.</div></footer>
-    <script src="../assets/js/wishlist.js"></script>
+    <script src="../assets/js/products.js"></script>
+<script src="../assets/js/wishlist.js"></script>
     <script src="../assets/js/main.js"></script>
     <script src="../assets/js/footer.js"></script>
 </body>

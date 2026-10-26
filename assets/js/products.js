@@ -15,9 +15,8 @@ const PRODUCTS = [
 
         description: "Moletom oversized premium desenvolvido em algodão de alta qualidade. Confortável, resistente e perfeito para qualquer ocasião.",
 
-        price: 180.00,
+        price: 129.99,
 
-        oldPrice: 199.90,
 
         rating: 5,
 
@@ -71,9 +70,8 @@ const PRODUCTS = [
 
         description: "Moletom premium feminino SØLID com acabamento de alta qualidade e modelagem confortável.",
 
-        price: 99.90,
+        price: 129.99,
 
-        oldPrice: 129.90,
 
         rating: 5,
 
@@ -111,3 +109,15 @@ const PRODUCTS = [
     }
 
 ];  
+
+// Atualiza também produtos que já estavam salvos no carrinho ou favoritos.
+for (const key of ["solid-cart", "solid-wishlist"]) {
+    try {
+        const items = JSON.parse(localStorage.getItem(key));
+        if (!Array.isArray(items)) continue;
+        localStorage.setItem(key, JSON.stringify(items.map(item => {
+            const current = PRODUCTS.find(product => String(product.id) === String(item.id));
+            return current ? { ...item, price: current.price } : item;
+        })));
+    } catch { /* A loja continua disponível quando o armazenamento está bloqueado. */ }
+}

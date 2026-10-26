@@ -28,10 +28,10 @@
                 </div>
 
                 <form id="contact-form" class="contact-form">
-                    <label>Seu nome<input id="contact-name" type="text" required autocomplete="name" placeholder="Como podemos chamar você?"></label>
+                    <label>Seu nome<input id="contact-name" maxlength="30" type="text" required autocomplete="name" placeholder="Seu nome (até 30 caracteres)"></label>
                     <label>Seu WhatsApp<input id="contact-phone" type="tel" required autocomplete="tel" inputmode="numeric" maxlength="15" placeholder="(00) 00000-0000"></label>
                     <label>Assunto<select id="contact-subject" required><option value="">Selecione o assunto</option><option>Produtos e tamanhos</option><option>Pedido em andamento</option><option>Entrega e frete</option><option>Troca ou devolução</option><option>Pagamento</option><option>Outro assunto</option></select></label>
-                    <label>Sua dúvida<textarea id="contact-message" rows="4" required placeholder="Escreva aqui como podemos ajudar."></textarea></label>
+                    <label>Sua dúvida<textarea id="contact-message" maxlength="150" rows="4" required placeholder="Como podemos ajudar? (até 150 caracteres)"></textarea></label>
                     <button class="btn-primary" type="submit"><i class="fa-brands fa-whatsapp"></i> Enviar dúvida pelo WhatsApp</button>
                 </form>
             </div>

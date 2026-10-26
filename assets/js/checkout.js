@@ -125,6 +125,16 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
 
         checkoutMessage.textContent = "";
+        submitButton.disabled = true;
+        try {
+            if (!await window.solidPurchaseAuth.requireLogin()) return;
+        } catch (error) {
+            checkoutMessage.textContent = error.message;
+            return;
+        } finally {
+            submitButton.disabled = false;
+        }
+
 
         [phoneInput, cpfInput, zipInput, emailInput].forEach(input =>
             input.dispatchEvent(new Event("input"))

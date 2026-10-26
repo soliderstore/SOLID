@@ -8,6 +8,7 @@ session_start([
 ]);
 
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/../lib/newsletter.php';
 
 function respond(array $payload, int $status = 200): never
 {
@@ -103,7 +104,8 @@ try {
         ]);
         $_SESSION['user_id'] = (int)$db->lastInsertId();
         $user = currentUser($db);
-        respond(['ok' => true, 'user' => userData($user)]);
+        $newsletterMessage = newsletterAccountSubscribe($user, []);
+        respond(['ok' => true, 'user' => userData($user), 'newsletterMessage' => $newsletterMessage]);
     }
 
     if ($action === 'login') {
@@ -153,11 +155,17 @@ try {
         $check->execute([$email, $current['id']]);
         if ($check->fetch()) respond(['ok' => false, 'message' => 'Este e-mail já está em uso.'], 409);
 
+        if ((bool)$current['newsletter'] && (empty($data['newsletter']) || $email !== $current['email'])) {
+            try { newsletterRemove($current['email']); }
+            catch (RuntimeException $error) { respond(['ok' => false, 'message' => 'Não foi possível atualizar sua inscrição de e-mail. Tente novamente mais tarde.'], 503); }
+        }
         $update = $db->prepare('UPDATE users SET name = ?, email = ?, phone = ?, cpf = ?, zip = ?, address = ?, address_number = ?, complement = ?, neighborhood = ?, city = ?, newsletter = ?, profile_image = ? WHERE id = ?');
         $update->execute([
             $name, $email, text($data, 'phone', true), text($data, 'cpf'), text($data, 'zip', true), text($data, 'address', true), text($data, 'number', true), text($data, 'complement'), text($data, 'neighborhood', true), text($data, 'city', true), !empty($data['newsletter']) ? 1 : 0, imageValue($data, $current['profile_image'] ?? ''), $current['id']
         ]);
-        respond(['ok' => true, 'user' => userData(currentUser($db))]);
+        $updatedUser = currentUser($db);
+        $newsletterMessage = newsletterAccountSubscribe($updatedUser, $current);
+        respond(['ok' => true, 'user' => userData($updatedUser), 'newsletterMessage' => $newsletterMessage]);
     }
 
     if ($action === 'logout') {

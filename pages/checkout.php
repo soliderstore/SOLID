@@ -71,8 +71,10 @@
     </main>
 
     <footer class="footer"><div class="copyright">© 2026 SØLID. Todos os direitos reservados.</div></footer>
-    <script src="../assets/js/checkout.js"></script>
-    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/products.js"></script>
+<script src="../assets/js/purchase-auth.js"></script>
+<script src="../assets/js/checkout.js"></script>
+    <script src="../assets/js/address-lookup.js"></script><script src="../assets/js/main.js"></script>
     <script src="../assets/js/footer.js"></script>
 </body>
 </html>

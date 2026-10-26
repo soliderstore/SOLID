@@ -61,7 +61,7 @@ if (!container) {
 
                 <h2>
 
-                    R$ ${product.price.toFixed(2)}
+                    ${product.price.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
 
                 </h2>
 
