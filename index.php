@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=stable-navigation-22">
 
 </head>
 
@@ -77,13 +77,10 @@
 
     </header>
 
-
-
     <!-- ================= HERO ================= -->
 
-    <!-- ================= HERO ================= -->
-
-    <section class="hero">
+    <main>
+<section class="hero">
 
         <div class="container hero-container">
 
@@ -136,37 +133,6 @@
         </div>
 
     </section>
-
-
-    <!-- ================= BENEFÍCIOS ================= -->
-
-    <section class="benefits">
-
-        <div class="container">
-
-            <div class="benefit">
-
-                🚚 Enviamos para todo o Brasil
-
-            </div>
-
-            <div class="benefit">
-
-                🔒 Compra 100% Segura
-
-            </div>
-
-            <div class="benefit">
-
-                ⭐ Qualidade Premium
-
-            </div>
-
-        </div>
-
-    </section>
-
-
 
     <!-- ================= PRODUTOS ================= -->
 
@@ -253,6 +219,7 @@
         </div>
 
     </section>
+</main>
 
 
 
@@ -315,7 +282,7 @@
     <script src="assets/js/products.js"></script>
     <script src="assets/js/shop.js"></script>
     <script src="assets/js/newsletter.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="assets/js/main.js?v=page-mist-20"></script>
     <script src="assets/js/footer.js"></script>
 
 </body>

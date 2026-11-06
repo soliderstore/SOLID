@@ -62,7 +62,7 @@ const PRODUCTS = [
 
         featured: true,
 
-        badge: "LANÇAMENTO",
+        badge: "NOVO",
 
         category: "Moletom",
 

@@ -39,6 +39,7 @@
             if (zipDigits(input) !== cep || state.controller !== controller) return;
             if (data.erro) {
                 state.status.textContent = "CEP não encontrado. Confira o CEP ou preencha o endereço manualmente.";
+                input.dispatchEvent(new CustomEvent('solid:address-result', { bubbles: true, detail: { found: false } }));
                 return;
             }
             const values = { address: data.logradouro || "", neighborhood: data.bairro || "", city: data.localidade && data.uf ? `${data.localidade} / ${data.uf}` : "" };
@@ -52,9 +53,11 @@
             state.status.textContent = values.address && values.neighborhood && values.city
                 ? "Endereço preenchido. Informe o número e, se necessário, o complemento."
                 : "CEP localizado. Complete os campos de endereço que faltam e informe o número.";
+            input.dispatchEvent(new CustomEvent('solid:address-result', { bubbles: true, detail: { found: true } }));
         } catch {
             if (zipDigits(input) === cep && state.controller === controller) {
                 state.status.textContent = "Não foi possível consultar o CEP. Preencha o endereço manualmente.";
+                input.dispatchEvent(new CustomEvent('solid:address-result', { bubbles: true, detail: { found: false, unavailable: true } }));
             }
         } finally { clearTimeout(timeout); }
     }

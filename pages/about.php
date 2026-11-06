@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=stable-navigation-22">
 </head>
 <body>
     <header class="header"><div class="container">
@@ -45,7 +45,7 @@
         <section class="about-cta"><div class="container"><h2>Faça parte da SØLID.</h2><a href="shop.php" class="btn-primary">Conheça a coleção</a></div></section>
     </main>
     <footer class="footer"></footer>
-    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/main.js?v=page-mist-20"></script>
     <script src="../assets/js/footer.js"></script>
 </body>
 </html>

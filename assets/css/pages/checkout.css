@@ -40,3 +40,7 @@
 .purchase-auth-modal .btn-primary, .purchase-auth-modal .btn-secondary { display: flex; width: 100%; margin-top: 12px; }
 .purchase-auth-close { position: absolute; top: 12px; right: 16px; border: 0; background: transparent; color: var(--text-light); font-size: 28px; cursor: pointer; }
 .purchase-auth-modal :focus-visible { outline: 2px solid white; outline-offset: 4px; }
+.checkout-form label[hidden] { display: none; }
+.checkout-change-address { grid-column: 1 / -1; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--text); padding: 12px; font: inherit; cursor: pointer; }
+.checkout-saved-address { padding: 12px; border-radius: 10px; background: var(--card); }
+.checkout-saved-address:empty { display: none; }

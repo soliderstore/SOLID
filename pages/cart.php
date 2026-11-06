@@ -24,7 +24,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     <link rel="stylesheet"
-          href="../assets/css/style.css">
+          href="../assets/css/style.css?v=stable-navigation-22">
 
 </head>
 
@@ -35,6 +35,7 @@
 <!-- Cole exatamente o mesmo header do index -->
 <!-- ======================================== -->
 
+<main>
 <section class="cart-page">
 
     <div class="container">
@@ -452,6 +453,7 @@
     </div>
 
 </section>
+</main>
 
 
 
@@ -470,7 +472,7 @@
 <script src="../assets/js/products.js"></script>
 <script src="../assets/js/purchase-auth.js"></script>
 <script src="../assets/js/cart.js"></script>
-<script src="../assets/js/main.js"></script>
+<script src="../assets/js/main.js?v=page-mist-20"></script>
 <script src="../assets/js/footer.js"></script>
 
 </body>

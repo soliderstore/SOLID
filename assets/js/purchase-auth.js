@@ -35,7 +35,7 @@
         }
         if (response.status === 401) { showLogin(); return false; }
         if (!response.ok || !data.ok) throw new Error(data.message || "Não foi possível verificar sua sessão. Tente novamente.");
-        return true;
+        return data.user;
     }
     window.solidPurchaseAuth = { requireLogin };
     document.addEventListener("DOMContentLoaded", async () => {
@@ -52,7 +52,11 @@
         const content = document.querySelector("#checkout-content");
         if (!content) return;
         content.inert = true;
-        try { content.inert = !await requireLogin(); }
+        try {
+            const user = await requireLogin();
+            content.inert = !user;
+            if (user) document.dispatchEvent(new CustomEvent('solid:checkout-user', { detail: user }));
+        }
         catch (error) { document.querySelector("#checkout-message").textContent = error.message; }
     });
 })();

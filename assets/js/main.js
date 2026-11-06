@@ -104,6 +104,49 @@ document.addEventListener("DOMContentLoaded", () => {
         <a href="${actions.children[2]?.getAttribute("href") || "login.php"}">${mobileAccount}</a>`;
     menu.append(mobileActions);
 
+    // A navegação móvel usa os mesmos destinos do menu principal.
+    const mobileNav = document.createElement('nav');
+    mobileNav.className = 'mobile-dock';
+    mobileNav.id = 'mobile-navigation';
+    mobileNav.setAttribute('aria-label', 'Navegação no celular');
+    const dockItems = [
+        { page: 'index', label: 'Início', icon: 'fa-house' },
+        { page: 'shop', label: 'Loja', icon: 'fa-bag-shopping' },
+        { page: 'login', label: 'Minha conta', icon: 'fa-user', account: true },
+        { page: 'cart', label: 'Carrinho', icon: 'fa-cart-shopping' },
+        { page: 'contact', label: 'Contato', icon: 'fa-envelope' }
+    ];
+    const currentPath = window.location.pathname.replace(/\/index\.php$/, '/');
+    dockItems.forEach(item => {
+        const link = document.createElement('a');
+        link.href = item.account ? actions.children[2].href : pageUrl(item.page);
+        if (item.account) link.classList.add('mobile-dock-account');
+        const icon = document.createElement('span');
+        icon.className = 'mobile-dock-icon';
+        icon.innerHTML = `<i class="fa-solid ${item.icon}" aria-hidden="true"></i>`;
+        const avatar = item.account ? actions.children[2].querySelector('img') : null;
+        if (avatar) icon.replaceChildren(avatar.cloneNode(true));
+        const text = document.createElement('span');
+        text.className = 'mobile-dock-label';
+        text.textContent = item.label;
+        link.append(icon, text);
+        if (new URL(link.href).pathname.replace(/\/index\.php$/, '/') === currentPath) {
+            link.classList.add('is-current');
+            link.setAttribute('aria-current', 'page');
+        }
+        mobileNav.append(link);
+    });
+    document.body.append(mobileNav);
+    const dockLinks = [...mobileNav.querySelectorAll('a')];
+    function positionDock(link) {
+        const index = dockLinks.indexOf(link);
+        if (index < 0) return;
+        mobileNav.style.setProperty('--dock-x', `${(index + .5) * 100 / dockLinks.length}%`);
+        mobileNav.classList.add('has-selection');
+    }
+    positionDock(mobileNav.querySelector('.is-current'));
+    toggle.setAttribute('aria-controls', mobileNav.id);
+
     function closeMenu() {
         header.classList.remove("menu-open");
         toggle.setAttribute("aria-expanded", "false");
@@ -119,9 +162,27 @@ document.addEventListener("DOMContentLoaded", () => {
     menu.addEventListener("click", event => {
         if (event.target.closest("a")) closeMenu();
     });
+    mobileNav.addEventListener('click', event => {
+        const link = event.target.closest('a');
+        if (!link) return;
+        if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button !== 0) return;
+        event.preventDefault();
+        mobileNav.querySelectorAll('a').forEach(item => item.classList.remove('is-current'));
+        link.classList.add('is-current');
+        positionDock(link);
+        closeMenu();
+        const delay = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 300;
+        window.setTimeout(() => window.location.assign(link.href), delay);
+    });
+    document.addEventListener('click', event => {
+        if (!header.contains(event.target)) closeMenu();
+    });
 
     document.addEventListener("keydown", event => {
-        if (event.key === "Escape") closeMenu();
+        if (event.key === "Escape" && header.classList.contains('menu-open')) {
+            closeMenu();
+            toggle.focus();
+        }
     });
 
     window.addEventListener("resize", () => {

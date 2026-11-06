@@ -121,6 +121,82 @@ document.addEventListener("DOMContentLoaded", () => {
         : "";
     totalElement.textContent = format(orderTotal);
 
+    const addressKeys = ['address', 'number', 'complement', 'neighborhood', 'city'];
+    const addressFields = addressKeys.map(key => document.querySelector(`#customer-${key}`));
+    let addressReady = false;
+    let confirmedZip = '';
+    let fillingSavedAddress = false;
+    function revealAddress(show) {
+        addressReady = show;
+        addressFields.forEach(input => {
+            input.closest('label').hidden = !show;
+            input.disabled = !show;
+        });
+    }
+    revealAddress(false);
+    zipInput.addEventListener('input', () => {
+        if (fillingSavedAddress) return;
+        if (digits(zipInput.value, 8) !== confirmedZip) {
+            revealAddress(false);
+            addressFields.forEach(input => { input.value = ''; });
+            zipInput.setCustomValidity('Informe o CEP e aguarde a consulta do endereço.');
+        }
+    });
+    zipInput.addEventListener('solid:address-result', event => {
+        if (event.detail.found || event.detail.unavailable) {
+            confirmedZip = digits(zipInput.value, 8);
+            revealAddress(true);
+            zipInput.setCustomValidity('');
+            document.querySelector(event.detail.found ? '#customer-number' : '#customer-address').focus();
+        } else {
+            zipInput.setCustomValidity('CEP não encontrado. Confira os números informados.');
+        }
+    });
+    const changeAddress = document.createElement('button');
+    changeAddress.type = 'button';
+    changeAddress.className = 'checkout-change-address';
+    changeAddress.textContent = 'Escolher endereço de entrega';
+    zipInput.closest('label').before(changeAddress);
+    function chooseAddress(user) {
+        const saved = ['zip', 'address', 'number', 'neighborhood', 'city'].every(key => user[key]);
+        const dialog = document.createElement('dialog');
+        dialog.className = 'purchase-auth-modal';
+        dialog.setAttribute('aria-labelledby', 'delivery-choice-title');
+        dialog.innerHTML = `<h2 id="delivery-choice-title">Endereço de entrega</h2><p>${saved ? 'Quer receber seu pedido no endereço salvo na sua conta?' : 'Sua conta ainda não tem um endereço completo. Vamos informar o CEP da entrega?'}</p><p class="checkout-saved-address"></p>${saved ? '<button type="button" class="btn-primary" data-saved>Sim, usar endereço salvo</button>' : ''}<button type="button" class="btn-primary" data-new>${saved ? 'Não, usar outro endereço' : 'Informar CEP'}</button>`;
+        if (saved) dialog.querySelector('.checkout-saved-address').textContent = `${user.address}, ${user.number}${user.complement ? ' — ' + user.complement : ''} · ${user.neighborhood} · ${user.city} · CEP ${user.zip}`;
+        dialog.querySelector('[data-saved]')?.addEventListener('click', () => {
+            fillingSavedAddress = true;
+            zipInput.value = formatZip(user.zip);
+            confirmedZip = digits(zipInput.value, 8);
+            addressKeys.forEach(key => { document.querySelector(`#customer-${key}`).value = user[key] || ''; });
+            revealAddress(true);
+            zipInput.setCustomValidity('');
+            fillingSavedAddress = false;
+            dialog.close();
+        });
+        dialog.querySelector('[data-new]').addEventListener('click', () => {
+            confirmedZip = '';
+            zipInput.value = '';
+            addressFields.forEach(input => { input.value = ''; });
+            revealAddress(false);
+            dialog.close();
+            zipInput.focus();
+        });
+        dialog.addEventListener('close', () => dialog.remove(), { once: true });
+        document.body.append(dialog);
+        dialog.showModal();
+    }
+    document.addEventListener('solid:checkout-user', event => {
+        const user = event.detail;
+        ['name', 'phone', 'email', 'cpf'].forEach(key => {
+            const input = document.querySelector(`#customer-${key}`);
+            input.value = user[key] || '';
+            input.dispatchEvent(new Event('input'));
+        });
+        changeAddress.addEventListener('click', () => chooseAddress(user));
+        chooseAddress(user);
+    }, { once: true });
+
     form.addEventListener("submit", async event => {
         event.preventDefault();
 
@@ -141,6 +217,11 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
         if (!form.reportValidity()) return;
+        if (!addressReady) {
+            checkoutMessage.textContent = 'Informe o CEP e complete o endereço de entrega antes de continuar.';
+            zipInput.focus();
+            return;
+        }
 
         if (couponApplied) {
             try {

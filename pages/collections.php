@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="../assets/css/reset.css">
     <link rel="stylesheet" href="../assets/css/variables.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=stable-navigation-22">
     <link rel="stylesheet" href="../assets/css/responsive.css">
     <link rel="stylesheet" href="../assets/css/pages/collections.css">
 
@@ -26,7 +26,8 @@
 
     <!-- ================= HERO ================= -->
 
-    <section class="collections-hero">
+    <main>
+<section class="collections-hero">
 
         <div class="collections-container">
 
@@ -344,6 +345,7 @@
     </div>
 
 </section>
+</main>
 
 
 
@@ -357,7 +359,7 @@
 
 <script src="../assets/js/collections.js"></script>
 <script src="../assets/js/newsletter.js"></script>
-<script src="../assets/js/main.js"></script>
+<script src="../assets/js/main.js?v=page-mist-20"></script>
 <script src="../assets/js/footer.js"></script>
 
 </body>

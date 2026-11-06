@@ -252,3 +252,124 @@
 
     }
 }
+.mobile-dock { display: none; }
+@property --dock-x {
+    syntax: '<percentage>';
+    inherits: true;
+    initial-value: 6.25%;
+}
+@media (max-width: 1100px) {
+    .header .menu { display: none; }
+    .header .menu-toggle { display: none; }
+    body { padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
+    .mobile-dock {
+        position: fixed;
+        z-index: 1000;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0;
+        min-height: calc(58px + env(safe-area-inset-bottom, 0px));
+        padding: 4px 2px calc(4px + env(safe-area-inset-bottom, 0px));
+        border: 0;
+        border-radius: 14px 14px 0 0;
+        background: transparent;
+        -webkit-backdrop-filter: blur(40px);
+        backdrop-filter: blur(40px);
+        isolation: isolate;
+        transition: --dock-x .46s cubic-bezier(.65, 0, .2, 1);
+    }
+    .mobile-dock::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        border-radius: inherit;
+        background: rgba(5,5,5,.80);
+        box-shadow: inset 0 1px 0 var(--border);
+    }
+    .mobile-dock a { position: relative; }
+    .mobile-dock a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        min-height: 48px;
+        min-width: 0;
+        color: #aaa;
+        text-align: center;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .mobile-dock-icon {
+        display: grid;
+        place-items: center;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: transparent;
+        color: #fff;
+        font-size: 16px;
+        box-shadow: 0 0 0 0 #fff;
+        transition: transform .46s cubic-bezier(.65, 0, .2, 1), box-shadow .3s, background-color .3s;
+    }
+    .mobile-dock-icon img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+    .mobile-dock a.is-current .mobile-dock-icon,
+    .mobile-dock a:focus-visible .mobile-dock-icon {
+        transform: translateY(-17px) scale(1.15);
+        box-shadow: 0 0 0 3px rgba(255,255,255,.85), 0 5px 12px #0004;
+        background: linear-gradient(135deg, #ffffffed, #dce4efb8);
+        color: #080808;
+        animation: mobile-dock-select .56s cubic-bezier(.22, 1, .36, 1) both;
+    }
+    .mobile-dock a.is-current { color: #fff; }
+    .mobile-dock a.is-current .mobile-dock-icon i { animation: mobile-dock-icon-settle .56s ease both; }
+    .mobile-dock-label { font-size: clamp(6px, 1.9vw, 9px); font-weight: 500; line-height: 1.3; white-space: nowrap; transition: transform .38s, color .38s; }
+    .mobile-dock a.is-current .mobile-dock-label { transform: translateY(-4px); }
+    .mobile-dock a:active .mobile-dock-icon { transform: translateY(-2px) scale(.85); }
+    .mobile-dock .mobile-dock-account .mobile-dock-icon {
+        position: absolute;
+        top: -15px;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        aspect-ratio: 1;
+        font-size: 19px;
+        background: #fff;
+        color: #080808;
+        box-shadow: 0 0 0 4px rgba(230,238,255,.18), 0 3px 16px #0005;
+        transform: none;
+        animation: none;
+    }
+    .mobile-dock .mobile-dock-account .mobile-dock-icon img {
+        position: absolute;
+        inset: 0;
+        display: block;
+        width: 40px;
+        height: 40px;
+        max-width: none;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: center;
+    }
+    .mobile-dock .mobile-dock-account .mobile-dock-label { margin-top: 28px; transform: none; }
+    .mobile-dock .mobile-dock-account:active .mobile-dock-icon { transform: scale(.9); }
+    .mobile-dock .mobile-dock-account.is-current .mobile-dock-icon { box-shadow: 0 0 0 3px rgba(230,238,255,.3), 0 0 0 4px rgba(255,255,255,.8), 0 3px 18px #0005; }
+}
+@keyframes mobile-dock-select {
+    0% { transform: translateY(1px) scale(1); }
+    25% { transform: translateY(5px) scale(1.05, .85); }
+    65% { transform: translateY(-20px) scale(1.1, 1.2); }
+    100% { transform: translateY(-17px) scale(1.15); }
+}
+@keyframes mobile-dock-icon-settle {
+    0%, 25% { transform: scale(.8) rotate(-8deg); }
+    70% { transform: scale(1.12) rotate(4deg); }
+    100% { transform: scale(1) rotate(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .mobile-dock, .mobile-dock-icon, .mobile-dock a.is-current .mobile-dock-icon i { transition: none; animation: none; }
+}

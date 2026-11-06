@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css?v=stable-navigation-22">
 </head>
 <body>
     <header class="header">
@@ -45,12 +45,15 @@
                         <label>WhatsApp<input id="customer-phone" type="tel" required autocomplete="tel" inputmode="numeric" maxlength="15" placeholder="(00) 00000-0000"></label>
                         <label>E-mail<input id="customer-email" type="email" required autocomplete="email" placeholder="nome@exemplo.com"></label>
                         <label>CPF <small>(opcional)</small><input id="customer-cpf" type="text" inputmode="numeric" maxlength="14" placeholder="000.000.000-00"></label>
+                        <label>CEP<input id="customer-zip" type="text" required inputmode="numeric" maxlength="9" placeholder="00000-000"></label>
+                        
+                        <label class="form-full">Cidade / UF<input id="customer-city" type="text" required placeholder="Ex.: Belo Horizonte / MG"></label>
+                        <label>Bairro<input id="customer-neighborhood" type="text" required></label>
                         <label class="form-full">Rua / Avenida<input id="customer-address" type="text" required autocomplete="street-address"></label>
                         <label>Número<input id="customer-number" type="text" required inputmode="numeric" maxlength="8" placeholder="Ex.: 123"></label>
                         <label>Complemento <small>(opcional)</small><input id="customer-complement" type="text"></label>
-                        <label>Bairro<input id="customer-neighborhood" type="text" required></label>
-                        <label>CEP<input id="customer-zip" type="text" required inputmode="numeric" maxlength="9" placeholder="00000-000"></label>
-                        <label class="form-full">Cidade / UF<input id="customer-city" type="text" required placeholder="Ex.: Belo Horizonte / MG"></label>
+                       
+                        
                         <label>Recebimento<select id="delivery-method" required><option value="">Selecione</option><option>Entrega no endereço</option><option>Retirada a combinar</option></select></label>
                         <label>Forma de pagamento<select id="payment-method" required><option value="">Selecione</option><option>PIX</option><option>Cartão de crédito</option><option>Cartão de débito</option><option>Dinheiro</option></select></label>
                     </div>
@@ -72,9 +75,9 @@
 
     <footer class="footer"><div class="copyright">© 2026 SØLID. Todos os direitos reservados.</div></footer>
     <script src="../assets/js/products.js"></script>
-<script src="../assets/js/purchase-auth.js"></script>
-<script src="../assets/js/checkout.js"></script>
-    <script src="../assets/js/address-lookup.js"></script><script src="../assets/js/main.js"></script>
+<script src="../assets/js/purchase-auth.js?v=delivery-address-12"></script>
+<script src="../assets/js/checkout.js?v=delivery-address-12"></script>
+    <script src="../assets/js/address-lookup.js?v=delivery-address-12"></script><script src="../assets/js/main.js?v=page-mist-20"></script>
     <script src="../assets/js/footer.js"></script>
 </body>
 </html>
