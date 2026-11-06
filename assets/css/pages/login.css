@@ -1,0 +1,27 @@
+.google-login-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    width: 100%;
+    min-height: 64px;
+    margin-top: 24px;
+    padding: 14px 20px;
+    border: 1.5px solid #51494c;
+    border-radius: 15px;
+    background: radial-gradient(ellipse at 58% 0%, rgba(133, 53, 72, .28), transparent 75%), #292628;
+    color: #f1eeee;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: clamp(18px, 4.8vw, 26px);
+    font-weight: 400;
+    line-height: 1.25;
+    text-decoration: none;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+    transition: background-color .2s, border-color .2s;
+}
+.google-login-button svg { width: 36px; height: 36px; flex-shrink: 0; }
+.google-login-button svg path { fill: #fff; }
+.google-login-button:hover { background-color: #383033; border-color: #766269; color: #fff; }
+.google-login-button:focus-visible { outline: 3px solid #4285f4; outline-offset: 3px; }
+.account-divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: #777; font-size: 12px; }
+.account-divider::before, .account-divider::after { content: ''; flex: 1; height: 1px; background: #ddd; }

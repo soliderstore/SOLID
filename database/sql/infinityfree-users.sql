@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     cpf VARCHAR(20) NULL,
     zip VARCHAR(12) NOT NULL,
     address VARCHAR(180) NOT NULL,
-    address_number VARCHAR(30) NOT NULL,
+    address_number VARCHAR(50) NOT NULL,
     complement VARCHAR(120) NULL,
     neighborhood VARCHAR(120) NOT NULL,
     city VARCHAR(120) NOT NULL,

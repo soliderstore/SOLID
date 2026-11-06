@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         try {
             data = JSON.parse(rawResponse);
         } catch {
-            throw new Error("A API PHP não respondeu. Confirme se o projeto foi enviado ao InfinityFree e se o arquivo api/account.php está na hospedagem.");
+            throw new Error("O servidor retornou uma resposta inválida. Verifique os logs do PHP e a estrutura do banco de dados.");
         }
         if (!response.ok || !data.ok) throw new Error(data.message || "Não foi possível concluir esta ação.");
         return data;
@@ -42,6 +42,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const destination = new URLSearchParams(window.location.search).get("next") === "checkout" ? "checkout.php" : "profile.php";
+    const googleParams = new URLSearchParams(window.location.search);
+    document.querySelectorAll('[data-google-login]').forEach(link => {
+        if (destination === 'checkout.php') link.href += '?next=checkout';
+    });
+    const googleErrors = {
+        configuration: 'O login com Google ainda não foi configurado. Por enquanto, entre com e-mail e senha.',
+        expired: 'A tentativa de login expirou. Clique novamente em Continuar com o Google.',
+        cancelled: 'Login com Google cancelado. Você pode tentar novamente.',
+        existing: 'Já existe uma conta com este e-mail. Entre com sua senha.',
+        failed: 'Não foi possível entrar com o Google. Tente novamente mais tarde.'
+    };
+    if (googleParams.has('google_error')) {
+        const message = document.querySelector('#account-message');
+        if (message) message.textContent = googleErrors[googleParams.get('google_error')] || googleErrors.failed;
+    }
+    if (googleParams.get('google_login') === '1') {
+        api('session').then(data => {
+            saveSession(data.user);
+            window.location.replace(destination);
+        }).catch(error => {
+            const message = document.querySelector('#account-message');
+            if (message) message.textContent = error.message;
+        });
+    }
     if (destination === "checkout.php") {
         document.querySelectorAll('.account-alternative a').forEach(link => {
             link.href = link.getAttribute("href") + "?next=checkout";
@@ -63,8 +87,98 @@ document.addEventListener("DOMContentLoaded", () => {
     function readImage(input) {
         const file = input.files?.[0];
         if (!file) return Promise.resolve(null);
-        if (!file.type.startsWith("image/") || file.size > 1500000) return Promise.reject(new Error("Escolha uma imagem de até 1,5 MB."));
-        return new Promise(resolve => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.readAsDataURL(file); });
+        if (!file.type.startsWith("image/")) return Promise.reject(new Error("Escolha um arquivo de imagem."));
+        return new Promise((resolve, reject) => {
+            const url = URL.createObjectURL(file);
+            const image = new Image();
+            image.onload = () => {
+                try {
+                    const scale = Math.min(1, 1024 / Math.max(image.naturalWidth, image.naturalHeight));
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+                    canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+                    const context = canvas.getContext('2d');
+                    context.fillStyle = '#fff';
+                    context.fillRect(0, 0, canvas.width, canvas.height);
+                    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                    resolve(canvas.toDataURL('image/jpeg', .85));
+                } catch { reject(new Error('Não foi possível preparar esta foto. Escolha outra imagem.')); }
+                finally { URL.revokeObjectURL(url); }
+            };
+            image.onerror = () => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Não foi possível abrir esta imagem. Tente uma foto JPG, PNG ou WebP.'));
+            };
+            image.src = url;
+        });
+    }
+
+    function photoPicker(account) {
+        const photo = account.profileImage
+            ? `<img src="${escapeHtml(account.profileImage)}" alt="Foto de perfil atual">`
+            : escapeHtml(account.name.charAt(0).toUpperCase());
+        return `<div class="profile-photo-picker"><div class="profile-photo-controls"><button type="button" class="profile-avatar profile-photo-button" aria-label="Ver foto de perfil ampliada" title="Ver foto">${photo}</button><button type="button" class="profile-photo-camera" aria-label="Alterar foto de perfil" title="Alterar foto"><i class="fa-solid fa-camera" aria-hidden="true"></i></button></div><input id="profile-image" type="file" accept="image/*" hidden><p class="profile-photo-status" role="status"></p></div>`;
+    }
+
+    function showProfilePhoto(source) {
+        const dialog = document.createElement('dialog');
+        dialog.className = 'profile-photo-viewer';
+        dialog.setAttribute('aria-label', 'Foto de perfil ampliada');
+        dialog.innerHTML = '<button type="button" class="profile-photo-close" aria-label="Fechar foto" autofocus>×</button><img alt="Foto de perfil completa">';
+        dialog.querySelector('img').src = source;
+        const previousOverflow = document.body.style.overflow;
+        dialog.addEventListener('close', () => {
+            document.body.style.overflow = previousOverflow;
+            dialog.remove();
+        }, { once: true });
+        dialog.querySelector('button').addEventListener('click', () => dialog.close());
+        dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
+        document.body.append(dialog);
+        document.body.style.overflow = 'hidden';
+        dialog.showModal();
+    }
+
+    function setupPhotoPicker(account, autoSave = false) {
+        const button = content.querySelector('.profile-photo-button');
+        const input = content.querySelector('#profile-image');
+        const camera = content.querySelector('.profile-photo-camera');
+        const status = content.querySelector('.profile-photo-status');
+        let selectedPhoto = null;
+        let pending = Promise.resolve();
+        camera.addEventListener('click', () => input.click());
+        button.addEventListener('click', () => {
+            const photo = button.querySelector('img');
+            if (photo) showProfilePhoto(photo.src);
+            else input.click();
+        });
+        input.addEventListener('change', () => {
+            if (!input.files?.length) return;
+            button.disabled = true;
+            camera.disabled = true;
+            status.textContent = 'Preparando foto…';
+            pending = (async () => {
+                try {
+                    const photo = await readImage(input);
+                    if (autoSave) {
+                        const data = await api('photo', { profileImage: photo });
+                        saveSession(data.user);
+                        account.profileImage = data.user.profileImage;
+                    }
+                    selectedPhoto = photo;
+                    let preview = button.querySelector('img');
+                    if (!preview) {
+                        button.firstChild?.nodeType === Node.TEXT_NODE && button.firstChild.remove();
+                        preview = document.createElement('img');
+                        preview.alt = 'Foto de perfil atual';
+                        button.prepend(preview);
+                    }
+                    preview.src = photo;
+                    status.textContent = autoSave ? 'Foto atualizada.' : 'Foto selecionada. Salve as alterações para confirmar.';
+                } catch (error) { status.textContent = error.message; }
+                finally { button.disabled = false; camera.disabled = false; input.value = ''; }
+            })();
+        });
+        return async () => { await pending; return selectedPhoto; };
     }
 
     function fields(prefix, account = {}) {
@@ -95,6 +209,22 @@ document.addEventListener("DOMContentLoaded", () => {
     const registerForm = document.querySelector("#register-form");
     if (registerForm) {
         setupMasks(registerForm);
+        registerForm.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="tel"]').forEach(input => {
+            const limit = input.maxLength > 0 ? Math.min(input.maxLength, 50) : 50;
+            input.maxLength = limit;
+            const counter = document.createElement('small');
+            counter.id = `${input.id}-limit`;
+            counter.className = 'account-character-count';
+            input.setAttribute('aria-describedby', [input.getAttribute('aria-describedby'), counter.id].filter(Boolean).join(' '));
+            input.insertAdjacentElement('afterend', counter);
+            const enforceLimit = () => {
+                if (input.value.length > limit) input.value = input.value.slice(0, limit);
+                counter.textContent = `${input.value.length}/${limit} caracteres`;
+            };
+            input.addEventListener('input', enforceLimit);
+            input.addEventListener('change', enforceLimit);
+            enforceLimit();
+        });
         registerForm.addEventListener("submit", async event => {
             event.preventDefault();
             const message = document.querySelector("#account-message");
@@ -133,8 +263,8 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.removeItem(accountKey);
         }
         if (!account) { content.innerHTML = `<div class="account-card account-empty"><i class="fa-regular fa-user"></i><h2>Entre na sua conta</h2><p>Faça login ou crie uma conta para acessar este espaço.</p><a href="login.php" class="btn-primary">Entrar</a><a href="register.php" class="btn-secondary">Criar conta</a></div>`; return; }
-        const photo = account.profileImage ? `<img src="${account.profileImage}" alt="Foto de ${escapeHtml(account.name)}">` : account.name.charAt(0).toUpperCase();
-        content.innerHTML = `<div class="account-card profile-card"><div class="profile-avatar">${photo}</div><span>MINHA CONTA</span><h2>Olá, ${escapeHtml(account.name.split(" ")[0])}!</h2><p>${escapeHtml(account.email)}</p><div class="profile-data"><div><small>WhatsApp</small><strong>${escapeHtml(account.phone)}</strong></div><div><small>Endereço</small><strong>${escapeHtml(account.address)}, ${escapeHtml(account.number)}${account.complement ? ` - ${escapeHtml(account.complement)}` : ""}<br>${escapeHtml(account.neighborhood)} · ${escapeHtml(account.city)}<br>CEP: ${escapeHtml(account.zip)}</strong></div><div><small>Novidades por e-mail</small><strong>${account.newsletter ? "Ativadas" : "Não ativadas"}</strong></div></div><div class="profile-links"><a href="wishlist.php"><i class="fa-regular fa-heart"></i> Meus favoritos</a><a href="cart.php"><i class="fa-solid fa-bag-shopping"></i> Meu carrinho</a></div><button id="edit-profile" class="profile-edit" type="button">Editar meus dados</button><button id="logout-button" type="button">Sair da conta</button></div>`;
+        content.innerHTML = `<div class="account-card profile-card">${photoPicker(account)}<span>MINHA CONTA</span><h2>Olá, ${escapeHtml(account.name.split(" ")[0])}!</h2><p>${escapeHtml(account.email)}</p><div class="profile-data"><div><small>WhatsApp</small><strong>${escapeHtml(account.phone)}</strong></div><div><small>Endereço</small><strong>${escapeHtml(account.address)}, ${escapeHtml(account.number)}${account.complement ? ` - ${escapeHtml(account.complement)}` : ""}<br>${escapeHtml(account.neighborhood)} · ${escapeHtml(account.city)}<br>CEP: ${escapeHtml(account.zip)}</strong></div><div><small>Novidades por e-mail</small><strong>${account.newsletter ? "Ativadas" : "Não ativadas"}</strong></div></div><div class="profile-links"><a href="wishlist.php"><i class="fa-regular fa-heart"></i> Meus favoritos</a><a href="cart.php"><i class="fa-solid fa-bag-shopping"></i> Meu carrinho</a></div><button id="edit-profile" class="profile-edit" type="button">Editar meus dados</button><button id="logout-button" type="button">Sair da conta</button></div>`;
+        setupPhotoPicker(account, true);
         const newsletterMessage = sessionStorage.getItem("solid-newsletter-message");
         if (newsletterMessage) {
             const notice = document.createElement("p");
@@ -151,14 +281,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function renderEdit(account) {
-        content.innerHTML = `<section class="account-card edit-profile-card"><h1>Editar dados</h1><p>Mantenha suas informações e endereço atualizados.</p><form id="profile-form" class="account-form">${fields("profile", account)}<label class="account-full">Foto de perfil <small>(opcional, até 1,5 MB)</small><input id="profile-image" type="file" accept="image/*"></label><label class="newsletter-choice account-full"><input id="profile-newsletter" type="checkbox" ${account.newsletter ? "checked" : ""}> Quero receber lançamentos, promoções e novidades por e-mail.</label><p id="account-message" class="account-message" role="alert"></p><button class="btn-primary" type="submit">Salvar alterações</button><button id="cancel-edit" class="account-cancel" type="button">Cancelar</button></form></section>`;
+        content.innerHTML = `<section class="account-card edit-profile-card"><h1>Editar dados</h1><p>Mantenha suas informações e endereço atualizados.</p><form id="profile-form" class="account-form">${photoPicker(account)}${fields("profile", account)}<label class="newsletter-choice account-full"><input id="profile-newsletter" type="checkbox" ${account.newsletter ? "checked" : ""}> Quero receber lançamentos, promoções e novidades por e-mail.</label><p id="account-message" class="account-message" role="alert"></p><button class="btn-primary" type="submit">Salvar alterações</button><button id="cancel-edit" class="account-cancel" type="button">Cancelar</button></form></section>`;
         const form = document.querySelector("#profile-form"); setupMasks(form);
+        const selectedPhoto = setupPhotoPicker(account);
         document.querySelector("#cancel-edit").addEventListener("click", renderProfile);
         form.addEventListener("submit", async event => {
             event.preventDefault();
             const message = document.querySelector("#account-message");
             const updated = collect("profile", account);
-            if (!await savePhoto(document.querySelector("#profile-image"), updated, message)) return;
+            const photo = await selectedPhoto();
+            if (photo) updated.profileImage = photo;
             try { const data = await api("update", updated); rememberNewsletter(data); saveSession(data.user); renderProfile(); }
             catch (error) { message.textContent = error.message; }
         });

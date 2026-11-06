@@ -73,8 +73,13 @@ function imageValue(array $data, string $current = ''): string
 {
     $image = (string)($data['profileImage'] ?? $current);
     if ($image === '') return '';
-    if (!str_starts_with($image, 'data:image/') || strlen($image) > 2100000) {
-        respond(['ok' => false, 'message' => 'A foto de perfil é inválida ou muito grande.'], 422);
+    if (!preg_match('~^data:image/(jpeg|png|webp|gif);base64,~', $image, $match)) {
+        respond(['ok' => false, 'message' => 'A foto de perfil é inválida.'], 422);
+    }
+    $bytes = base64_decode(substr($image, strlen($match[0])), true);
+    $info = $bytes !== false ? @getimagesizefromstring($bytes) : false;
+    if (!$info || !in_array($info['mime'], ['image/jpeg', 'image/png', 'image/webp', 'image/gif'], true)) {
+        respond(['ok' => false, 'message' => 'Escolha um arquivo de imagem válido.'], 422);
     }
     return $image;
 }
@@ -85,6 +90,15 @@ try {
     $action = (string)($data['action'] ?? '');
 
     if ($action === 'register') {
+        $limits = ['name' => 50, 'email' => 50, 'password' => 50, 'phone' => 15,
+            'cpf' => 14, 'zip' => 9, 'address' => 50, 'number' => 50,
+            'complement' => 50, 'neighborhood' => 50, 'city' => 50];
+        foreach ($limits as $field => $limit) {
+            $value = (string)($data[$field] ?? '');
+            if (mb_strlen($value, 'UTF-8') > $limit) {
+                respond(['ok' => false, 'message' => 'Os campos do cadastro devem respeitar o limite de caracteres informado (máximo de 50; telefone, CPF e CEP têm limites menores).'], 422);
+            }
+        }
         $name = text($data, 'name', true);
         $email = strtolower(text($data, 'email', true));
         $password = (string)($data['password'] ?? '');
@@ -143,6 +157,15 @@ try {
             respond(['ok' => false, 'message' => 'Este cupom já foi usado nesta conta.'], 409);
         }
         respond(['ok' => true]);
+    }
+
+    if ($action === 'photo') {
+        $current = currentUser($db);
+        $photo = imageValue($data);
+        if ($photo === '') respond(['ok' => false, 'message' => 'Escolha uma foto.'], 422);
+        $update = $db->prepare('UPDATE users SET profile_image = ? WHERE id = ?');
+        $update->execute([$photo, $current['id']]);
+        respond(['ok' => true, 'user' => userData(currentUser($db))]);
     }
 
     if ($action === 'update') {
