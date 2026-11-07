@@ -199,5 +199,11 @@ try {
 
     respond(['ok' => false, 'message' => 'Ação inválida.'], 400);
 } catch (PDOException $error) {
-    respond(['ok' => false, 'message' => 'Não foi possível conectar ao banco de dados. Confira config/conexao.php e importe o arquivo SQL em database/sql.'], 500);
+    // DIAGNÓSTICO TEMPORÁRIO: remover após identificar o problema.
+    respond([
+        'ok' => false,
+        'message' => 'Diagnóstico do banco',
+        'sqlstate' => (string)$error->getCode(),
+        'driver_code' => (int)($error->errorInfo[1] ?? 0),
+    ], 500);
 }
