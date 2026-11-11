@@ -18,7 +18,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
           rel="stylesheet">
 
-    <link rel="stylesheet" href="../assets/css/style.css?v=stable-navigation-22">
+    <link rel="stylesheet" href="../assets/css/style.css?v=product-reviews-28">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -110,6 +110,7 @@
     <script src="../assets/js/products.js"></script>
 
     <script src="../assets/js/product.js"></script>
+    <script src="../assets/js/product-experience.js?v=product-reviews-28"></script>
     <script src="../assets/js/main.js?v=page-mist-20"></script>
     <script src="../assets/js/footer.js"></script>
 

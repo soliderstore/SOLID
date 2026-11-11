@@ -21,4 +21,6 @@
 @import url("pages/account.css");
 
 @import url("responsive.css");
+@import url("pages/cart-list.css");
+@import url("pages/product-feedback.css");
 @import url("components/page-transitions.css");

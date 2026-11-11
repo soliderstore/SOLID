@@ -209,6 +209,65 @@ document.addEventListener("DOMContentLoaded", () => {
     const registerForm = document.querySelector("#register-form");
     if (registerForm) {
         setupMasks(registerForm);
+        const residenceNumber = registerForm.querySelector('#register-number');
+        const digitsOnly = () => {
+            residenceNumber.value = residenceNumber.value.replace(/[^0-9]/g, '');
+        };
+        residenceNumber.addEventListener('input', digitsOnly);
+        residenceNumber.addEventListener('change', digitsOnly);
+        const fieldValidations = [];
+        ['cpf', 'email'].forEach(field => {
+            const input = registerForm.querySelector(`#register-${field}`);
+            const status = document.createElement('small');
+            status.className = 'registration-validation';
+            status.id = `${input.id}-validation`;
+            status.setAttribute('aria-live', 'polite');
+            input.insertAdjacentElement('afterend', status);
+            input.setAttribute('aria-describedby', [input.getAttribute('aria-describedby'), status.id].filter(Boolean).join(' '));
+            let timer;
+            let revision = 0;
+            let controller;
+            async function validate() {
+                clearTimeout(timer);
+                controller?.abort();
+                controller = new AbortController();
+                const current = ++revision;
+                input.setCustomValidity('');
+                status.textContent = 'Conferindo…';
+                status.dataset.valid = '';
+                try {
+                    const response = await fetch('../api/validate-registration.php', {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        credentials: 'same-origin', signal: controller.signal,
+                        body: JSON.stringify({ field, value: input.value.trim() })
+                    });
+                    const result = await response.json();
+                    if (current !== revision) return false;
+                    if (!response.ok || !result.ok) throw new Error('validation');
+                    input.setCustomValidity(result.valid ? '' : result.message);
+                    input.setAttribute('aria-invalid', String(!result.valid));
+                    status.dataset.valid = String(result.valid);
+                    status.textContent = result.message;
+                    return result.valid;
+                } catch (error) {
+                    if (current !== revision || error.name === 'AbortError') return false;
+                    status.textContent = 'A conferência será feita ao enviar o cadastro.';
+                    // A API de cadastro repete as regras, mesmo se esta consulta falhar.
+                    return true;
+                }
+            }
+            input.addEventListener('input', () => {
+                revision++;
+                controller?.abort();
+                input.setCustomValidity('');
+                input.removeAttribute('aria-invalid');
+                status.textContent = '';
+                clearTimeout(timer);
+                timer = setTimeout(validate, 500);
+            });
+            input.addEventListener('blur', validate);
+            fieldValidations.push(validate);
+        });
         registerForm.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="tel"]').forEach(input => {
             const limit = input.maxLength > 0 ? Math.min(input.maxLength, 50) : 50;
             input.maxLength = limit;
@@ -228,9 +287,15 @@ document.addEventListener("DOMContentLoaded", () => {
         registerForm.addEventListener("submit", async event => {
             event.preventDefault();
             const message = document.querySelector("#account-message");
+            const results = await Promise.all(fieldValidations.map(validate => validate()));
+            if (results.includes(false) || !registerForm.reportValidity()) {
+                registerForm.reportValidity();
+                return;
+            }
             const account = collect("register");
             account.password = document.querySelector("#register-password").value;
-            if (!await savePhoto(document.querySelector("#register-image"), account, message)) return;
+            digitsOnly();
+            if (!registerForm.reportValidity()) return;
             try {
                 const data = await api("register", account);
                 rememberNewsletter(data);

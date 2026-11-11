@@ -110,3 +110,7 @@
 .profile-photo-close { position: absolute; top: 12px; right: 16px; width: 44px; height: 44px; border: 0; border-radius: 50%; background: #292929; color: #fff; font-size: 32px; cursor: pointer; }
 .profile-photo-status { margin-top: 10px; color: var(--text-light); font-size: .8rem; }
 .profile-photo-status:empty { display: none; }
+.registration-validation { display: block; margin-top: 6px; font-size: 12px; line-height: 1.4; color: var(--text-light); }
+.registration-validation:empty { display: none; }
+.registration-validation[data-valid="false"] { color: #ff9d9d; }
+.registration-validation[data-valid="true"] { color: #79d89b; }

@@ -9,6 +9,7 @@ session_start([
 
 require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/../lib/newsletter.php';
+require_once __DIR__ . '/../lib/registration-validation.php';
 
 function respond(array $payload, int $status = 200): never
 {
@@ -100,8 +101,16 @@ try {
             }
         }
         $name = text($data, 'name', true);
+        $residenceNumber = text($data, 'number', true);
+        if (!preg_match('/^[0-9]+$/D', $residenceNumber)) {
+            respond(['ok' => false, 'message' => 'O número da residência deve conter apenas números.'], 422);
+        }
         $email = strtolower(text($data, 'email', true));
         $password = (string)($data['password'] ?? '');
+        $validationError = registrationEmailError($email) ?? registrationCpfError(text($data, 'cpf'));
+        if ($validationError !== null) {
+            respond(['ok' => false, 'message' => $validationError], 422);
+        }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 6) {
             respond(['ok' => false, 'message' => 'Informe um e-mail válido e uma senha com pelo menos 6 caracteres.'], 422);
         }
@@ -113,8 +122,8 @@ try {
         $insert = $db->prepare('INSERT INTO users (name, email, password_hash, phone, cpf, zip, address, address_number, complement, neighborhood, city, newsletter, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $insert->execute([
             $name, $email, password_hash($password, PASSWORD_DEFAULT), text($data, 'phone', true), text($data, 'cpf'),
-            text($data, 'zip', true), text($data, 'address', true), text($data, 'number', true), text($data, 'complement'),
-            text($data, 'neighborhood', true), text($data, 'city', true), !empty($data['newsletter']) ? 1 : 0, imageValue($data)
+            text($data, 'zip', true), text($data, 'address', true), $residenceNumber, text($data, 'complement'),
+            text($data, 'neighborhood', true), text($data, 'city', true), !empty($data['newsletter']) ? 1 : 0, ''
         ]);
         $_SESSION['user_id'] = (int)$db->lastInsertId();
         $user = currentUser($db);

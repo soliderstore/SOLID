@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
     }
 
-    const cart = getCart();
+    const cart = getCart().filter(item => item.selected !== false);
 
     if (cart.length === 0) {
         content.innerHTML = `
