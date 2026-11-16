@@ -70,8 +70,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const accountLink = actions?.children[2];
 
         if (isLoggedIn && accountLink) {
-            accountLink.href = pageUrl("profile");
-            accountLink.setAttribute("aria-label", "Minha conta");
+            accountLink.href = pageUrl(account.isAdmin ? "admin" : "profile");
+            accountLink.setAttribute("aria-label", account.isAdmin ? "Administração" : "Minha conta");
+            if (account.isAdmin && menu && !menu.querySelector('[data-admin-link]')) {
+                const adminLink = document.createElement('a');
+                adminLink.href = pageUrl('admin');
+                adminLink.textContent = 'Admin';
+                adminLink.dataset.adminLink = '';
+                menu.append(adminLink);
+            }
 
             if (typeof account.profileImage === "string" && account.profileImage.startsWith("data:image/")) {
                 accountLink.classList.add("account-avatar-link");

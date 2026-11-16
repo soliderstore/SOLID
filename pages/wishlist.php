@@ -13,13 +13,13 @@
 <body>
     <header class="header">
         <div class="container">
-            <a href="../index.php" class="logo"><span>SØLID</span></a>
+            <a href="../index.php" class="logo" data-site-edit="wishlist-1"><span data-site-edit="wishlist-2">SØLID</span></a>
             <nav class="menu">
-                <a href="../index.php">Home</a>
-                <a href="shop.php">Shop</a>
-                <a href="collections.php">Coleções</a>
-                <a href="about.php">Sobre</a>
-                <a href="contact.php">Contato</a>
+                <a href="../index.php" data-site-edit="wishlist-3">Home</a>
+                <a href="shop.php" data-site-edit="wishlist-4">Shop</a>
+                <a href="collections.php" data-site-edit="wishlist-5">Coleções</a>
+                <a href="about.php" data-site-edit="wishlist-6">Sobre</a>
+                <a href="contact.php" data-site-edit="wishlist-7">Contato</a>
             </nav>
             <div class="actions">
                 <a href="wishlist.php" aria-label="Lista de desejos"><i class="fa-solid fa-heart"></i></a>
@@ -31,17 +31,17 @@
     <main class="wishlist-page">
         <section class="container">
             <div class="section-title">
-                <span>FAVORITOS</span>
-                <h1>Lista de Desejos</h1>
-                <p>Os produtos que você salvou.</p>
+                <span data-site-edit="wishlist-11">FAVORITOS</span>
+                <h1 data-site-edit="wishlist-12">Lista de Desejos</h1>
+                <p data-site-edit="wishlist-13">Os produtos que você salvou.</p>
             </div>
             <div id="wishlist-products" class="products-grid"></div>
         </section>
     </main>
     <footer class="footer"><div class="copyright">© 2026 SØLID. Todos os direitos reservados.</div></footer>
-    <script src="../assets/js/products.js"></script>
+    <script src="../api/catalog.php"></script><script src="../assets/js/products.js?v=all-changes-27"></script>
 <script src="../assets/js/wishlist.js"></script>
-    <script src="../assets/js/main.js?v=page-mist-20"></script>
+    <script src="../assets/js/main.js?v=admin-navigation-29"></script>
     <script src="../assets/js/footer.js"></script>
-</body>
+<script src="../api/site-content.php"></script></body>
 </html>

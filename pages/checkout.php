@@ -13,13 +13,13 @@
 <body>
     <header class="header">
         <div class="container">
-            <a href="../index.php" class="logo"><span>SØLID</span></a>
+            <a href="../index.php" class="logo" data-site-edit="checkout-1"><span data-site-edit="checkout-2">SØLID</span></a>
             <nav class="menu">
-                <a href="../index.php">Home</a>
-                <a href="shop.php">Shop</a>
-                <a href="collections.php">Coleções</a>
-                <a href="about.php">Sobre</a>
-                <a href="contact.php">Contato</a>
+                <a href="../index.php" data-site-edit="checkout-3">Home</a>
+                <a href="shop.php" data-site-edit="checkout-4">Shop</a>
+                <a href="collections.php" data-site-edit="checkout-5">Coleções</a>
+                <a href="about.php" data-site-edit="checkout-6">Sobre</a>
+                <a href="contact.php" data-site-edit="checkout-7">Contato</a>
             </nav>
             <div class="actions">
                 <a href="wishlist.php" aria-label="Favoritos"><i class="fa-regular fa-heart"></i></a>
@@ -32,14 +32,14 @@
     <main class="checkout-page">
         <div class="container">
             <div class="section-title">
-                <span>CHECKOUT</span>
-                <h1>Finalizar Compra</h1>
-                <p>Preencha seus dados para enviar o pedido.</p>
+                <span data-site-edit="checkout-11">CHECKOUT</span>
+                <h1 data-site-edit="checkout-12">Finalizar Compra</h1>
+                <p data-site-edit="checkout-13">Preencha seus dados para enviar o pedido.</p>
             </div>
 
             <div id="checkout-content" class="checkout-layout">
                 <form id="checkout-form" class="checkout-form">
-                    <h2>Seus dados</h2>
+                    <h2 data-site-edit="checkout-14">Seus dados</h2>
                     <div class="form-grid">
                         <label>Nome completo<input id="customer-name" type="text" required autocomplete="name"></label>
                         <label>WhatsApp<input id="customer-phone" type="tel" required autocomplete="tel" inputmode="numeric" maxlength="15" placeholder="(00) 00000-0000"></label>
@@ -67,17 +67,17 @@
                     <h2>Resumo do pedido</h2>
                     <div id="checkout-items"></div>
                     <div id="checkout-coupon" class="checkout-coupon"></div>
-                    <div class="checkout-total"><span>Total</span><strong id="checkout-total"></strong></div>
+                    <div class="checkout-total"><span data-site-edit="checkout-15">Total</span><strong id="checkout-total"></strong></div>
                 </aside>
             </div>
         </div>
     </main>
 
     <footer class="footer"><div class="copyright">© 2026 SØLID. Todos os direitos reservados.</div></footer>
-    <script src="../assets/js/products.js"></script>
+    <script src="../api/catalog.php"></script><script src="../assets/js/products.js?v=all-changes-27"></script>
 <script src="../assets/js/purchase-auth.js?v=delivery-address-12"></script>
-<script src="../assets/js/checkout.js?v=cart-selection-25"></script>
-    <script src="../assets/js/address-lookup.js?v=delivery-address-12"></script><script src="../assets/js/main.js?v=page-mist-20"></script>
+<script src="../assets/js/checkout.js?v=orders-28"></script>
+    <script src="../assets/js/address-lookup.js?v=delivery-address-12"></script><script src="../assets/js/main.js?v=admin-navigation-29"></script>
     <script src="../assets/js/footer.js"></script>
-</body>
+<script src="../api/site-content.php"></script></body>
 </html>

@@ -18,3 +18,5 @@ CREATE TABLE IF NOT EXISTS product_reviews (
     INDEX product_date (product_id, updated_at),
     FOREIGN KEY (user_id, product_id) REFERENCES product_purchases(user_id, product_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE product_purchases ADD COLUMN IF NOT EXISTS can_review TINYINT(1) NOT NULL DEFAULT 1;

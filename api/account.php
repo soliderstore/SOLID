@@ -33,10 +33,26 @@ function text(array $data, string $key, bool $required = false): string
     return $value;
 }
 
+function accountCpf(array $data, PDO $db, int $excludeId = 0): string
+{
+    $raw = text($data, 'cpf');
+    $cpf = preg_replace('/[.\s-]/', '', $raw);
+    if ($raw !== '' && !preg_match('/^[0-9]{11}$/', $cpf)) {
+        respond(['ok' => false, 'message' => 'Informe um CPF com 11 dígitos.'], 422);
+    }
+    if ($cpf !== '') {
+        $check = $db->prepare("SELECT id FROM users WHERE REPLACE(REPLACE(REPLACE(TRIM(cpf), '.', ''), '-', ''), ' ', '') = ? AND id != ? LIMIT 1");
+        $check->execute([$cpf, $excludeId]);
+        if ($check->fetch()) respond(['ok' => false, 'message' => 'Este CPF já está em uso.'], 409);
+    }
+    return $cpf;
+}
+
 function userData(array $user): array
 {
     return [
         'id' => (int)$user['id'],
+        'isAdmin' => !empty($user['is_admin']),
         'name' => $user['name'],
         'email' => $user['email'],
         'phone' => $user['phone'],
@@ -119,14 +135,19 @@ try {
         $check->execute([$email]);
         if ($check->fetch()) respond(['ok' => false, 'message' => 'Já existe uma conta com este e-mail.'], 409);
 
+        $cpf = accountCpf($data, $db);
         $insert = $db->prepare('INSERT INTO users (name, email, password_hash, phone, cpf, zip, address, address_number, complement, neighborhood, city, newsletter, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $insert->execute([
-            $name, $email, password_hash($password, PASSWORD_DEFAULT), text($data, 'phone', true), text($data, 'cpf'),
+            $name, $email, password_hash($password, PASSWORD_DEFAULT), text($data, 'phone', true), $cpf,
             text($data, 'zip', true), text($data, 'address', true), $residenceNumber, text($data, 'complement'),
             text($data, 'neighborhood', true), text($data, 'city', true), !empty($data['newsletter']) ? 1 : 0, ''
         ]);
+        session_regenerate_id(true);
         $_SESSION['user_id'] = (int)$db->lastInsertId();
         $user = currentUser($db);
+        try {
+            $db->prepare("INSERT INTO admin_events (user_id, message) VALUES (?, ?)")->execute([$user["id"], "Novo cadastro na loja"]);
+        } catch (PDOException $eventError) { error_log("Registration event: " . $eventError->getMessage()); }
         $newsletterMessage = newsletterAccountSubscribe($user, []);
         respond(['ok' => true, 'user' => userData($user), 'newsletterMessage' => $newsletterMessage]);
     }
@@ -140,6 +161,7 @@ try {
         if (!$user || !password_verify($password, $user['password_hash'])) {
             respond(['ok' => false, 'message' => 'E-mail ou senha incorretos.'], 401);
         }
+        session_regenerate_id(true);
         $_SESSION['user_id'] = (int)$user['id'];
         respond(['ok' => true, 'user' => userData($user)]);
     }
@@ -187,13 +209,14 @@ try {
         $check->execute([$email, $current['id']]);
         if ($check->fetch()) respond(['ok' => false, 'message' => 'Este e-mail já está em uso.'], 409);
 
+        $cpf = accountCpf($data, $db, (int)$current['id']);
         if ((bool)$current['newsletter'] && (empty($data['newsletter']) || $email !== $current['email'])) {
             try { newsletterRemove($current['email']); }
             catch (RuntimeException $error) { respond(['ok' => false, 'message' => 'Não foi possível atualizar sua inscrição de e-mail. Tente novamente mais tarde.'], 503); }
         }
         $update = $db->prepare('UPDATE users SET name = ?, email = ?, phone = ?, cpf = ?, zip = ?, address = ?, address_number = ?, complement = ?, neighborhood = ?, city = ?, newsletter = ?, profile_image = ? WHERE id = ?');
         $update->execute([
-            $name, $email, text($data, 'phone', true), text($data, 'cpf'), text($data, 'zip', true), text($data, 'address', true), text($data, 'number', true), text($data, 'complement'), text($data, 'neighborhood', true), text($data, 'city', true), !empty($data['newsletter']) ? 1 : 0, imageValue($data, $current['profile_image'] ?? ''), $current['id']
+            $name, $email, text($data, 'phone', true), $cpf, text($data, 'zip', true), text($data, 'address', true), text($data, 'number', true), text($data, 'complement'), text($data, 'neighborhood', true), text($data, 'city', true), !empty($data['newsletter']) ? 1 : 0, imageValue($data, $current['profile_image'] ?? ''), $current['id']
         ]);
         $updatedUser = currentUser($db);
         $newsletterMessage = newsletterAccountSubscribe($updatedUser, $current);
@@ -208,11 +231,13 @@ try {
 
     respond(['ok' => false, 'message' => 'Ação inválida.'], 400);
 } catch (PDOException $error) {
-    // DIAGNÓSTICO TEMPORÁRIO: remover após identificar o problema.
+    if ((int)($error->errorInfo[1] ?? 0) === 1062) {
+        $field = str_contains($error->getMessage(), 'cpf') ? 'CPF' : 'e-mail';
+        respond(['ok' => false, 'message' => "Este {$field} já está em uso."], 409);
+    }
+    error_log('Account database error: ' . $error->getMessage());
     respond([
         'ok' => false,
-        'message' => 'Diagnóstico do banco',
-        'sqlstate' => (string)$error->getCode(),
-        'driver_code' => (int)($error->errorInfo[1] ?? 0),
+        'message' => 'Não foi possível salvar os dados. Tente novamente mais tarde.',
     ], 500);
 }

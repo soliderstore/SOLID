@@ -4,6 +4,7 @@ header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 session_start(['cookie_httponly' => true, 'cookie_samesite' => 'Lax']);
 require_once __DIR__ . '/config.php';
+require_once __DIR__ . '/../lib/review-permissions.php';
 
 function reviewResponse(array $data, int $status = 200): never
 {
@@ -19,31 +20,32 @@ if (!in_array($method, ['GET', 'POST'], true)) {
 $input = $method === 'POST' ? json_decode(file_get_contents('php://input'), true) : $_GET;
 if (!is_array($input)) reviewResponse(['ok' => false, 'message' => 'Dados inválidos.'], 422);
 $productId = filter_var($input['product_id'] ?? null, FILTER_VALIDATE_INT);
-// IDs do catálogo atual em assets/js/products.js.
-if (!in_array($productId, [1, 2], true)) reviewResponse(['ok' => false, 'message' => 'Produto não encontrado.'], 404);
+if (!$productId || $productId < 1) reviewResponse(['ok'=>false,'message'=>'Produto não encontrado.'],404);
 $userId = (int)($_SESSION['user_id'] ?? 0);
 try {
     $db = database();
+    $productQuery = $db->prepare('SELECT id FROM products WHERE id=? AND active=1');
+    $productQuery->execute([$productId]);
+    if (!$productQuery->fetchColumn()) reviewResponse(['ok'=>false,'message'=>'Produto não encontrado.'],404);
     $eligible = false;
     $ownReview = null;
-    if ($userId) {
-        $query = $db->prepare('SELECT 1 FROM product_purchases WHERE user_id = ? AND product_id = ?');
-        $query->execute([$userId, $productId]);
-        $eligible = (bool)$query->fetchColumn();
-    }
+    if ($userId) $eligible = canReviewProduct($db,$userId,$productId);
     if ($method === 'POST') {
         if (!$userId) reviewResponse(['ok' => false, 'message' => 'Entre na sua conta para avaliar.'], 401);
         if (!is_string($input['csrf'] ?? null) || empty($_SESSION['reviews_csrf']) || !hash_equals($_SESSION['reviews_csrf'], $input['csrf'])) {
             reviewResponse(['ok' => false, 'message' => 'Atualize a página e tente novamente.'], 403);
         }
-        if (!$eligible) reviewResponse(['ok' => false, 'message' => 'A avaliação é liberada após a confirmação da compra pela loja.'], 403);
+        if (!$eligible) reviewResponse(['ok' => false, 'message' => 'Somente contas com compra concluída deste produto e liberação do administrador podem avaliar.'], 403);
         $rating = filter_var($input['rating'] ?? null, FILTER_VALIDATE_INT);
         $comment = is_string($input['comment'] ?? null) ? trim($input['comment']) : '';
         if ($rating === false || $rating < 1 || $rating > 5 || mb_strlen($comment, 'UTF-8') < 3 || mb_strlen($comment, 'UTF-8') > 1000) {
             reviewResponse(['ok' => false, 'message' => 'Escolha de 1 a 5 estrelas e escreva entre 3 e 1.000 caracteres.'], 422);
         }
+        $db->beginTransaction();
+        if (!canReviewProduct($db,$userId,$productId,true)) { $db->rollBack(); reviewResponse(['ok'=>false,'message'=>'Sua conta não tem liberação para avaliar este produto.'],403); }
         $query = $db->prepare('INSERT INTO product_reviews (user_id, product_id, rating, comment) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE rating = VALUES(rating), comment = VALUES(comment), updated_at = CURRENT_TIMESTAMP');
         $query->execute([$userId, $productId, $rating, $comment]);
+        $db->commit();
     }
     if ($eligible) {
         $query = $db->prepare('SELECT rating, comment FROM product_reviews WHERE user_id = ? AND product_id = ?');
@@ -65,6 +67,7 @@ try {
         'reviews' => $reviews, 'loggedIn' => $userId > 0, 'eligible' => $eligible,
         'ownReview' => $ownReview, 'csrf' => $userId ? $_SESSION['reviews_csrf'] : null]);
 } catch (PDOException $error) {
+    if (isset($db) && $db->inTransaction()) $db->rollBack();
     error_log('SOLID reviews database error: ' . $error->getCode());
     reviewResponse(['ok' => false, 'message' => 'As avaliações estão indisponíveis no momento. Tente novamente mais tarde.'], 503);
 }

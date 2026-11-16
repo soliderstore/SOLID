@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="checkout-item">
             <img src="${item.image}" alt="${item.name}">
             <div><strong>${item.quantity}x ${item.name}</strong><small>Tam. ${item.size} · ${item.color}</small></div>
-            <span>${format(item.price * item.quantity)}</span>
+            <span>${format(item.priceCents / 100 * item.quantity)}</span>
         </div>`).join("");
     checkoutCoupon.innerHTML = couponApplied
         ? `<span>Cupom SOLID10</span><strong>− ${format(discountValue)}</strong>`
@@ -223,23 +223,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        if (couponApplied) {
-            try {
-                submitButton.disabled = true;
-                submitButton.textContent = "Validando cupom...";
-                await accountApi("redeem_coupon");
-            } catch (error) {
-                checkoutMessage.textContent = error.message === "Faça login para continuar."
-                    ? "Entre na sua conta para finalizar este pedido com o cupom SOLID10."
-                    : error.message;
-                submitButton.disabled = false;
-                submitButton.innerHTML = '<i class="fa-brands fa-whatsapp"></i> Confirmar e enviar pedido pelo WhatsApp';
-                return;
-            }
-        }
-
-        const orderCode = `SOLID-${Date.now().toString().slice(-6)}`;
-
         const customer = {
             name: document.querySelector("#customer-name").value.trim(),
             phone: document.querySelector("#customer-phone").value.trim(),
@@ -257,15 +240,50 @@ document.addEventListener("DOMContentLoaded", () => {
             notes: document.querySelector("#customer-notes").value.trim()
         };
 
-        const orderItems = cart.map(item =>
+        let savedOrder;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Registrando pedido...';
+        try {
+            const tokenResponse = await fetch('../api/orders.php', { credentials: 'same-origin' });
+            const tokenData = await tokenResponse.json();
+            if (!tokenResponse.ok || !tokenData.ok) throw new Error(tokenData.message || 'Faça login para continuar.');
+            const signature = JSON.stringify({ customer, cart, couponApplied });
+            if (sessionStorage.getItem('solid-order-signature') !== signature) sessionStorage.removeItem('solid-order-request');
+            sessionStorage.setItem('solid-order-signature', signature);
+            const requestKey = sessionStorage.getItem('solid-order-request') || crypto.randomUUID();
+            sessionStorage.setItem('solid-order-request', requestKey);
+            const response = await fetch('../api/orders.php', {
+                method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ token: tokenData.token, requestKey, customer, items: cart.map(({ id, quantity, size, color }) => ({ id, quantity, size, color })), coupon: couponApplied ? 'SOLID10' : '' })
+            });
+            const data = await response.json();
+            if (!response.ok || !data.ok) throw new Error(data.message || 'Não foi possível registrar o pedido.');
+            savedOrder = data.order;
+        } catch (error) {
+            checkoutMessage.textContent = error.message;
+            submitButton.disabled = false;
+            submitButton.textContent = 'Confirmar e enviar pedido pelo WhatsApp';
+            return;
+        }
+        const orderCode = savedOrder.code;
+        const orderItems = savedOrder.items.map(item =>
             `• ${item.quantity}x ${item.name} (Tam: ${item.size} | Cor: ${item.color}) — ${format(item.price * item.quantity)}`
         ).join("\n");
 
-        const discountLine = couponApplied ? `\nCupom SOLID10: − ${format(discountValue)}` : "";
-        const message = `Olá! Quero confirmar meu pedido na SØLID.\n\n*PEDIDO ${orderCode}*\nData: ${new Date().toLocaleString("pt-BR")}\n\n*DADOS DO CLIENTE*\nNome: ${customer.name}\nWhatsApp: ${customer.phone}\nE-mail: ${customer.email}${customer.cpf ? `\nCPF: ${customer.cpf}` : ""}\n\n*ENDEREÇO*\n${customer.address}, ${customer.number}${customer.complement ? ` - ${customer.complement}` : ""}\nBairro: ${customer.neighborhood}\nCEP: ${customer.zip}\nCidade/UF: ${customer.city}\n\n*RECEBIMENTO E PAGAMENTO*\nRecebimento: ${customer.delivery}\nFrete: a confirmar pela loja\nPagamento: ${customer.payment}${customer.paymentDetails ? `\nDetalhes do pagamento: ${customer.paymentDetails}` : ""}\n\n*ITENS DO PEDIDO*\n${orderItems}\n\nSubtotal: ${format(orderSubtotal)}${discountLine}\n*TOTAL DOS PRODUTOS: ${format(orderTotal)}*\n\n${customer.notes ? `*OBSERVAÇÕES*\n${customer.notes}\n\n` : ""}Aguardo a confirmação do pedido, disponibilidade e valor do frete.`;
+        const discountLine = savedOrder.discount > 0 ? `\nCupom SOLID10: − ${format(savedOrder.discount)}` : "";
+        const message = `Olá! Quero confirmar meu pedido na SØLID.\n\n*PEDIDO ${orderCode}*\nData: ${new Date().toLocaleString("pt-BR")}\n\n*DADOS DO CLIENTE*\nNome: ${customer.name}\nWhatsApp: ${customer.phone}\nE-mail: ${customer.email}${customer.cpf ? `\nCPF: ${customer.cpf}` : ""}\n\n*ENDEREÇO*\n${customer.address}, ${customer.number}${customer.complement ? ` - ${customer.complement}` : ""}\nBairro: ${customer.neighborhood}\nCEP: ${customer.zip}\nCidade/UF: ${customer.city}\n\n*RECEBIMENTO E PAGAMENTO*\nRecebimento: ${customer.delivery}\nFrete: a confirmar pela loja\nPagamento: ${customer.payment}${customer.paymentDetails ? `\nDetalhes do pagamento: ${customer.paymentDetails}` : ""}\n\n*ITENS DO PEDIDO*\n${orderItems}\n\nSubtotal: ${format(savedOrder.subtotal)}${discountLine}\n*TOTAL DOS PRODUTOS: ${format(savedOrder.total)}*\n\n${customer.notes ? `*OBSERVAÇÕES*\n${customer.notes}\n\n` : ""}Aguardo a confirmação do pedido, disponibilidade e valor do frete.`;
         if (couponApplied) {
             localStorage.removeItem("solid-coupon");
         }
+        localStorage.removeItem('solid-cart');
+        sessionStorage.removeItem('solid-order-request');
+        submitButton.textContent = 'Pedido registrado';
+        const whatsappLink = document.createElement('a');
+        whatsappLink.href = 'https://wa.me/5531998244421?text=' + encodeURIComponent(message);
+        whatsappLink.target = '_blank'; whatsappLink.rel = 'noopener';
+        whatsappLink.textContent = 'Abrir WhatsApp para combinar pagamento e entrega';
+        checkoutMessage.textContent = 'Pedido ' + orderCode + ' registrado. ';
+        checkoutMessage.append(whatsappLink);
         window.open(`https://wa.me/5531998244421?text=${encodeURIComponent(message)}`, "_blank", "noopener");
     });
 });

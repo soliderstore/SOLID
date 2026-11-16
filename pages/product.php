@@ -18,7 +18,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap"
           rel="stylesheet">
 
-    <link rel="stylesheet" href="../assets/css/style.css?v=product-reviews-28">
+    <link rel="stylesheet" href="../assets/css/style.css?v=feedback-33">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -33,21 +33,21 @@
 
         <div class="container">
 
-            <a href="../index.php" class="logo">
-                <span>SØLID</span>
+            <a href="../index.php" class="logo" data-site-edit="product-1">
+                <span data-site-edit="product-2">SØLID</span>
             </a>
 
             <nav class="menu">
 
-                <a href="../index.php">Home</a>
+                <a href="../index.php" data-site-edit="product-3">Home</a>
 
-                <a href="shop.php">Shop</a>
+                <a href="shop.php" data-site-edit="product-4">Shop</a>
 
-                <a href="collections.php">Coleções</a>
+                <a href="collections.php" data-site-edit="product-5">Coleções</a>
 
-                <a href="about.php">Sobre</a>
+                <a href="about.php" data-site-edit="product-6">Sobre</a>
 
-                <a href="contact.php">Contato</a>
+                <a href="contact.php" data-site-edit="product-7">Contato</a>
 
             </nav>
 
@@ -107,13 +107,13 @@
 
     </footer>
 
-    <script src="../assets/js/products.js"></script>
+    <script src="../api/catalog.php"></script><script src="../assets/js/products.js?v=all-changes-27"></script>
 
     <script src="../assets/js/product.js"></script>
-    <script src="../assets/js/product-experience.js?v=product-reviews-28"></script>
-    <script src="../assets/js/main.js?v=page-mist-20"></script>
+    <script src="../assets/js/product-experience.js?v=feedback-33"></script>
+    <script src="../assets/js/main.js?v=admin-navigation-29"></script>
     <script src="../assets/js/footer.js"></script>
 
-</body>
+<script src="../api/site-content.php"></script></body>
 
 </html>

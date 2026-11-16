@@ -34,23 +34,23 @@
 
     <div class="container">
 
-        <a href="../index.php" class="logo">
+        <a href="../index.php" class="logo" data-site-edit="shop-1">
 
-            <span>SØLID</span>
+            <span data-site-edit="shop-2">SØLID</span>
 
         </a>
 
         <nav class="menu">
 
-            <a href="../index.php">Home</a>
+            <a href="../index.php" data-site-edit="shop-3">Home</a>
 
-            <a href="shop.php">Shop</a>
+            <a href="shop.php" data-site-edit="shop-4">Shop</a>
 
-            <a href="collections.php">Coleções</a>
+            <a href="collections.php" data-site-edit="shop-5">Coleções</a>
 
-            <a href="about.php">Sobre</a>
+            <a href="about.php" data-site-edit="shop-6">Sobre</a>
 
-            <a href="contact.php">Contato</a>
+            <a href="contact.php" data-site-edit="shop-7">Contato</a>
 
         </nav>
 
@@ -80,15 +80,15 @@
 
     <div class="container">
 
-        <span>SHOP</span>
+        <span data-site-edit="shop-11">SHOP</span>
 
-        <h1>
+        <h1 data-site-edit="shop-12">
 
             Nossa Coleção
 
         </h1>
 
-        <p>
+        <p data-site-edit="shop-13">
 
             Descubra peças desenvolvidas para quem busca
             autenticidade e qualidade.
@@ -151,15 +151,15 @@
 
     <div class="newsletter-content">
 
-        <span>NOVIDADES</span>
+        <span data-site-edit="shop-14">NOVIDADES</span>
 
-        <h2>
+        <h2 data-site-edit="shop-15">
 
             Receba nossos lançamentos.
 
         </h2>
 
-        <p>
+        <p data-site-edit="shop-16">
 
             Seja o primeiro a conhecer novas coleções.
 
@@ -197,12 +197,12 @@
 
 </footer>
 
-<script src="../assets/js/products.js"></script>
+<script src="../api/catalog.php"></script><script src="../assets/js/products.js?v=all-changes-27"></script>
 <script src="../assets/js/shop.js"></script>
 <script src="../assets/js/newsletter.js"></script>
-<script src="../assets/js/main.js?v=page-mist-20"></script>
+<script src="../assets/js/main.js?v=admin-navigation-29"></script>
 <script src="../assets/js/footer.js"></script>
 
-</body>
+<script src="../api/site-content.php"></script></body>
 
 </html>

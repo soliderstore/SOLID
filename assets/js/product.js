@@ -95,9 +95,9 @@ if (!container) {
 
                 </select>
 
-                <button id="add-cart">
+                <button id="add-cart" ${product.stock <= 0 ? "disabled" : ""}>
 
-                    Adicionar ao Carrinho
+                    ${product.stock <= 0 ? "Produto esgotado" : "Adicionar ao Carrinho"}
 
                 </button>
 

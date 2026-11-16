@@ -3,7 +3,9 @@ const projectRoot = ["localhost", "127.0.0.1"].includes(window.location.hostname
 
 if (container) {
 
-    PRODUCTS.forEach(product => {
+    const visibleProducts = window.location.pathname.endsWith("/index.php") || window.location.pathname.endsWith("/")
+        ? PRODUCTS.filter(product => product.featured) : PRODUCTS;
+    visibleProducts.forEach(product => {
 
         container.innerHTML += `
 

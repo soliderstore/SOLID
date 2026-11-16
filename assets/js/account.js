@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (googleParams.get('google_login') === '1') {
         api('session').then(data => {
             saveSession(data.user);
-            window.location.replace(destination);
+            window.location.replace(data.user.isAdmin ? "admin.php" : destination);
         }).catch(error => {
             const message = document.querySelector('#account-message');
             if (message) message.textContent = error.message;
@@ -73,11 +73,28 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     function setupMasks(root = document) {
         root.querySelectorAll("[data-cpf]").forEach(input => {
-            const mask = () => { input.value = input.value.replace(/\D/g, "").slice(0, 11)
-                .replace(/(\d{3})(\d)/, "$1.$2")
-                .replace(/(\d{3})(\d)/, "$1.$2")
-                .replace(/(\d{3})(\d{1,2})$/, "$1-$2"); };
-            input.addEventListener("input", mask);
+            input.disabled = false;
+            input.readOnly = false;
+            const formatCpf = value => {
+                const digits = value.replace(/\D/g, '').slice(0, 11);
+                return digits.slice(0, 3)
+                    + (digits.length > 3 ? '.' + digits.slice(3, 6) : '')
+                    + (digits.length > 6 ? '.' + digits.slice(6, 9) : '')
+                    + (digits.length > 9 ? '-' + digits.slice(9, 11) : '');
+            };
+            const mask = () => {
+                const position = input.selectionStart ?? input.value.length;
+                const digitCount = input.value.slice(0, position).replace(/\D/g, '').length;
+                input.value = formatCpf(input.value);
+                let cursor = 0;
+                let seen = 0;
+                while (cursor < input.value.length && seen < digitCount) {
+                    if (/\d/.test(input.value[cursor])) seen++;
+                    cursor++;
+                }
+                input.setSelectionRange(cursor, cursor);
+            };
+            input.addEventListener('input', mask);
             mask();
         });
         root.querySelectorAll("[data-phone]").forEach(input => input.addEventListener("input", () => { input.value = formatPhone(input.value); }));
@@ -209,6 +226,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const registerForm = document.querySelector("#register-form");
     if (registerForm) {
         setupMasks(registerForm);
+        const zip = registerForm.querySelector('#register-zip');
+        const toggleAddress = () => {
+            const visible = zip.value.replace(/\D/g, '').length === 8;
+            ['address', 'number', 'complement', 'neighborhood', 'city'].forEach(name => {
+                const label = registerForm.querySelector('#register-' + name).closest('label');
+                label.hidden = !visible;
+                label.querySelector('input').disabled = !visible;
+            });
+        };
+        zip.addEventListener('input', toggleAddress);
+        zip.addEventListener('change', toggleAddress);
+        window.addEventListener('pageshow', toggleAddress);
+        toggleAddress();
+
         const residenceNumber = registerForm.querySelector('#register-number');
         const digitsOnly = () => {
             residenceNumber.value = residenceNumber.value.replace(/[^0-9]/g, '');
@@ -300,7 +331,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await api("register", account);
                 rememberNewsletter(data);
                 saveSession(data.user);
-                window.location.href = destination;
+                window.location.href = data.user.isAdmin ? "admin.php" : destination;
             } catch (error) { message.textContent = error.message; }
         });
     }
@@ -310,7 +341,7 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
         const message = document.querySelector("#account-message");
         api("login", { email: document.querySelector("#login-email").value.trim(), password: document.querySelector("#login-password").value })
-            .then(data => { saveSession(data.user); window.location.href = destination; })
+            .then(data => { saveSession(data.user); window.location.href = data.user.isAdmin ? "admin.php" : destination; })
             .catch(error => { message.textContent = error.message; });
     });
 
@@ -328,7 +359,11 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.removeItem(accountKey);
         }
         if (!account) { content.innerHTML = `<div class="account-card account-empty"><i class="fa-regular fa-user"></i><h2>Entre na sua conta</h2><p>Faça login ou crie uma conta para acessar este espaço.</p><a href="login.php" class="btn-primary">Entrar</a><a href="register.php" class="btn-secondary">Criar conta</a></div>`; return; }
-        content.innerHTML = `<div class="account-card profile-card">${photoPicker(account)}<span>MINHA CONTA</span><h2>Olá, ${escapeHtml(account.name.split(" ")[0])}!</h2><p>${escapeHtml(account.email)}</p><div class="profile-data"><div><small>WhatsApp</small><strong>${escapeHtml(account.phone)}</strong></div><div><small>Endereço</small><strong>${escapeHtml(account.address)}, ${escapeHtml(account.number)}${account.complement ? ` - ${escapeHtml(account.complement)}` : ""}<br>${escapeHtml(account.neighborhood)} · ${escapeHtml(account.city)}<br>CEP: ${escapeHtml(account.zip)}</strong></div><div><small>Novidades por e-mail</small><strong>${account.newsletter ? "Ativadas" : "Não ativadas"}</strong></div></div><div class="profile-links"><a href="wishlist.php"><i class="fa-regular fa-heart"></i> Meus favoritos</a><a href="cart.php"><i class="fa-solid fa-bag-shopping"></i> Meu carrinho</a></div><button id="edit-profile" class="profile-edit" type="button">Editar meus dados</button><button id="logout-button" type="button">Sair da conta</button></div>`;
+        if (account.isAdmin && new URLSearchParams(window.location.search).get('view') !== 'personal') {
+            window.location.replace('admin.php');
+            return;
+        }
+        content.innerHTML = `<div class="account-card profile-card">${photoPicker(account)}<span>MINHA CONTA</span><h2>Olá, ${escapeHtml(account.name.split(" ")[0])}!</h2><p>${escapeHtml(account.email)}</p><div class="profile-data"><div><small>WhatsApp</small><strong>${escapeHtml(account.phone)}</strong></div><div><small>Endereço</small><strong>${escapeHtml(account.address)}, ${escapeHtml(account.number)}${account.complement ? ` - ${escapeHtml(account.complement)}` : ""}<br>${escapeHtml(account.neighborhood)} · ${escapeHtml(account.city)}<br>CEP: ${escapeHtml(account.zip)}</strong></div><div><small>Novidades por e-mail</small><strong>${account.newsletter ? "Ativadas" : "Não ativadas"}</strong></div></div><div class="profile-links">${account.isAdmin ? '<a href="admin.php">Painel de administração</a>' : ''}<a href="wishlist.php"><i class="fa-regular fa-heart"></i> Meus favoritos</a><a href="cart.php"><i class="fa-solid fa-bag-shopping"></i> Meu carrinho</a></div><button id="edit-profile" class="profile-edit" type="button">Editar meus dados</button><button id="logout-button" type="button">Sair da conta</button></div>`;
         setupPhotoPicker(account, true);
         const newsletterMessage = sessionStorage.getItem("solid-newsletter-message");
         if (newsletterMessage) {

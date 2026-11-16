@@ -33,20 +33,20 @@
 
             <div class="collections-left">
 
-                <span class="collections-subtitle">
+                <span class="collections-subtitle" data-site-edit="collections-1">
 
                     SØLID®
 
                 </span>
 
-                <h1>
+                <h1 data-site-edit="collections-2">
 
                     STREET<br>
                     CRISTÃ
 
                 </h1>
 
-                <p>
+                <p data-site-edit="collections-3">
 
                     Nossa primeira coleção foi criada para representar Cristo
                     através da moda. Um streetwear minimalista, premium e cheio
@@ -57,13 +57,13 @@
 
                 <div class="collections-buttons">
 
-                    <a href="#collections" class="btn-primary">
+                    <a href="#collections" class="btn-primary" data-site-edit="collections-4">
 
                         Conhecer Coleção
 
                     </a>
 
-                    <a href="shop.php" class="btn-secondary">
+                    <a href="shop.php" class="btn-secondary" data-site-edit="collections-5">
 
                         Comprar
 
@@ -76,7 +76,7 @@
             <div class="collections-right">
 
                 <img src="../assets/images/products/F1.jpeg"
-                    alt="Street Cristã">
+                    alt="Street Cristã" data-site-edit="collections-6">
 
             </div>
 
@@ -92,13 +92,13 @@
 
         <div class="section-title">
 
-            <span>
+            <span data-site-edit="collections-7">
 
                 PRIMEIRA COLEÇÃO
 
             </span>
 
-            <h2>
+            <h2 data-site-edit="collections-8">
 
                 Street Cristã
 
@@ -113,25 +113,25 @@
                 <div class="collection-image">
 
                     <img src="../assets/images/products/F1.jpeg"
-                        alt="Street Cristã">
+                        alt="Street Cristã" data-site-edit="collections-9">
 
                 </div>
 
                 <div class="collection-content">
 
-                    <span>
+                    <span data-site-edit="collections-10">
 
                         COLLECTION 01
 
                     </span>
 
-                    <h3>
+                    <h3 data-site-edit="collections-11">
 
                         Street Cristã
 
                     </h3>
 
-                    <p>
+                    <p data-site-edit="collections-12">
 
                         A Street Cristã representa a essência da SØLID.
                         Uma coleção desenvolvida para unir moda, propósito e
@@ -143,14 +143,14 @@
 
                     <div class="collection-footer">
 
-                        <span class="collection-tag">
+                        <span class="collection-tag" data-site-edit="collections-13">
 
                             Premium Collection
 
                         </span>
 
                         <a href="shop.php"
-                            class="btn-primary">
+                            class="btn-primary" data-site-edit="collections-14">
 
                             Ver Produtos
 
@@ -174,26 +174,26 @@
         <div class="featured-image">
 
             <img src="../assets/images/products/F2.jpeg"
-                alt="Street Cristã">
+                alt="Street Cristã" data-site-edit="collections-15">
 
         </div>
 
         <div class="featured-content">
 
-            <span>
+            <span data-site-edit="collections-16">
 
                 SOBRE A COLEÇÃO
 
             </span>
 
-            <h2>
+            <h2 data-site-edit="collections-17">
 
                 Vista sua fé.
                 Viva seu propósito.
 
             </h2>
 
-            <p>
+            <p data-site-edit="collections-18">
 
                 A Street Cristã nasceu para mostrar que a moda pode transmitir
                 princípios, identidade e propósito.
@@ -211,9 +211,9 @@
 
                 <div class="featured-item">
 
-                    <h3>01</h3>
+                    <h3 data-site-edit="collections-19">01</h3>
 
-                    <span>
+                    <span data-site-edit="collections-20">
 
                         Coleção
 
@@ -223,9 +223,9 @@
 
                 <div class="featured-item">
 
-                    <h3>100%</h3>
+                    <h3 data-site-edit="collections-21">100%</h3>
 
-                    <span>
+                    <span data-site-edit="collections-22">
 
                         Premium
 
@@ -235,9 +235,9 @@
 
                 <div class="featured-item">
 
-                    <h3>∞</h3>
+                    <h3 data-site-edit="collections-23">∞</h3>
 
-                    <span>
+                    <span data-site-edit="collections-24">
 
                         Propósito
 
@@ -261,20 +261,20 @@
 
 <section class="next-drop">
 
-    <span>
+    <span data-site-edit="collections-25">
 
         EM BREVE
 
     </span>
 
-    <h2>
+    <h2 data-site-edit="collections-26">
 
         Novas Peças
         Estão Chegando
 
     </h2>
 
-    <p>
+    <p data-site-edit="collections-27">
 
         A Street Cristã continuará crescendo.
 
@@ -286,7 +286,7 @@
 
     <a href="shop.php"
 
-        class="btn-primary">
+        class="btn-primary" data-site-edit="collections-28">
 
         Comprar Agora
 
@@ -304,19 +304,19 @@
 
     <div class="newsletter-content">
 
-        <span>
+        <span data-site-edit="collections-29">
 
             FAÇA PARTE
 
         </span>
 
-        <h2>
+        <h2 data-site-edit="collections-30">
 
             Entre para a comunidade SØLID
 
         </h2>
 
-        <p>
+        <p data-site-edit="collections-31">
 
             Receba novidades,
             descontos exclusivos e seja o primeiro
@@ -359,9 +359,9 @@
 
 <script src="../assets/js/collections.js"></script>
 <script src="../assets/js/newsletter.js"></script>
-<script src="../assets/js/main.js?v=page-mist-20"></script>
+<script src="../assets/js/main.js?v=admin-navigation-29"></script>
 <script src="../assets/js/footer.js"></script>
 
-</body>
+<script src="../api/site-content.php"></script></body>
 
 </html>

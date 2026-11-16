@@ -14,17 +14,17 @@
     <main class="contact-page">
         <div class="container">
             <div class="section-title">
-                <span>FALE CONOSCO</span>
-                <h1>Como podemos ajudar?</h1>
-                <p>Envie sua dúvida e nossa equipe responderá pelo WhatsApp.</p>
+                <span data-site-edit="contact-1">FALE CONOSCO</span>
+                <h1 data-site-edit="contact-2">Como podemos ajudar?</h1>
+                <p data-site-edit="contact-3">Envie sua dúvida e nossa equipe responderá pelo WhatsApp.</p>
             </div>
 
             <div class="contact-layout">
                 <div class="contact-intro">
                     <i class="fa-brands fa-whatsapp"></i>
-                    <h2>Atendimento rápido</h2>
-                    <p>Conte o que você precisa. Sua mensagem será encaminhada diretamente para o atendimento da SØLID.</p>
-                    <a href="https://wa.me/5531998244421" target="_blank" rel="noopener">+55 31 99824-4421</a>
+                    <h2 data-site-edit="contact-4">Atendimento rápido</h2>
+                    <p data-site-edit="contact-5">Conte o que você precisa. Sua mensagem será encaminhada diretamente para o atendimento da SØLID.</p>
+                    <a href="https://wa.me/5531998244421" target="_blank" rel="noopener" data-site-edit="contact-6">+55 31 99824-4421</a>
                 </div>
 
                 <form id="contact-form" class="contact-form">
@@ -39,7 +39,7 @@
     </main>
 
     <script src="../assets/js/contact.js"></script>
-    <script src="../assets/js/main.js?v=page-mist-20"></script>
+    <script src="../assets/js/main.js?v=admin-navigation-29"></script>
     <script src="../assets/js/footer.js"></script>
-</body>
+<script src="../api/site-content.php"></script></body>
 </html>

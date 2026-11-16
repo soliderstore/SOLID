@@ -21,7 +21,7 @@ Uma loja virtual moderna desenvolvida com HTML, CSS e JavaScript, focada em uma 
 
 A SØLID é uma marca de streetwear desenvolvida para oferecer uma experiência moderna, elegante e minimalista. O projeto foi criado com foco em performance, design responsivo e uma interface premium.
 
----
+----
 
 # Tecnologias
 
@@ -85,6 +85,7 @@ SOLID/
 - Lista de desejos
 - Login
 - Cadastro
+- admin 
 - Perfil do usuário
 - Página de contato
 - Página Sobre
@@ -109,7 +110,7 @@ SOLID/
 Desenvolvedor Full Stack
 
 GitHub:
-> https://github.com/
+> https://github.com/cwba-star
 
 ---
 

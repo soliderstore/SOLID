@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(255) NOT NULL,
     phone VARCHAR(20) NOT NULL,
     cpf VARCHAR(20) NULL,
+    cpf_unique VARCHAR(20) GENERATED ALWAYS AS (NULLIF(REPLACE(REPLACE(REPLACE(TRIM(cpf), '.', ''), '-', ''), ' ', ''), '')) STORED,
+    UNIQUE KEY users_cpf_unique (cpf_unique),
     zip VARCHAR(12) NOT NULL,
     address VARCHAR(180) NOT NULL,
     address_number VARCHAR(50) NOT NULL,

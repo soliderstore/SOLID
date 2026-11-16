@@ -31,23 +31,23 @@
 
         <div class="container">
 
-            <a href="index.php" class="logo">
+            <a href="index.php" class="logo" data-site-edit="index-1">
 
-                <span>SØLID</span>
+                <span data-site-edit="index-2">SØLID</span>
 
             </a>
 
             <nav class="menu">
 
-                <a href="index.php">Home</a>
+                <a href="index.php" data-site-edit="index-3">Home</a>
 
-                <a href="pages/shop.php">Shop</a>
+                <a href="pages/shop.php" data-site-edit="index-4">Shop</a>
 
-                <a href="pages/collections.php">Coleções</a>
+                <a href="pages/collections.php" data-site-edit="index-5">Coleções</a>
 
-                <a href="pages/about.php">Sobre</a>
+                <a href="pages/about.php" data-site-edit="index-6">Sobre</a>
 
-                <a href="pages/contact.php">Contato</a>
+                <a href="pages/contact.php" data-site-edit="index-7">Contato</a>
 
             </nav>
 
@@ -59,13 +59,13 @@
 
                 </a>
 
-                <a href="pages/cart.php">
+                <a href="pages/cart.php" data-site-edit="index-33">
 
                     <i class="fa-solid fa-bag-shopping"></i>
 
                 </a>
 
-                <a href="pages/login.php">
+                <a href="pages/login.php" data-site-edit="index-35">
 
                     <i class="fa-regular fa-user"></i>
 
@@ -86,13 +86,13 @@
 
             <div class="hero-left">
 
-                <span class="subtitle">
+                <span class="subtitle" data-site-edit="index-11">
 
                 NEW COLLECTION 2026
 
             </span>
 
-                <h1>
+                <h1 data-site-edit="index-12">
 
                     WE DON'T<br> FOLLOW
 
@@ -100,7 +100,7 @@
 
                 </h1>
 
-                <p>
+                <p data-site-edit="index-13">
 
                     Minimalismo. Qualidade. Streetwear desenvolvido para quem cria seu próprio caminho.
 
@@ -108,13 +108,13 @@
 
                 <div class="hero-buttons">
 
-                    <a href="pages/shop.php" class="btn-primary">
+                    <a href="pages/shop.php" class="btn-primary" data-site-edit="index-14">
 
                     Comprar Agora
 
                 </a>
 
-                    <a href="pages/about.php" class="btn-secondary">
+                    <a href="pages/about.php" class="btn-secondary" data-site-edit="index-15">
 
                     Nossa História
 
@@ -126,7 +126,7 @@
 
             <div class="hero-right">
 
-                <img src="assets/images/products/M1.jpeg" alt="Moletom">
+                <img src="assets/images/products/M1.jpeg" alt="Moletom" data-site-edit="index-16">
 
             </div>
 
@@ -140,9 +140,9 @@
 
         <div class="section-title">
 
-            <span>DESTAQUES</span>
+            <span data-site-edit="index-17">DESTAQUES</span>
 
-            <h2>Produtos em Destaque</h2>
+            <h2 data-site-edit="index-18">Produtos em Destaque</h2>
 
         </div>
 
@@ -158,21 +158,21 @@
 
         <div class="history-content">
 
-            <span>NOSSA HISTÓRIA</span>
+            <span data-site-edit="index-19">NOSSA HISTÓRIA</span>
 
-            <h2>
+            <h2 data-site-edit="index-20">
 
                 Ser SØLID é permanecer firme.
 
             </h2>
 
-            <p>
+            <p data-site-edit="index-21">
 
                 Acreditamos que vestir-se é uma forma de comunicar quem você é. Criamos peças minimalistas, premium e atemporais para pessoas que valorizam identidade acima de tendências.
 
             </p>
 
-            <a href="pages/about.php" class="btn-primary">
+            <a href="pages/about.php" class="btn-primary" data-site-edit="index-22">
 
                 Conheça nossa história
 
@@ -190,15 +190,15 @@
 
         <div class="newsletter-content">
 
-            <span>NOVIDADES</span>
+            <span data-site-edit="index-23">NOVIDADES</span>
 
-            <h2>
+            <h2 data-site-edit="index-24">
 
                 Receba nossos lançamentos.
 
             </h2>
 
-            <p>
+            <p data-site-edit="index-25">
 
                 Seja o primeiro a conhecer novas coleções e promoções.
 
@@ -231,9 +231,9 @@
 
             <div>
 
-                <h3>SØLID</h3>
+                <h3 data-site-edit="index-26">SØLID</h3>
 
-                <p>
+                <p data-site-edit="index-27">
 
                     Premium Streetwear.
 
@@ -242,16 +242,16 @@
             </div>              
             <div>
                 
-                <h4>Institucional</h4>                <a href="pages/about.php">Sobre</a>
-                <a href="pages/contact.php">Contato</a>            </div>
+                <h4 data-site-edit="index-28">Institucional</h4>                <a href="pages/about.php" data-site-edit="index-29">Sobre</a>
+                <a href="pages/contact.php" data-site-edit="index-30">Contato</a>            </div>
                 
 
 
 
             <div>
                 
-                <h4>Loja</h4>
-                <a href="pages/shop.php">Produtos</a>
+                <h4 data-site-edit="index-31">Loja</h4>
+                <a href="pages/shop.php" data-site-edit="index-32">Produtos</a>
                 <a href="pages/cart.php">Carrinho</a>
             </div>
 
@@ -259,11 +259,11 @@
 
             <div>
 
-                <h4>Conta</h4>
+                <h4 data-site-edit="index-34">Conta</h4>
 
                 <a href="pages/login.php">Entrar</a>
 
-                <a href="pages/register.php">Cadastrar</a>
+                <a href="pages/register.php" data-site-edit="index-36">Cadastrar</a>
 
             </div>
 
@@ -279,12 +279,12 @@
 
 
 
-    <script src="assets/js/products.js"></script>
+    <script src="api/catalog.php"></script><script src="assets/js/products.js?v=all-changes-27"></script>
     <script src="assets/js/shop.js"></script>
     <script src="assets/js/newsletter.js"></script>
-<script src="assets/js/main.js?v=page-mist-20"></script>
+<script src="assets/js/main.js?v=admin-navigation-29"></script>
     <script src="assets/js/footer.js"></script>
 
-</body>
+<script src="api/site-content.php"></script></body>
 
 </html>
