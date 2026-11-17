@@ -1,2 +1,3 @@
 config/newsletter.local.php
 config/google.local.php
+config/database.local.php

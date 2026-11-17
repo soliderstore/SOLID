@@ -44,7 +44,7 @@ function createOrder(PDO $db, int $userId, array $data): array {
             if ($used[$id]>(int)$product['stock']) throw new RuntimeException('Estoque insuficiente para '.$product['name'].'.');
             $price=(int)round($product['price']*100);
             $subtotal+=$price*$quantity;
-            $items[]=['id'=>$id,'name'=>$product['name'],'sku'=>$product['sku'],'size'=>$size,'color'=>$color,'quantity'=>$quantity,'priceCents'=>$price];
+            $items[]=['id'=>$id,'name'=>$product['name'],'sku'=>$product['sku'],'size'=>$size,'color'=>$color,'quantity'=>$quantity,'priceCents'=>$price,'description'=>$product['description']??'','image'=>$product['images'][0]??''];
         }
         $coupon=($data['coupon']??'')==='SOLID10';
         if (($data['coupon']??'')!=='' && !$coupon) throw new RuntimeException('Cupom inválido.');
@@ -58,28 +58,13 @@ function createOrder(PDO $db, int $userId, array $data): array {
         $code='SOLID-'.strtoupper(bin2hex(random_bytes(6)));
         $db->prepare('INSERT INTO orders (code,user_id,request_key,customer,items,subtotal_cents,discount_cents,total_cents) VALUES (?,?,?,?,?,?,?,?)')->execute([$code,$userId,$key,json_encode($snapshot,JSON_THROW_ON_ERROR),json_encode($items,JSON_THROW_ON_ERROR),$subtotal,$discount,$subtotal-$discount]);
         $id=(int)$db->lastInsertId();
+        $db->prepare("INSERT INTO order_history(order_id,message) VALUES(?,'Pedido recebido pelo site; pagamento pendente')")->execute([$id]);
         $db->prepare('INSERT INTO admin_events (user_id,message) VALUES (?,?)')->execute([$userId,'Novo pedido: '.$code]);
         $query=$db->prepare('SELECT * FROM orders WHERE id=?');$query->execute([$id]);$order=$query->fetch();
         $db->commit();return $order;
     } catch (Throwable $e) {if($db->inTransaction())$db->rollBack();throw $e;}
 }
 function updateOrderStatus(PDO $db,int $id,string $status,int $adminId): void {
-    $transitions=['pending'=>['paid','cancelled'],'paid'=>['shipped','completed','cancelled'],'shipped'=>['completed'],'completed'=>[],'cancelled'=>[]];
-    $db->beginTransaction();
-    try {
-        $query=$db->prepare('SELECT * FROM orders WHERE id=? FOR UPDATE');$query->execute([$id]);$order=$query->fetch();
-        if(!$order)throw new RuntimeException('Pedido não encontrado.');
-        if($status===$order['status']){$db->commit();return;}
-        if(!in_array($status,$transitions[$order['status']]??[],true))throw new RuntimeException('Essa mudança de status não é permitida.');
-        if($status==='cancelled') {
-            $items=json_decode($order['items'],true);usort($items,fn($a,$b)=>$a['id']<=>$b['id']);
-            foreach($items as $item) {
-                $query=$db->prepare('SELECT data FROM products WHERE id=? FOR UPDATE');$query->execute([$item['id']]);$json=$query->fetchColumn();
-                if($json){$product=json_decode($json,true);$product['stock']+=$item['quantity'];$db->prepare('UPDATE products SET data=? WHERE id=?')->execute([json_encode($product,JSON_UNESCAPED_UNICODE),$item['id']]);}
-            }
-        }
-        $db->prepare('UPDATE orders SET status=? WHERE id=?')->execute([$status,$id]);
-        $db->prepare('INSERT INTO admin_events (user_id,message) VALUES (?,?)')->execute([$adminId,'Pedido '.$order['code'].': '.$status]);
-        $db->commit();
-    }catch(Throwable $e){if($db->inTransaction())$db->rollBack();throw $e;}
+ require_once __DIR__.'/admin-orders.php';
+ adminUpdateOrder($db,$id,$adminId,['status'=>$status,'confirm_cancel'=>$status==='cancelled']);
 }

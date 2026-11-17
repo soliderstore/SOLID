@@ -133,3 +133,7 @@ Todos os direitos reservados.
 **Built with ❤️ by Carlos Wilson Braga de Azevedo**
 
 </div>
+
+## SØLID Admin PWA
+
+Painel integrado em /admin/. Configuração, migração, instalação e testes: [docs/admin-pwa.md](docs/admin-pwa.md).

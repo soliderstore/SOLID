@@ -1,6 +1,7 @@
 <?php
 if (!isset($admin) || !$admin['is_admin']) { http_response_code(403); exit; }
-$statuses=['pending'=>'Aguardando pagamento','paid'=>'Pago','shipped'=>'Enviado','completed'=>'Concluído','cancelled'=>'Cancelado'];
+require_once __DIR__.'/admin-orders.php';
+$statuses=ADMIN_STATUSES;
 function money(int $cents): string {return 'R$ '.number_format($cents/100,2,',','.');}
 $filter=(string)($_GET['status']??'');if(!isset($statuses[$filter]))$filter='';
 $from=(string)($_GET['from']??'');$to=(string)($_GET['to']??'');
@@ -13,7 +14,7 @@ $where=$conditions?' WHERE '.implode(' AND ',$conditions):'';
 $count=$db->prepare('SELECT COUNT(*) FROM orders'.$where);$count->execute($params);$orderCount=(int)$count->fetchColumn();
 $page=max(1,min((int)($_GET['page']??1),max(1,(int)ceil($orderCount/30))));
 $ordersQuery=$db->prepare('SELECT * FROM orders'.$where.' ORDER BY id DESC LIMIT 30 OFFSET '.(($page-1)*30));$ordersQuery->execute($params);$orders=$ordersQuery->fetchAll();
-$totals=$db->query("SELECT COUNT(*) AS orders_count, COALESCE(SUM(CASE WHEN status IN ('paid','shipped','completed') THEN total_cents ELSE 0 END),0) AS revenue, SUM(status='pending') AS pending, SUM(status IN ('paid','shipped','completed')) AS paid_count FROM orders")->fetch();
+$totals=$db->query("SELECT COUNT(*) AS orders_count, COALESCE(SUM(CASE WHEN payment_status='paid' AND status<>'cancelled' THEN total_cents ELSE 0 END),0) AS revenue, SUM(status='pending') AS pending, SUM(payment_status='paid' AND status<>'cancelled') AS paid_count FROM orders")->fetch();
 $customersCount=(int)$db->query('SELECT COUNT(*) FROM users WHERE is_admin=0')->fetchColumn();
 $stockCount=0;foreach($products as $row){$product=json_decode($row['data'],true);if($row['active']&&$product['stock']<=5)$stockCount++;}
 ?>
@@ -35,5 +36,5 @@ $stockCount=0;foreach($products as $row){$product=json_decode($row['data'],true)
 <div class="order-body"><div class="grid"><div><h3>Cliente</h3><p><?=h($customer['name'])?><br><?=h($customer['email'])?><br>WhatsApp: <?=h($customer['phone'])?><br>CPF: <?=h($customer['cpf'])?></p></div><div><h3>Entrega</h3><p><?=h($customer['address'])?>, <?=h($customer['number'])?><br><?=h($customer['complement'])?><br><?=h($customer['neighborhood'])?> · <?=h($customer['city'])?><br>CEP <?=h($customer['zip'])?><br><?=h($customer['delivery'])?></p></div><div><h3>Pagamento</h3><p><?=h($customer['payment'])?><br><?=h($customer['paymentDetails'])?></p><p>Subtotal: <?=money((int)$order['subtotal_cents'])?><br>Desconto: <?=money((int)$order['discount_cents'])?><br>Total dos produtos: <?=money((int)$order['total_cents'])?></p></div></div>
 <div class="table-wrap"><table><thead><tr><th>Produto</th><th>Tamanho / cor</th><th>Quantidade</th><th>Valor unitário</th><th>Total</th></tr></thead><tbody><?php foreach($items as $item):?><tr><td><?=h($item['name'])?><small><?=h($item['sku'])?></small></td><td><?=h($item['size'])?> / <?=h($item['color'])?></td><td><?=(int)$item['quantity']?></td><td><?=money((int)$item['priceCents'])?></td><td><?=money($item['priceCents']*$item['quantity'])?></td></tr><?php endforeach?></tbody></table></div>
 <?php if($customer['notes']):?><p>Observações: <?=h($customer['notes'])?></p><?php endif?>
-<?php $next=['pending'=>['paid','cancelled'],'paid'=>['shipped','completed','cancelled'],'shipped'=>['completed']][$order['status']]??[];if($next):?><form method="post"><?php token()?><input type="hidden" name="action" value="order_status"><input type="hidden" name="order_id" value="<?=(int)$order['id']?>"><label>Atualizar status<select name="status" required><option value="">Escolha uma ação</option><?php foreach($next as $value):?><option value="<?=$value?>"><?=$statuses[$value]?></option><?php endforeach?></select></label><button>Confirmar atualização</button></form><?php endif?></div></details>
+<?php $next=['pending'=>['confirmed','cancelled'],'confirmed'=>['preparing','cancelled'],'preparing'=>['ready','cancelled'],'ready'=>['shipped','cancelled'],'shipped'=>['delivered']][$order['status']]??[];if($next):?><form method="post"><?php token()?><input type="hidden" name="action" value="order_status"><input type="hidden" name="order_id" value="<?=(int)$order['id']?>"><label>Atualizar status<select name="status" required><option value="">Escolha uma ação</option><?php foreach($next as $value):?><option value="<?=$value?>"><?=$statuses[$value]?></option><?php endforeach?></select></label><button>Confirmar atualização</button></form><?php endif?></div></details>
 <?php endforeach?><div class="pagination"><?php if($page>1):?><a href="?<?=h(http_build_query(['tab'=>'orders','page'=>$page-1,'status'=>$filter,'from'=>$from,'to'=>$to]))?>">← Anterior</a><?php endif?><span>Página <?=$page?> de <?=max(1,(int)ceil($orderCount/30))?></span><?php if($page*30<$orderCount):?><a href="?<?=h(http_build_query(['tab'=>'orders','page'=>$page+1,'status'=>$filter,'from'=>$from,'to'=>$to]))?>">Próxima →</a><?php endif?></div></section>

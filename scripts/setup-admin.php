@@ -10,6 +10,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($password) < 12 || strl
 $db = database();
 $db->exec(file_get_contents(__DIR__.'/../database/sql/admin-panel.sql'));
 $db->exec(file_get_contents(__DIR__.'/../database/sql/orders.sql'));
+$db->exec(file_get_contents(__DIR__.'/../database/sql/admin-pwa.sql'));
 $db->exec(file_get_contents(__DIR__.'/../database/sql/product-reviews.sql'));
 $db->beginTransaction();
 try {

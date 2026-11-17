@@ -17,6 +17,7 @@ $_SESSION['admin_csrf'] ??= bin2hex(random_bytes(32));
 $tab = (string)($_GET['tab'] ?? 'overview');
 if (!in_array($tab, ['overview','orders','products','content','notifications','customers','reviews','security'], true)) $tab = 'overview';
 if ($admin['must_change_password']) $tab = 'security';
+if (!$admin['must_change_password'] && in_array($tab,['overview','orders'],true) && !isset($_GET['export'])) { header('Location: ../admin/'); exit; }
 if (isset($_GET['export']) && !$admin['must_change_password']) {
     $kind = $_GET['export'] === 'customers' ? 'customers' : 'orders';
     header('Content-Type: text/csv; charset=utf-8');
