@@ -1,29 +1,119 @@
 (() => {
     if (!product || !container) return;
     const gallery = container.querySelector('.product-gallery');
-    gallery.innerHTML = `<div class="product-carousel" role="region" aria-label="Fotos do produto" tabindex="0"><div class="product-slides">${product.images.map((src, i) => `<img src="${src}" alt="${product.name} — foto ${i + 1} de ${product.images.length}" draggable="false" ${i ? 'loading="lazy"' : 'fetchpriority="high"'}>`).join('')}</div><button type="button" class="gallery-arrow gallery-prev" aria-label="Foto anterior">‹</button><button type="button" class="gallery-arrow gallery-next" aria-label="Próxima foto">›</button><span class="gallery-counter" aria-live="polite"></span></div><div class="gallery-thumbnails">${product.images.map((src, i) => `<button type="button" aria-label="Ver foto ${i + 1}"><img src="${src}" alt=""></button>`).join('')}</div><p class="gallery-hint">Deslize para os lados para ver mais fotos</p>`;
+    gallery.innerHTML = `
+        <div class="product-carousel" role="region" aria-label="Fotos do produto" tabindex="0">
+            <div class="product-slides"></div>
+            <button type="button" class="gallery-arrow gallery-prev" aria-label="Foto anterior">‹</button>
+            <button type="button" class="gallery-arrow gallery-next" aria-label="Próxima foto">›</button>
+            <span class="gallery-counter" aria-live="polite"></span>
+        </div>
+        <div class="gallery-thumbnails"></div>
+        <p class="gallery-hint">Deslize para os lados para ver mais fotos</p>
+        <p class="gallery-unavailable" role="status" tabindex="-1">Fotos indisponíveis.</p>
+    `;
+    const carousel = gallery.querySelector('.product-carousel');
     const track = gallery.querySelector('.product-slides');
-    const thumbs = [...gallery.querySelectorAll('.gallery-thumbnails button')];
+    const thumbnails = gallery.querySelector('.gallery-thumbnails');
+    const previousButton = gallery.querySelector('.gallery-prev');
+    const nextButton = gallery.querySelector('.gallery-next');
+    const counter = gallery.querySelector('.gallery-counter');
+    const controls = [previousButton, nextButton, counter, thumbnails, gallery.querySelector('.gallery-hint')];
+    const unavailable = gallery.querySelector('.gallery-unavailable');
+    const configured = [...new Set(product.images)];
+    const alternatives = [...new Set(product.fallbackImages ?? [])].filter(source => !configured.includes(source));
+    const placeholder = new URL('../images/logo/logo.png', document.currentScript.src).pathname;
+    const placeholderSources = [...configured, ...alternatives].includes(placeholder) ? [] : [placeholder];
+    const backups = [alternatives, placeholderSources].filter(sources => sources.length);
+    const photos = [];
     let current = 0;
+    let drag;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    function updateGallery() {
-        current = Math.round(track.scrollLeft / Math.max(track.clientWidth, 1));
-        thumbs.forEach((thumb, i) => thumb.setAttribute('aria-pressed', String(i === current)));
-        gallery.querySelector('.gallery-counter').textContent = `${current + 1} / ${product.images.length}`;
-        gallery.querySelector('.gallery-prev').disabled = current === 0;
-        gallery.querySelector('.gallery-next').disabled = current === product.images.length - 1;
+
+    function slideIndex(index) {
+        return Math.max(0, Math.min(photos.length - 1, index));
     }
-    function go(index) { track.scrollTo({ left: Math.max(0, Math.min(product.images.length - 1, index)) * track.clientWidth, behavior: reduced ? 'instant' : 'smooth' }); }
-    thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => go(i)));
-    gallery.querySelector('.gallery-prev').addEventListener('click', () => go(current - 1));
-    gallery.querySelector('.gallery-next').addEventListener('click', () => go(current + 1));
+
+    function updateGallery() {
+        current = slideIndex(Math.round(track.scrollLeft / Math.max(track.clientWidth, 1)));
+        photos.forEach(({ thumb }, i) => thumb.setAttribute('aria-pressed', String(i === current)));
+        counter.textContent = `${current + 1} / ${photos.length}`;
+        previousButton.disabled = current === 0;
+        nextButton.disabled = current >= photos.length - 1;
+    }
+
+    function syncPhotos() {
+        photos.forEach(({ source, slide, thumb }, index) => {
+            slide.alt = source === placeholder ? 'Foto indisponível' : `${product.name} — foto ${index + 1} de ${photos.length}`;
+            thumb.setAttribute('aria-label', `Ver foto ${index + 1}`);
+        });
+        controls.forEach(control => { control.hidden = photos.length < 2; });
+        carousel.hidden = photos.length === 0;
+        unavailable.hidden = photos.length > 0;
+    }
+
+    function go(index, behavior = reduced ? 'instant' : 'smooth') {
+        track.scrollTo({ left: slideIndex(index) * track.clientWidth, behavior });
+    }
+
+    function removePhoto(photo) {
+        const index = photos.indexOf(photo);
+        if (index < 0) return;
+
+        updateGallery();
+        const selected = index < current ? current - 1 : current;
+        const activeElement = document.activeElement;
+        drag = null;
+        track.classList.remove('is-dragging');
+        photos.splice(index, 1);
+        photo.slide.remove();
+        photo.thumb.remove();
+        if (!photos.length) addPhotos(backups.shift() ?? []);
+
+        syncPhotos();
+        go(selected, 'instant');
+        updateGallery();
+        const focusedControlHidden = photos.length < 2 && [previousButton, nextButton].includes(activeElement);
+        const focusedGalleryHidden = !photos.length && activeElement === carousel;
+        if (activeElement === photo.thumb || focusedControlHidden || focusedGalleryHidden) {
+            const target = photos.length > 1 ? photos[current].thumb : (photos.length ? carousel : unavailable);
+            target.focus({ preventScroll: true });
+        }
+    }
+
+    function addPhotos(sources) {
+        sources.forEach((source, index) => {
+            const slide = document.createElement('img');
+            slide.draggable = false;
+            if (index === 0) slide.fetchPriority = 'high';
+            else slide.loading = 'lazy';
+
+            const thumb = document.createElement('button');
+            thumb.type = 'button';
+            const preview = document.createElement('img');
+            preview.alt = '';
+            thumb.append(preview);
+
+            const photo = { source, slide, thumb };
+            photos.push(photo);
+            slide.addEventListener('error', () => removePhoto(photo), { once: true });
+            preview.addEventListener('error', () => removePhoto(photo), { once: true });
+            thumb.addEventListener('click', () => go(photos.indexOf(photo)));
+            track.append(slide);
+            thumbnails.append(thumb);
+            slide.src = source;
+            preview.src = source;
+        });
+    }
+
+    previousButton.addEventListener('click', () => go(current - 1));
+    nextButton.addEventListener('click', () => go(current + 1));
     track.addEventListener('scroll', updateGallery, { passive: true });
-    gallery.querySelector('.product-carousel').addEventListener('keydown', event => {
+    carousel.addEventListener('keydown', event => {
         if (['ArrowLeft', 'ArrowRight'].includes(event.key)) { event.preventDefault(); go(current + (event.key === 'ArrowRight' ? 1 : -1)); }
     });
-    let drag;
     track.addEventListener('pointerdown', event => {
-        if (event.pointerType !== 'mouse' || event.button !== 0) return;
+        if (photos.length < 2 || event.pointerType !== 'mouse' || event.button !== 0) return;
         drag = { x: event.clientX, left: track.scrollLeft };
         track.setPointerCapture(event.pointerId);
         track.classList.add('is-dragging');
@@ -32,7 +122,9 @@
     function finishDrag() { if (!drag) return; drag = null; track.classList.remove('is-dragging'); updateGallery(); go(current); }
     track.addEventListener('pointerup', finishDrag);
     track.addEventListener('pointercancel', finishDrag);
-    new ResizeObserver(() => { track.scrollLeft = current * track.clientWidth; updateGallery(); }).observe(track);
+    new ResizeObserver(() => { go(current, 'instant'); updateGallery(); }).observe(track);
+    addPhotos(configured.length ? configured : (backups.shift() ?? []));
+    syncPhotos();
     updateGallery();
 
     const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);

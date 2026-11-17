@@ -1,5 +1,17 @@
 <?php
 declare(strict_types=1);
+
+const PRODUCT_UPLOAD_DIRECTORY = __DIR__ . '/../assets/images/uploads';
+const PRODUCT_UPLOAD_TYPES = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'image/gif' => 'gif'];
+
+function isProductUploadFilename(string $filename): bool {
+    return preg_match('/\A[a-f0-9]{32}\.(?:jpe?g|png|webp|gif)\z/i', $filename) === 1;
+}
+
+function productUploadUrl(string $siteRoot, string $filename): string {
+    return $siteRoot . '/api/product-image.php?file=' . rawurlencode($filename);
+}
+
 function orderedProductImages(array $references, string $orderJson): array {
     $order=json_decode($orderJson,true);
     if(!is_array($order)||!array_is_list($order)||count($order)!==count($references))throw new RuntimeException('A ordem das fotos é inválida. Selecione as fotos novamente.');
@@ -14,7 +26,7 @@ function productImageUploads(array $files, string $directory): array {
     $names=$files['name']??[];
     if(!is_array($names)||count($names)>20)throw new RuntimeException('Selecione até 20 imagens.');
     $validated=[];$saved=[];
-    $types=['image/jpeg'=>'jpg','image/png'=>'png','image/webp'=>'webp','image/gif'=>'gif'];
+    $types=PRODUCT_UPLOAD_TYPES;
     foreach($names as $index=>$name){
         $error=$files['error'][$index]??UPLOAD_ERR_NO_FILE;
         if($error===UPLOAD_ERR_NO_FILE)continue;

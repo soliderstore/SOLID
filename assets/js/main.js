@@ -115,6 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const mobileNav = document.createElement('nav');
     mobileNav.className = 'mobile-dock';
     mobileNav.id = 'mobile-navigation';
+    mobileNav.style.display = 'none';
     mobileNav.setAttribute('aria-label', 'Navegação no celular');
     const dockItems = [
         { page: 'index', label: 'Início', icon: 'fa-house' },
@@ -132,7 +133,13 @@ document.addEventListener("DOMContentLoaded", () => {
         icon.className = 'mobile-dock-icon';
         icon.innerHTML = `<i class="fa-solid ${item.icon}" aria-hidden="true"></i>`;
         const avatar = item.account ? actions.children[2].querySelector('img') : null;
-        if (avatar) icon.replaceChildren(avatar.cloneNode(true));
+        if (avatar) {
+            const dockAvatar = avatar.cloneNode(true);
+            dockAvatar.width = 40;
+            dockAvatar.height = 40;
+            dockAvatar.alt = '';
+            icon.replaceChildren(dockAvatar);
+        }
         const text = document.createElement('span');
         text.className = 'mobile-dock-label';
         text.textContent = item.label;

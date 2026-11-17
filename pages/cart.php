@@ -6,7 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-<link rel="stylesheet" href="../assets/css/style.css?v=cart-footer-stop-27">
+<link rel="stylesheet" href="../assets/css/style.css?v=storefront-34">
 </head>
 <body class="cart-screen">
 <main><section class="cart-page"><div class="container">
@@ -26,5 +26,5 @@
 <p class="cart-shipping-note">Entrega e pagamento são combinados com a SØLID pelo WhatsApp.</p>
 </div></aside></div></div></section></main>
 <div class="cart-checkout-bar" aria-label="Finalizar pedido"><div><small>Total dos produtos</small><strong id="cart-bar-total">R$ 0,00</strong><span id="cart-bar-savings"></span></div><a href="checkout.php" class="btn-primary" id="cart-continue">Continuar (0)</a></div>
-<script src="../api/catalog.php"></script><script src="../assets/js/products.js?v=all-changes-27"></script><script src="../assets/js/purchase-auth.js"></script><script src="../assets/js/cart.js?v=cart-footer-stop-27"></script><script src="../assets/js/main.js?v=admin-navigation-29"></script><script src="../assets/js/footer.js"></script>
+<script src="../api/catalog.php"></script><script src="../assets/js/products.js?v=all-changes-27"></script><script src="../assets/js/purchase-auth.js"></script><script src="../assets/js/cart.js?v=cart-footer-stop-27"></script><script src="../assets/js/main.js?v=storefront-34"></script><script src="../assets/js/footer.js"></script>
 <script src="../api/site-content.php"></script></body></html>

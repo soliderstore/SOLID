@@ -21,7 +21,7 @@
           rel="stylesheet">
 
     <link rel="stylesheet"
-          href="../assets/css/style.css?v=stable-navigation-22">
+          href="../assets/css/style.css?v=storefront-34">
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -198,9 +198,9 @@
 </footer>
 
 <script src="../api/catalog.php"></script><script src="../assets/js/products.js?v=all-changes-27"></script>
-<script src="../assets/js/shop.js"></script>
+<script src="../assets/js/shop.js?v=catalog-images-2"></script>
 <script src="../assets/js/newsletter.js"></script>
-<script src="../assets/js/main.js?v=admin-navigation-29"></script>
+<script src="../assets/js/main.js?v=storefront-34"></script>
 <script src="../assets/js/footer.js"></script>
 
 <script src="../api/site-content.php"></script></body>

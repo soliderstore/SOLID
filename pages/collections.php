@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="../assets/css/reset.css">
     <link rel="stylesheet" href="../assets/css/variables.css">
-    <link rel="stylesheet" href="../assets/css/style.css?v=stable-navigation-22">
+    <link rel="stylesheet" href="../assets/css/style.css?v=storefront-34">
     <link rel="stylesheet" href="../assets/css/responsive.css">
     <link rel="stylesheet" href="../assets/css/pages/collections.css">
 
@@ -359,7 +359,7 @@
 
 <script src="../assets/js/collections.js"></script>
 <script src="../assets/js/newsletter.js"></script>
-<script src="../assets/js/main.js?v=admin-navigation-29"></script>
+<script src="../assets/js/main.js?v=storefront-34"></script>
 <script src="../assets/js/footer.js"></script>
 
 <script src="../api/site-content.php"></script></body>

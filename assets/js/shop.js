@@ -1,13 +1,11 @@
 const container = document.querySelector("#products");
-const projectRoot = ["localhost", "127.0.0.1"].includes(window.location.hostname) ? "/SOLID/" : "/";
+const projectRoot = new URL("../../", document.currentScript.src).pathname;
 
 if (container) {
 
     const visibleProducts = window.location.pathname.endsWith("/index.php") || window.location.pathname.endsWith("/")
         ? PRODUCTS.filter(product => product.featured) : PRODUCTS;
-    visibleProducts.forEach(product => {
-
-        container.innerHTML += `
+    container.innerHTML = visibleProducts.map(product => `
 
             <div class="card">
 
@@ -15,7 +13,7 @@ if (container) {
 
                     <span class="badge">${product.badge}</span>
 
-                    <img src="${projectRoot + product.images[0].replace(/^\.\.\//, "")}" alt="${product.name}">
+                    <img alt="${product.name}">
 
                 </div>
 
@@ -44,8 +42,28 @@ if (container) {
 
             </div>
 
-        `;
+    `).join("");
 
+    const print = `${projectRoot}assets/images/products/estampa.jpeg`;
+    const placeholder = `${projectRoot}assets/images/logo/logo.png`;
+    container.querySelectorAll(".card-image img").forEach((image, index) => {
+        const { images, fallbackImages = [] } = visibleProducts[index];
+        const [cover, ...gallery] = images;
+        const sources = new Set([
+            cover,
+            ...gallery.filter(source => source !== print),
+            ...fallbackImages,
+            ...gallery,
+            placeholder
+        ]).values();
+
+        function loadNextImage() {
+            const { value, done } = sources.next();
+            if (!done) image.src = value;
+        }
+
+        image.addEventListener("error", loadNextImage);
+        loadNextImage();
     });
 
 }

@@ -22,28 +22,7 @@ if (!container) {
 
         <div class="product-layout">
 
-            <div class="product-gallery">
-
-                <img
-                    class="main-image"
-                    id="main-image"
-                    src="${product.images[0]}"
-                    alt="${product.name}">
-
-                <div class="thumbs">
-
-                    ${product.images.map(image => `
-
-                        <img
-                            src="${image}"
-                            alt="${product.name}"
-                            onclick="document.getElementById('main-image').src='${image}'">
-
-                    `).join("")}
-
-                </div>
-
-            </div>
+            <div class="product-gallery"></div>
 
             <div class="product-info">
 

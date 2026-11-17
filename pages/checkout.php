@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-    <link rel="stylesheet" href="../assets/css/style.css?v=stable-navigation-22">
+    <link rel="stylesheet" href="../assets/css/style.css?v=storefront-34">
 </head>
 <body>
     <header class="header">
@@ -77,7 +77,7 @@
     <script src="../api/catalog.php"></script><script src="../assets/js/products.js?v=all-changes-27"></script>
 <script src="../assets/js/purchase-auth.js?v=delivery-address-12"></script>
 <script src="../assets/js/checkout.js?v=orders-28"></script>
-    <script src="../assets/js/address-lookup.js?v=delivery-address-12"></script><script src="../assets/js/main.js?v=admin-navigation-29"></script>
+    <script src="../assets/js/address-lookup.js?v=delivery-address-12"></script><script src="../assets/js/main.js?v=storefront-34"></script>
     <script src="../assets/js/footer.js"></script>
 <script src="../api/site-content.php"></script></body>
 </html>

@@ -268,7 +268,8 @@
         bottom: 0;
         left: 0;
         right: 0;
-        display: grid;
+        /* O menu só aparece quando os estilos da barra móvel estão disponíveis. */
+        display: grid !important;
         grid-template-columns: repeat(5, minmax(0, 1fr));
         gap: 0;
         min-height: calc(58px + env(safe-area-inset-bottom, 0px));
